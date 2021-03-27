@@ -23,8 +23,8 @@ export default {
     margin: 0px;
 }
 .title {
-    padding-top: 0px;
-    font-size: 30px;
+    margin-top: 0px;
+    font-size: 25px;
     text-align: center;
     text-shadow: 5px 5px 5px black, 0px 0px 2px black;
     color: #5882FA;
