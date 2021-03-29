@@ -1,8 +1,8 @@
 <template>
     <body>
     <Header></Header>
+    <Sidebar class="sidebar"></Sidebar>
     <div class="container" style="overflow: hidden;">
-        <Sidebar class="sidebar"></Sidebar>
         <router-view></router-view>
     </div>
     <Footer></Footer>
@@ -32,5 +32,8 @@ body {
 
 .sidebar {
     float: left;
+}
+.container{
+    height: 100vh;
 }
 </style>

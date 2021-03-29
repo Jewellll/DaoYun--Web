@@ -7,6 +7,7 @@ import Login from '../components/layout/Login'
 import CheckPhone from '../components/page/CheckPhone'
 import Register from '../components/layout/Register'
 import Manage from '../components/page/Manage'
+import StudentManage from '../components/page/StudentManage'
 
 Vue.use(Router)
 
@@ -29,6 +30,14 @@ export default new Router({
                     path: '/manage',
                     name: 'Manage',
                     component: Manage,
+                    meta: {
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/studentmanage',
+                    name: 'StudentManage',
+                    component: StudentManage,
                     meta: {
                         requireAuth: true
                     }

@@ -1,5 +1,6 @@
 <template>
     <div class="sidebar">
+        <el-collapse-transition>
         <el-menu
             class="sidebar-el-menu"
             :default-active="tohome"
@@ -49,6 +50,7 @@
                 </template>
             </template>
         </el-menu>
+        </el-collapse-transition>
     </div>
 </template>
 
@@ -71,7 +73,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-tickets',
-                    index: 'table',
+                    index: 'StudentManage',
                     title: '学生管理'
                 },
                 {
@@ -130,6 +132,7 @@ export default {
 .sidebar-el-menu{
 }
 .sidebar {
+    margin-top: 10px;
     text-align: left;
 }
 </style>

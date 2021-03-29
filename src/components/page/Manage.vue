@@ -2,6 +2,7 @@
 <div class="manage-container">
     <div class="container">
         <div class="title">
+            <h1>欢迎来到到云</h1>
         </div>
     <div class="info">
         <el-table
@@ -48,28 +49,19 @@ export default {
 </script>
 
 <style scoped>
-.manage-container{
-    margin: 0;
-    width: 100%;
-    height: 100vh;
-}
 .title{
     margin-top: 0px;
     text-align: center;
 }
 .info{
-   position: absolute;
-    top: 50px;
-   left: 400px;
+    margin-left: 500px;
 }
 .container{
     margin-top: 8px;
-    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
     background-color: #FFFFFF;
-    left: 165px;
-    width: 1200px;
     height:500px;
     border-radius: 5px;
-
 }
 </style>
