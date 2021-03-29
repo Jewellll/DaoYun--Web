@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/page/Index'
 import Home from '@/components/Home'
 import LoginHome from '../components/LoginHome'
 import ForgetPassword from '../components/layout/ForgetPassword'
 import Login from '../components/layout/Login'
 import CheckPhone from '../components/page/CheckPhone'
 import Register from '../components/layout/Register'
+import Manage from '../components/page/Manage'
 
 Vue.use(Router)
 
@@ -23,12 +23,12 @@ export default new Router({
             path: '/home',
             name: 'Home',
             component: Home,
-            redirect: '/index',
+            redirect: '/manage',
             children: [
                 {
-                    path: '/index',
-                    name: 'Index',
-                    component: Index,
+                    path: '/manage',
+                    name: 'Manage',
+                    component: Manage,
                     meta: {
                         requireAuth: true
                     }

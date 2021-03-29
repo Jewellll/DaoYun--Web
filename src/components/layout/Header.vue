@@ -47,7 +47,7 @@ export default {
 
 .logo {
     float: left;
-    width: 200px;
+    width: 157px;
     text-align: center;
     line-height: 70px;
     background-color: #81BEF7;

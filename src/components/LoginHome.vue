@@ -20,11 +20,13 @@ export default {
     width: 100%;
     background-size: cover;
     position: fixed;
-    margin: 0px;
+    top: 0;
+    left: 0;
 }
 .title {
-    margin-top: 0px;
-    font-size: 25px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-size: 30px;
     text-align: center;
     text-shadow: 5px 5px 5px black, 0px 0px 2px black;
     color: #5882FA;

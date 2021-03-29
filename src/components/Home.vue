@@ -1,8 +1,10 @@
 <template>
     <body>
     <Header></Header>
-    <Sidebar></Sidebar>
-    <router-view></router-view>
+    <div class="container" style="overflow: hidden;">
+        <Sidebar class="sidebar"></Sidebar>
+        <router-view></router-view>
+    </div>
     <Footer></Footer>
     </body>
 </template>
@@ -10,8 +12,9 @@
 import Header from './layout/Header'
 import Sidebar from './layout/Sidebar'
 import Footer from './layout/Footer'
+
 export default {
-    components:{
+    components: {
         Header,
         Sidebar,
         Footer
@@ -21,11 +24,13 @@ export default {
 
 <style>
 body {
-    margin: 0px;
-}
-.el-main {
+    margin: 0;
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
+}
+
+.sidebar {
+    float: left;
 }
 </style>
