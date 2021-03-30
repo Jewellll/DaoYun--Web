@@ -1,10 +1,9 @@
 <template>
     <div class="sidebar">
-        <el-collapse-transition>
         <el-menu
             class="sidebar-el-menu"
-            :default-active="tohome"
             :collapse="isCollapse"
+            :collapse-transition="true"
             background-color="#f5f5f5"
             text-color="#000"
             active-text-color="#ffd04b"
@@ -50,7 +49,6 @@
                 </template>
             </template>
         </el-menu>
-        </el-collapse-transition>
     </div>
 </template>
 
@@ -135,4 +133,5 @@ export default {
     margin-top: 10px;
     text-align: left;
 }
+
 </style>

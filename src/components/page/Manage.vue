@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .title{
-    margin-top: 0px;
+    padding-top: 10px;
     text-align: center;
 }
 .info{

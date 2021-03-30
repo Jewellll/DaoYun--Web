@@ -14,7 +14,7 @@
                         @click="dellSelection"
                     >批量删除</el-button>
                 </div>
-
+                <div class="view">
                 <el-table
                     :data="tableData"
                     border
@@ -56,6 +56,7 @@
                         :total="pageTotal"
                         @current-change="handlePageChange"
                     ></el-pagination>
+                </div>
                 </div>
             </div>
 
@@ -201,12 +202,17 @@ export default {
     flex-direction: row;
     padding: 30px 10px 20px 10px;
 }
+.view{
+    margin-left: 10px;
+    margin-right: 10px;
+}
 .input {
     width: 200px;
     display: inline-block;
 }
 .table {
     font-size: 14px;
+    margin-bottom: 15px;
 }
 .red {
     color: #ff0000;

@@ -31,6 +31,8 @@ export default new Router({
                     name: 'Manage',
                     component: Manage,
                     meta: {
+                        title:'系统首页',
+                        hideclose:true,
                         requireAuth: true
                     }
                 },
@@ -39,6 +41,7 @@ export default new Router({
                     name: 'StudentManage',
                     component: StudentManage,
                     meta: {
+                        title:'学生管理',
                         requireAuth: true
                     }
                 }

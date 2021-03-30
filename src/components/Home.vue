@@ -2,6 +2,7 @@
     <body>
     <Header></Header>
     <Sidebar class="sidebar"></Sidebar>
+    <Label></Label>
     <div class="container" style="overflow: hidden;">
         <router-view></router-view>
     </div>
@@ -12,12 +13,14 @@
 import Header from './layout/Header'
 import Sidebar from './layout/Sidebar'
 import Footer from './layout/Footer'
+import Label from   './layout/Label'
 
 export default {
     components: {
         Header,
         Sidebar,
-        Footer
+        Footer,
+        Label
     }
 }
 </script>
