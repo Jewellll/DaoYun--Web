@@ -14,6 +14,7 @@ export default {
 </script>
 <style scoped>
 #poster {
+    margin: 0;
     background: url("../assets/img/login.jpg") no-repeat;
     background-position: center;
     height: 100%;

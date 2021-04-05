@@ -134,6 +134,7 @@ export default {
 }
 .min-tag{
     margin-left: 2px;
+
 }
 
 .tag-title {

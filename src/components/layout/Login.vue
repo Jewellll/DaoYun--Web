@@ -13,10 +13,10 @@
         </el-form-item>
 
         <el-form-item  prop="verifycode">
-            <el-input v-model="loginForm.verifycode" placeholder="请输入验证码" class="identifyinput"></el-input>
+            <el-input v-model="loginForm.verifycode" placeholder="请输入验证码" class="identifyInput"></el-input>
         </el-form-item>
         <el-form-item>
-            <div class="identifybox">
+            <div class="identifyBox">
                 <div @click="refreshCode">
                     <Identify :identifyCode="identifyCode"></Identify>
                 </div>
@@ -25,17 +25,18 @@
         </el-form-item>
 
         <el-form-item>
-            <el-button type="primary" style="width: 100%;background: #2E9AFE;border: none" @click="login()">
+            <el-button type="primary" :loading="logining" style="width: 100%;background: #2E9AFE;border: none" @click="login()">
                 登录
             </el-button>
         </el-form-item>
-        <el-link :underline="false" class="forget-link" @click="forgetpassword()">忘记密码</el-link>
+        <el-link :underline="false" class="forget-link" @click="forgetPassword()">忘记密码</el-link>
         <el-link :underline="false" class="signup-link" @click="register()">注册账号</el-link>
     </el-form>
     </div>
 </template>
 <script>
 import Identify from './Identify'
+import {requestLogin} from '../../api/api'
 export default {
     name: 'Login',
     data () {
@@ -50,6 +51,7 @@ export default {
             }
         };
         return {
+            logining: false,
             loginForm: {
                 username: '',
                 password: '',
@@ -99,31 +101,25 @@ export default {
         login () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$axios
-                        .post('/login', {
-                            username: this.loginForm.username,
-                            password: this.loginForm.password
-                        })
-                        .then(res => {
-                            if (res.data.code === 200) {
-                                this.$store.commit('login', this.loginForm);  //触发 store 中的 login() 方法，把 loginForm 对象传递给 store 中的 user 对象
-                                var path = this.$route.query.redirect
-                                this.$router.replace({
-                                    path: path === '/' || path === undefined ? '/index' : path
-                                });
-                            }
-                            if (res.data.code === 400) {
-                                this.$message.error("账号或密码错误");
-                            }
-                        })
-                        .catch(failResponse => {});
+                    this.logining = true;
+                    const loginParams = {username: this.loginForm.username, password: this.loginForm.password}
+                    requestLogin(loginParams).then(data => {
+                        this.logining = false;
+                        let { msg, code, user,token } = data;
+                        if (code !== 200) {
+                            this.$message.error("账号或密码错误");
+                        } else {
+                            this.$store.commit('login', JSON.stringify(token));
+                            this.$router.push({ path: '/home' });
+                        }
+                    });
                 } else {
-                    this.$message.error('请输入账号和密码或验证码')
-                    return false
+                    console.log('error submit!!');
+                    return false;
                 }
-            })
+            });
         },
-        forgetpassword(){
+        forgetPassword(){
             this.$router.push({ path: "/checkphone", query: {} });
         },
         register(){
@@ -164,7 +160,7 @@ export default {
     color: #505458;
     font-size: 12px;
 }
-.identifybox{
+.identifyBox{
     display: flex;
     justify-content: space-between;
     margin-top:7px;

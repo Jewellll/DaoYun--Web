@@ -66,7 +66,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-tickets',
-                    index: 'role',
+                    index: 'teachermanage',
                     title: '教师管理'
                 },
                 {

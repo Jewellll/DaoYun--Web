@@ -16,7 +16,7 @@
                 </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-user">个人信息</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-close">退出登录</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-close" @click.native="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
@@ -29,9 +29,34 @@ export default {
     name: 'Header',
     data () {
         return {
-            username: 'admin'
+            username: ''
         }
-    }
+    },
+    methods: {
+        logout: function () {
+            var _this = this;
+            this.$confirm('确认退出吗?', '提示', {
+                //type: 'warning'
+            }).then(() => {
+                sessionStorage.removeItem('user');
+                _this.$router.push('/login');
+            }).catch(() => {
+
+            });
+
+        },
+    },
+        mounted() {
+            console.log("22")
+            var user = localStorage.getItem('user');
+            if (user) {
+                console.log("11")
+                user = JSON.parse(user);
+                this.username = user.username || '';
+                this.sysUserAvatar = user.avatar || '';
+            }
+
+        }
 }
 </script>
 <style scoped>

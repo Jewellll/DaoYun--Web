@@ -3,8 +3,11 @@
     <Header></Header>
     <Sidebar class="sidebar"></Sidebar>
     <Label></Label>
+<!--    <strong class="title">{{$route.meta.title}}</strong>-->
     <div class="container" style="overflow: hidden;">
-        <router-view></router-view>
+        <transition name="fade" mode="out-in">
+            <router-view></router-view>
+        </transition>
     </div>
     <Footer></Footer>
     </body>

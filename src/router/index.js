@@ -8,6 +8,7 @@ import CheckPhone from '../components/page/CheckPhone'
 import Register from '../components/layout/Register'
 import Manage from '../components/page/Manage'
 import StudentManage from '../components/page/StudentManage'
+import TeacherManage from '../components/page/TeacherManage'
 
 Vue.use(Router)
 
@@ -42,6 +43,15 @@ export default new Router({
                     component: StudentManage,
                     meta: {
                         title:'学生管理',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/teachermanage',
+                    name: 'TeacherManage',
+                    component: TeacherManage,
+                    meta: {
+                        title:'教师管理',
                         requireAuth: true
                     }
                 }

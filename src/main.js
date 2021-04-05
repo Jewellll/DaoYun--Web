@@ -6,37 +6,40 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store/index'
+import http from './store/http';  //此处问http文件的路径
+import Mock from './mock'
 
-// 设置反向代理，前端请求默认发送到 http://localhost:8443/api
-var axios = require('axios')
-axios.defaults.baseURL = 'http://localhost:8443/api'
-// 全局注册，之后可在其他组件中通过 this.$axios 发送数据
-Vue.prototype.$axios = axios
 Vue.config.productionTip = false
+
+Vue.prototype.$http = http;
+
+// Mock.bootstrap()            //模拟数据测试
 
 Vue.use(ElementUI)
 
-router.beforeEach((to, from, next) => {                                   //访问每个路由之前调用拦截
-  if (to.meta.requireAuth) {
-    if (store.state.user.username) {
-      next()
-    } else {
-      next({
-        path: 'login',
-        query: {redirect: to.fullPath}
-      })
+router.beforeEach((to, from, next) => {
+    if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
+        if (localStorage.token) {  // 获取当前的token是否存在
+            console.log("token存在");
+            next();
+        } else {
+            console.log("token不存在");
+            next({
+                path: '/login', // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                query: {redirect: to.fullPath}
+            })
+        }
     }
-  } else {
-    next()
-  }
-}
-)
+    else { // 如果不需要权限校验，直接进入路由界面
+        next();
+    }
+})
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  render: h => h(App),
-  router,
-  store,      //拦截器
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    render: h => h(App),
+    router,
+    store,      //拦截器
+    components: {App},
+    template: '<App/>'
 })
