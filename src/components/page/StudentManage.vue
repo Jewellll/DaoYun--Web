@@ -3,7 +3,7 @@
         <section>
             <!--工具条-->
             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;margin-bottom: 10px">
-                <el-form :inline="true" :model="filters" style="display: inline-block;position: relative;left: -490px"  >
+                <el-form :inline="true" :model="filters">
                     <el-form-item>
                         <el-input v-model="filters.name" placeholder="姓名"></el-input>
                     </el-form-item>
@@ -325,7 +325,7 @@ export default {
 }
 .table{
     width: 100%;
-    height: 507px;
+    height: 405px;
 }
 
 </style>

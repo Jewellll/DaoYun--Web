@@ -37,7 +37,7 @@ export default {
                     })
 
                     if (hasUser) {
-                        resolve([200, {code: 200, msg: '请求成功', user}])
+                        resolve([200, {code: 200, msg: '登录成功', user}])
                     } else {
                         resolve([200, {code: 400, msg: '账号或密码错误'}])
                     }
@@ -115,11 +115,40 @@ export default {
             })
         })
 
+        //删除教师
+        mock.onGet('/teacher/remove').reply(config => {
+            let {id} = config.params
+            _Teacher = _Teacher.filter(u => u.id !== id)
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 200,
+                        msg: '删除成功'
+                    }])
+                }, 500)
+            })
+        })
+
         //批量删除用户
         mock.onGet('/user/batchremove').reply(config => {
             let {ids} = config.params
             ids = ids.split(',')
             _Users = _Users.filter(u => !ids.includes(u.id))
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 200,
+                        msg: '删除成功'
+                    }])
+                }, 500)
+            })
+        })
+
+        //批量删除教师
+        mock.onGet('/teacher/batchremove').reply(config => {
+            let {ids} = config.params
+            ids = ids.split(',')
+            _Teacher = _Teacher.filter(u => !ids.includes(u.id))
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
@@ -182,6 +211,24 @@ export default {
                 age: age,
                 birth: birth,
                 sex: sex
+            })
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 200,
+                        msg: '新增成功'
+                    }])
+                }, 500)
+            })
+        })
+
+        //新增教师
+        mock.onGet('/teacher/add').reply(config => {
+            let {card, name, course} = config.params
+            _Teacher.push({
+                card:card,
+                name: name,
+                course: course
             })
             return new Promise((resolve, reject) => {
                 setTimeout(() => {

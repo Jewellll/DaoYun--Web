@@ -9,6 +9,7 @@ import Register from '../components/layout/Register'
 import Manage from '../components/page/Manage'
 import StudentManage from '../components/page/StudentManage'
 import TeacherManage from '../components/page/TeacherManage'
+import error from '../components/page/404'
 
 Vue.use(Router)
 
@@ -54,6 +55,32 @@ export default new Router({
                         title:'教师管理',
                         requireAuth: true
                     }
+                },
+                {
+                    path: '/500',
+                    name: '500',
+                    component: () =>
+                        import (  '../components/page/500.vue'),
+                    meta:{
+                        title:'服务异常'
+                    }
+                },
+                {
+                    path: '/403',
+                    name: '403',
+                    component: () =>
+                        import (  '../components/page/403.vue'),
+                    meta:{
+                        title:'服务异常'
+                    }
+                },
+                {
+                    path: '/404',
+                    name: '404',
+                    component: error,
+                    meta:{
+                        title:'页面走丢了'
+                    }
                 }
             ]
         },
@@ -83,6 +110,14 @@ export default new Router({
                     component: Register
                 }
             ]
+        },
+        {
+            path: '*',
+            name: '404',
+            component: error,
+            meta:{
+                title:'页面走丢了'
+            }
         }
     ]
 })

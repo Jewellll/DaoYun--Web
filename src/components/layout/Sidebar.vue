@@ -95,12 +95,20 @@ export default {
                     title: '异常管理',
                     subs: [
                         {
-                            index: '505',
-                            title: '505异常页面'
+                            index: '500',
+                            title: '500异常页面'
                         },
                         {
                             index: '404',
-                            title: '异常页面'
+                            title: '404异常页面'
+                        },
+                        {
+                            index: '403',
+                            title: '403异常页面'
+                        },
+                        {
+                            index: 'diyError',
+                            title: '自定义异常页面'
                         }
                     ]
                 }
