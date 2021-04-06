@@ -5,21 +5,20 @@
             <h1>欢迎来到到云</h1>
         </div>
     <div class="info">
-        <el-table
-            :data="tableData"
-            border
-            style="width: 100%">
-            <el-table-column
-                prop="name"
-                label="成员"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="id"
-                label="学号"
-                width="180">
-            </el-table-column>
-        </el-table>
+        <el-carousel :interval="5000" arrow="always" class="car">
+            <el-carousel-item v-for="(img,index) in imgList" :key="index">
+                <img v-bind:src="img.url">
+            </el-carousel-item>
+        </el-carousel>
+            <el-table :data="tableData" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}"
+                      :row-style="{height:'25px'}" :cell-style="{padding:'1px'}"
+                      highlight-current-row class="table" >
+                <el-table-column prop="name" label="姓名" width="400">
+                </el-table-column>
+                <el-table-column prop="card" label="学号" width="400">
+                </el-table-column>
+            </el-table>
+
     </div>
     </div>
 </div>
@@ -30,18 +29,23 @@ export default {
     name: 'Manage',
     data() {
         return {
+            imgList:[
+                {url:require('../../assets/img/img1.jpg')},
+                {url:require('../../assets/img/img2.jpg')},
+                {url:require('../../assets/img/img3.jpg')}
+            ],
             tableData: [{
                 name: '朱文龙',
-                id: '200327128'
+                card: '200327128'
             }, {
                 name: '陈黎',
-                id: '200327011'
+                card: '200327011'
             }, {
                 name: '杨礼亮',
-                id: '200327104'
+                card: '200327104'
             }, {
                 name: '魏凌',
-                id: '200327176'
+                card: '200327176'
             }]
         }
     }
@@ -52,16 +56,46 @@ export default {
 .title{
     padding-top: 10px;
     text-align: center;
+    color: #e0dde8;
+    font-size: 18px;
+    text-shadow: 5px 5px 5px black, 0px 0px 2px black;
 }
 .info{
-    margin-left: 500px;
+
 }
 .container{
     margin-top: 8px;
     margin-left: 10px;
     margin-right: 10px;
-    background-color: #FFFFFF;
-    height:500px;
+    height:650px;
     border-radius: 5px;
+    background: url("../../assets/img/school1.jpg") no-repeat center;
+}
+.el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+}
+.table{
+    border: none;
+    width: 800px;
+    margin-top: 20px;
+    margin-left: 300px;
+    align-content: center;
+}
+.car{
+    width: 500px;
+    height: 50%;
+    margin-left: 460px;
+    border: none;
+}
+.el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
 }
 </style>

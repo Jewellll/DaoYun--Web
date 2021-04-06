@@ -1,5 +1,7 @@
 <template>
     <div class="sidebar">
+        <el-aside width="auto">
+            <transition name="el-zoom-in-center">
         <el-menu
             class="sidebar-el-menu"
             :collapse="isCollapse"
@@ -49,6 +51,8 @@
                 </template>
             </template>
         </el-menu>
+            </transition>
+        </el-aside>
     </div>
 </template>
 
