@@ -29,3 +29,17 @@ export const removeTeacher = params => { return http.get(`${base}/teacher/remove
 
 export const batchRemoveTeacher = params => { return http.get(`${base}/teacher/batchremove`, { params: params }); };
 
+//字典管理
+export const getDicListPage = params => { return http.get(`${base}/dictionary/listpage`, { params: params }); };
+
+export const editDic = params => { return http.get(`${base}/dictionary/edit`, { params: params }); };
+
+export const addDic = params => { return http.get(`${base}/dictionary/add`, { params: params }); };
+
+export const removeDic = params => { return http.get(`${base}/dictionary/remove`, { params: params }); };
+
+export const batchRemoveDic = params => { return http.get(`${base}/dictionary/batchremove`, { params: params }); };
+
+//系统参数管理
+
+

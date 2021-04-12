@@ -112,7 +112,7 @@ export default {
                             this.$store.commit('login', JSON.stringify(token));
                             this.$router.push({ path: '/home' });
                         }
-                    });
+                    } );
                 } else {
                     console.log('error submit!!');
                     return false;

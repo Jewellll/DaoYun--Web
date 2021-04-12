@@ -47,10 +47,8 @@ export default {
         },
     },
         mounted() {
-            console.log("22")
             var user = localStorage.getItem('user');
             if (user) {
-                console.log("11")
                 user = JSON.parse(user);
                 this.username = user.username || '';
                 this.sysUserAvatar = user.avatar || '';

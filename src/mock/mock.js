@@ -1,10 +1,10 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import {LoginUsers, Users,Teacher} from './data/user'
+import {LoginUsers, Users, Teacher, Dictionary} from './data/user'
 
 let _Users = Users
 let _Teacher = Teacher
-
+let _Dictionary = Dictionary
 export default {
     /**
      * mock bootstrap
@@ -98,7 +98,24 @@ export default {
                 }, 1000)
             })
         })
-
+        //获取字典
+        mock.onGet('/dictionary/listpage').reply(config => {
+            let {page, name} = config.params
+            let mockUsers = _Dictionary.filter(user => {
+                if (name && user.name.indexOf(name) == -1) return false
+                return true
+            })
+            let total = mockUsers.length
+            mockUsers = mockUsers.filter((u, index) => index < 10 * page && index >= 10 * (page - 1))
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        total: total,
+                        users: mockUsers
+                    }])
+                }, 1000)
+            })
+        })
 
 
         //删除用户

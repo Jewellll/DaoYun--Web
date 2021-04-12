@@ -10,6 +10,8 @@ import Manage from '../components/page/Manage'
 import StudentManage from '../components/page/StudentManage'
 import TeacherManage from '../components/page/TeacherManage'
 import error from '../components/page/404'
+import Dictionary from '../components/page/Dictionary'
+import SystemManage from '../components/page/SystemManage'
 
 Vue.use(Router)
 
@@ -53,6 +55,24 @@ export default new Router({
                     component: TeacherManage,
                     meta: {
                         title:'教师管理',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/dictionary',
+                    name: 'Dictionary',
+                    component: Dictionary,
+                    meta: {
+                        title:'数据字典',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/systemManage',
+                    name: 'SystemManage',
+                    component: SystemManage,
+                    meta: {
+                        title:'系统参数管理',
                         requireAuth: true
                     }
                 },

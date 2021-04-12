@@ -7,7 +7,7 @@
             :collapse="isCollapse"
             :collapse-transition="true"
             background-color="#f5f5f5"
-            text-color="#000"
+            text-color="#777"
             active-text-color="#ffd04b"
             unique-opened
             router
@@ -70,12 +70,12 @@ export default {
                 },
                 {
                     icon: 'el-icon-tickets',
-                    index: 'teachermanage',
+                    index: 'teacherManage',
                     title: '教师管理'
                 },
                 {
                     icon: 'el-icon-tickets',
-                    index: 'StudentManage',
+                    index: 'studentManage',
                     title: '学生管理'
                 },
                 {
@@ -90,8 +90,8 @@ export default {
                 },
                 {
                     icon: 'el-icon-tickets',
-                    index: 'test',
-                    title: '用户管理'
+                    index: 'systemManage',
+                    title: '系统参数管理'
                 },
                 {
                     icon: 'el-icon-files',

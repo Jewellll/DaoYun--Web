@@ -11,18 +11,23 @@ const LoginUsers = [
 
 const Users = [];
 const Teacher =[];
+const Dictionary =[];
 
+//用户
 for (let i = 0; i < 20; i++) {
     Users.push(Mock.mock({
         id: Mock.Random.guid(),
-        name: Mock.Random.cname(),
-        addr: Mock.mock('@county(true)'),
-        'age|18-60': 1,
-        birth: Mock.Random.date(),
-        sex: Mock.Random.integer(0, 1)
+        userName: Mock.Random.cname(),
+        userPhone:/^1[0-9]{11}$/,  //用正则匹配1开头的11位数字的手机号
+        // addr: Mock.mock('@county(true)'),
+        // 'age|18-60': 1,
+        // birth: Mock.Random.date(),
+        userSex: Mock.Random.integer(0, 1),
+        'role|1':['管理员','教师']
     }));
 }
 
+//教师
 for (let i = 0; i < 20; i++) {
     Teacher.push(Mock.mock({
         id: Mock.Random.guid(),
@@ -32,4 +37,14 @@ for (let i = 0; i < 20; i++) {
     }));
 }
 
-export { LoginUsers, Users,Teacher };
+//字典
+for (let i = 0; i < 20; i++) {
+    Dictionary.push(Mock.mock({
+        id: Mock.Random.guid(),
+        dicId:/^0[0-9]{6}$/, //用正则匹配1开头的11位数字的手机号
+        'dicName|1':['用户名','手机号','学号'],
+        'dicCode|1':['CARD_TYPE','CARD_TYPE','STUDENT_TYPE'],
+        'dicText|1':['用户类型','用户类型','学生类型']
+    }));
+}
+export { LoginUsers, Users,Teacher,Dictionary };
