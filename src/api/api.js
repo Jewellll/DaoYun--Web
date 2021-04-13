@@ -42,4 +42,12 @@ export const batchRemoveDic = params => { return http.get(`${base}/dictionary/ba
 
 //系统参数管理
 
+export const getParaListPage = params => { return http.get(`${base}/systemManage/listpage`, { params: params }); };
 
+export const editPara = params => { return http.get(`${base}/systemManage/edit`, { params: params }); };
+
+export const addPara = params => { return http.get(`${base}/systemManage/add`, { params: params }); };
+
+export const removePara = params => { return http.get(`${base}/systemManage/remove`, { params: params }); };
+
+export const batchRemovePara = params => { return http.get(`${base}/systemManage/batchremove`, { params: params }); };

@@ -11,6 +11,8 @@ import StudentManage from '../components/page/StudentManage'
 import TeacherManage from '../components/page/TeacherManage'
 import error from '../components/page/404'
 import Dictionary from '../components/page/Dictionary'
+import UserInformation from '../components/page/UserInformation'
+import UserManage from '../components/page/UserManage'
 import SystemManage from '../components/page/SystemManage'
 
 Vue.use(Router)
@@ -68,11 +70,29 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/userManage',
+                    name: 'UserManage',
+                    component: UserManage,
+                    meta: {
+                        title:'用户管理',
+                        requireAuth: true
+                    }
+                },
+                {
                     path: '/systemManage',
-                    name: 'SystemManage',
+                    name: 'systemManage',
                     component: SystemManage,
                     meta: {
                         title:'系统参数管理',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/userInformation',
+                    name: 'UserInformation',
+                    component: UserInformation,
+                    meta: {
+                        title:'个人信息',
                         requireAuth: true
                     }
                 },

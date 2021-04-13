@@ -85,9 +85,20 @@ export default {
                 },
                 {
                     icon: 'el-icon-tickets',
+                    index: 'userManage',
+                    title: '用户管理'
+                },
+                {
+                    icon: 'el-icon-tickets',
+                    index: 'roleManage',
+                    title: '角色管理'
+                },
+                {
+                    icon: 'el-icon-tickets',
                     index: 'dictionary',
                     title: '数据字典管理'
                 },
+
                 {
                     icon: 'el-icon-tickets',
                     index: 'systemManage',

@@ -12,6 +12,7 @@ const LoginUsers = [
 const Users = [];
 const Teacher =[];
 const Dictionary =[];
+const Parameter =[];
 
 //用户
 for (let i = 0; i < 20; i++) {
@@ -47,4 +48,12 @@ for (let i = 0; i < 20; i++) {
         'dicText|1':['用户类型','用户类型','学生类型']
     }));
 }
-export { LoginUsers, Users,Teacher,Dictionary };
+
+//系统参数
+const index = [{id: Mock.Random.guid(), parameter: '验证码时间', value: '60', remark: '重新获取验证码时间'},
+    {id: Mock.Random.guid(), parameter: '分页数', value: '10', remark: '一页的项目数'},
+    {id: Mock.Random.guid(), parameter: '密码长度', value: '6', remark: '要求最低密码长度'}]
+for (let i = 0;i<3;i++) {
+    Parameter.push(Mock.mock(index[i]));
+}
+export { LoginUsers, Users,Teacher,Dictionary,Parameter };

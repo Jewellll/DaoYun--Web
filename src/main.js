@@ -39,7 +39,6 @@ new Vue({
     el: '#app',
     render: h => h(App),
     router,
-    store,      //拦截器
     components: {App},
     template: '<App/>'
 })

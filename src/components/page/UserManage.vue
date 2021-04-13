@@ -5,13 +5,13 @@
             <el-col :span="24" class="toolbar" style="padding-bottom: 0px;margin-bottom: 10px">
                 <el-form :inline="true" :model="filters">
                     <el-form-item>
-                        <el-input v-model="filters.name" placeholder="参数名"></el-input>
+                        <el-input v-model="filters.name" placeholder="用户名"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" v-on:click="getUsers">查询参数</el-button>
+                        <el-button type="primary" v-on:click="getUsers">查询用户</el-button>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="handleAdd">新增参数</el-button>
+                        <el-button type="primary" @click="handleAdd">新增用户</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -24,11 +24,13 @@
                 </el-table-column>
                 <el-table-column type="index" width="60">
                 </el-table-column>
-                <el-table-column prop="parameter" label="系统参数名" width="300" >
+                <el-table-column prop="userName" label="用户名" width="100" sortable>
                 </el-table-column>
-                <el-table-column prop="value" label="系统参数值" width="300" >
+                <el-table-column prop="userPhone" label="手机号" width="350" sortable>
                 </el-table-column>
-                <el-table-column prop="remark" label="备注" width="300" >
+                <el-table-column prop="userSex" label="性别" width="100" :formatter="formatSex" sortable>
+                </el-table-column>
+                <el-table-column prop="role" label="角色" width="300" sortable>
                 </el-table-column>
                 <el-table-column label="操作" width="150">
                     <template scope="scope">
@@ -51,14 +53,20 @@
             <!--编辑界面-->
             <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
                 <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                    <el-form-item label="系统参数名" prop="parameter">
-                        <el-input v-model="editForm.parameter" auto-complete="off"></el-input>
+                    <el-form-item label="用户名" prop="userName">
+                        <el-input v-model="editForm.userName" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="系统参数值" prop="value">
-                        <el-input v-model="editForm.value" auto-complete="off"></el-input>
+                    <el-form-item label="手机号" prop="userPhone">
+                        <el-input v-model="editForm.userPhone" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="备注" prop="remark">
-                        <el-input v-model="editForm.remark" auto-complete="off"></el-input>
+                    <el-form-item label="性别">
+                        <el-radio-group v-model="editForm.userSex">
+                            <el-radio class="radio" :label="1">男</el-radio>
+                            <el-radio class="radio" :label="0">女</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="角色" prop="role">
+                        <el-input v-model="editForm.role" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -70,14 +78,20 @@
             <!--新增界面-->
             <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                    <el-form-item label="系统参数名" prop="parameter">
-                        <el-input v-model="addForm.parameter" auto-complete="off"></el-input>
+                    <el-form-item label="用户名" prop="userName">
+                        <el-input v-model="addForm.userName" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="系统参数值" prop="value">
-                        <el-input v-model="addForm.value" auto-complete="off"></el-input>
+                    <el-form-item label="手机号" prop="userPhone">
+                        <el-input v-model="addForm.userPhone" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="备注" prop="remark">
-                        <el-input v-model="addForm.remark" auto-complete="off"></el-input>
+                    <el-form-item label="性别">
+                        <el-radio-group v-model="addForm.userSex">
+                            <el-radio class="radio" :label="1">男</el-radio>
+                            <el-radio class="radio" :label="0">女</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="角色" prop="role">
+                        <el-input v-model="addForm.role" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -91,11 +105,11 @@
 
 <script>
 import {
-    addPara,
-    batchRemovePara,
-    editPara,
-    getParaListPage,
-    removePara
+    addUser,
+    batchRemoveUser,
+    editUser,
+    getUserListPage,
+    removeUser
 } from '../../api/api'
 
 export default {
@@ -146,6 +160,10 @@ export default {
         }
     },
     methods: {
+        //性别显示转换
+        formatSex: function (row, column) {
+            return row.userSex == 1 ? '男' : row.userSex == 0 ? '女' : '未知'
+        },
         //翻页
         handleCurrentChange (val) {
             this.page = val
@@ -158,7 +176,7 @@ export default {
                 name: this.filters.name
             }
             this.listLoading = true
-            getParaListPage(para).then((res) => {
+            getUserListPage(para).then((res) => {
                 this.total = res.data.total
                 this.users = res.data.users
                 this.listLoading = false
@@ -172,7 +190,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {id: row.id}
-                removePara(para).then((res) => {
+                removeUser(para).then((res) => {
                     this.listLoading = false
                     //NProgress.done();
                     this.$message({
@@ -209,7 +227,7 @@ export default {
                         this.editLoading = true
                         //NProgress.start();
                         let para = Object.assign({}, this.editForm)
-                        editPara(para).then((res) => {
+                        editUser(para).then((res) => {
                             this.editLoading = false
                             //NProgress.done();
                             this.$message({
@@ -232,7 +250,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
-                        addPara(para).then((res) => {
+                        addUser(para).then((res) => {
                             this.addLoading = false
                             this.$message({
                                 message: '新增成功',
@@ -257,7 +275,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {ids: ids}
-                batchRemovePara(para).then((res) => {
+                batchRemoveUser(para).then((res) => {
                     this.listLoading = false
                     //NProgress.done();
                     this.$message({
