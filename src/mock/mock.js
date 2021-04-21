@@ -31,14 +31,15 @@ export default {
                 setTimeout(() => {
                     let hasUser = LoginUsers.some(u => {
                         if (u.username === username && u.password === password) {
-                            user = JSON.parse(JSON.stringify(u))
+                                user = JSON.parse(JSON.stringify(u))
                             user.password = undefined
                             return true
                         }
                     })
 
                     if (hasUser) {
-                        resolve([200, {code: 200, msg: '登录成功', user}])
+                        console.log(user.username)
+                        resolve([200, {code: 200, msg: '登录成功',token:'222',user}])
                     } else {
                         resolve([200, {code: 400, msg: '账号或密码错误'}])
                     }

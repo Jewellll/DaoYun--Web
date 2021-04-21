@@ -24,13 +24,13 @@
                 </el-table-column>
                 <el-table-column type="index" width="60">
                 </el-table-column>
-                <el-table-column prop="dicId" label="字典编号" width="200" sortable>
+                <el-table-column prop="dicCode" label="Code" width="200" sortable>
                 </el-table-column>
-                <el-table-column prop="dicName" label="字典名称" width="250" sortable>
+                <el-table-column prop="dicName" label="name" width="250" sortable>
                 </el-table-column>
-                <el-table-column prop="dicCode" label="Code" width="340" sortable>
+                <el-table-column prop="dicType" label="type_code" width="340" sortable>
                 </el-table-column>
-                <el-table-column prop="dicText" label="字典描述" width="300" sortable>
+                <el-table-column prop="dicValue" label="value" width="300" sortable>
                 </el-table-column>
                 <el-table-column label="操作" width="150">
                     <template scope="scope">

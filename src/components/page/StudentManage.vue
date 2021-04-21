@@ -17,21 +17,20 @@
             </el-col>
 
             <!--列表-->
-            <el-table :data="users"  :header-cell-style="{background:'#F5F6FA',color:'#666E92'}" :row-style="{height:'25px'}" :cell-style="{padding:'1px'}"
-                      highlight-current-row v-loading="listLoading"  @selection-change="selsChange" class="table">
+            <el-table :data="users" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}"
+                      :row-style="{height:'25px'}" :cell-style="{padding:'1px'}"
+                      highlight-current-row v-loading="listLoading" @selection-change="selsChange" class="table">
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column type="index" width="60">
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" width="120" sortable>
+                <el-table-column prop="studentId" label="学号" width="200" :formatter="formatSex" sortable>
                 </el-table-column>
-                <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+                <el-table-column prop="name" label="姓名" width="300" sortable>
                 </el-table-column>
-                <el-table-column prop="age" label="年龄" width="100" sortable>
+                <el-table-column prop="school" label="学校" width="300" sortable>
                 </el-table-column>
-                <el-table-column prop="birth" label="生日" width="120" sortable>
-                </el-table-column>
-                <el-table-column prop="addr" label="地址" min-width="180" sortable>
+                <el-table-column prop="class" label="班课" width="300" sortable>
                 </el-table-column>
                 <el-table-column label="操作" width="150">
                     <template scope="scope">
@@ -43,32 +42,28 @@
 
             <!--工具条-->
             <el-col :span="24" class="toolbar2">
-                <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0" style="position: relative;left: -450px ">批量删除</el-button>
+                <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0"
+                           style="position: relative;left: -450px ">批量删除
+                </el-button>
                 <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="6"
                                :total="total" style="float:right;">
                 </el-pagination>
             </el-col>
 
             <!--编辑界面-->
-            <el-dialog title="编辑" :visible.sync="editFormVisible"  :close-on-click-modal="false">
+            <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
                 <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+                    <el-form-item label="学号" prop="studentId">
+                        <el-input v-model="editForm.studentId" auto-complete="off"></el-input>
+                    </el-form-item>
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="editForm.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="性别">
-                        <el-radio-group v-model="editForm.sex">
-                            <el-radio class="radio" :label="1">男</el-radio>
-                            <el-radio class="radio" :label="0">女</el-radio>
-                        </el-radio-group>
+                    <el-form-item label="学校" prop="school">
+                        <el-input v-model="editForm.school" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="年龄">
-                        <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-                    </el-form-item>
-                    <el-form-item label="生日">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="地址">
-                        <el-input type="textarea" v-model="editForm.addr"></el-input>
+                    <el-form-item label="班课" prop="class">
+                        <el-input v-model="editForm.class" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -80,23 +75,17 @@
             <!--新增界面-->
             <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+                    <el-form-item label="学号" prop="studentId">
+                        <el-input v-model="addForm.studentId" auto-complete="off"></el-input>
+                    </el-form-item>
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="addForm.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="性别">
-                        <el-radio-group v-model="addForm.sex">
-                            <el-radio class="radio" :label="1">男</el-radio>
-                            <el-radio class="radio" :label="0">女</el-radio>
-                        </el-radio-group>
+                    <el-form-item label="学校" prop="school">
+                        <el-input v-model="addForm.school" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="年龄">
-                        <el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-                    </el-form-item>
-                    <el-form-item label="生日">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="地址">
-                        <el-input type="textarea" v-model="addForm.addr"></el-input>
+                    <el-form-item label="班课" prop="class">
+                        <el-input v-model="addForm.class" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -109,8 +98,15 @@
 </template>
 
 <script>
-import {addUser, batchRemoveUser, editUser, getUserListPage, removeUser} from '../../api/api'
+import {
+    addStudent,
+    batchRemoveStudent,
+    editStudent,
+    getStudentListPage,
+    removeStudent
+} from '../../api/api'
 import util from '../../common/js/util'
+
 export default {
     name: 'StudentManage',
     data () {
@@ -160,10 +156,6 @@ export default {
         }
     },
     methods: {
-        //性别显示转换
-        formatSex: function (row, column) {
-            return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知'
-        },
         //翻页
         handleCurrentChange (val) {
             this.page = val
@@ -176,7 +168,7 @@ export default {
                 name: this.filters.name
             }
             this.listLoading = true
-            getUserListPage(para).then((res) => {
+            getStudentListPage(para).then((res) => {
                 this.total = res.data.total
                 this.users = res.data.users
                 this.listLoading = false
@@ -190,7 +182,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {id: row.id}
-                removeUser(para).then((res) => {
+                removeStudent(para).then((res) => {
                     this.listLoading = false
                     //NProgress.done();
                     this.$message({
@@ -228,7 +220,7 @@ export default {
                         //NProgress.start();
                         let para = Object.assign({}, this.editForm)
                         para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
-                        editUser(para).then((res) => {
+                        editStudent(para).then((res) => {
                             this.editLoading = false
                             //NProgress.done();
                             this.$message({
@@ -251,7 +243,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
-                        addUser(para).then((res) => {
+                        addStudent(para).then((res) => {
                             this.addLoading = false
                             this.$message({
                                 message: '新增成功',
@@ -276,7 +268,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {ids: ids}
-                batchRemoveUser(para).then((res) => {
+                batchRemoveStudent(para).then((res) => {
                     this.listLoading = false
                     //NProgress.done();
                     this.$message({
@@ -306,7 +298,8 @@ export default {
     height: 100vh;
     border-radius: 5px;
 }
-.toolbar{
+
+.toolbar {
     width: 100%;
     background-color: #f1f1f1;
     margin-right: 10px;
@@ -314,7 +307,8 @@ export default {
     padding-left: 0px;
     height: 60px;
 }
-.toolbar2{
+
+.toolbar2 {
     width: 100%;
     margin-top: 10px;
     background-color: #f1f1f1;
@@ -323,7 +317,8 @@ export default {
     padding-left: 0px;
     height: 60px;
 }
-.table{
+
+.table {
     width: 100%;
     height: 405px;
 }

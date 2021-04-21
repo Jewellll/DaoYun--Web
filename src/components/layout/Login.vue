@@ -23,13 +23,13 @@
                 <el-button @click="refreshCode" type='text' class="textbtn">看不清，换一张</el-button>
             </div>
         </el-form-item>
-
         <el-form-item>
             <el-button type="primary" :loading="logining" style="width: 100%;background: #2E9AFE;border: none" @click="login()">
                 登录
             </el-button>
         </el-form-item>
         <el-link :underline="false" class="forget-link" @click="forgetPassword()">忘记密码</el-link>
+        <el-link :underline="false" class="phone-link" @click="phoneLogin()"><i class="el-icon-mobile-phone"></i>手机登录</el-link>
         <el-link :underline="false" class="signup-link" @click="register()">注册账号</el-link>
     </el-form>
     </div>
@@ -99,6 +99,7 @@ export default {
             console.log(this.identifyCode)
         },
         login () {
+            const _this = this
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
                     this.logining = true;
@@ -109,7 +110,11 @@ export default {
                         if (code !== 200) {
                             this.$message.error("账号或密码错误");
                         } else {
-                            this.$store.commit('login', JSON.stringify(token));
+                            console.log(msg);
+                            console.log('1')
+                            console.log(user.username)
+                            _this.$store.commit('login', user);
+                            _this.$store.commit('login2', token);
                             this.$router.push({ path: '/home' });
                         }
                     } );
@@ -121,6 +126,9 @@ export default {
         },
         forgetPassword(){
             this.$router.push({ path: "/checkphone", query: {} });
+        },
+        phoneLogin(){
+            this.$router.push({ path: "/phoneLogin", query: {} });
         },
         register(){
             this.$router.push({ path: "/register", query: {} });
@@ -150,13 +158,18 @@ export default {
 
 .forget-link {
     position: relative;
-    right: 145px;
+    right: 120px;
+    color: #505458;
+    font-size: 12px;
+}
+.phone-link {
+    position: center;
     color: #505458;
     font-size: 12px;
 }
 .signup-link{
     position: relative;
-    left: 145px;
+    left: 120px;
     color: #505458;
     font-size: 12px;
 }

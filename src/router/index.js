@@ -14,6 +14,8 @@ import Dictionary from '../components/page/Dictionary'
 import UserInformation from '../components/page/UserInformation'
 import UserManage from '../components/page/UserManage'
 import SystemManage from '../components/page/SystemManage'
+import CourseManage from '../components/page/CourseManage'
+import PhoneLogin from '../components/page/PhoneLogin'
 
 Vue.use(Router)
 
@@ -57,6 +59,15 @@ export default new Router({
                     component: TeacherManage,
                     meta: {
                         title:'教师管理',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/courseManage',
+                    name: 'courseManage',
+                    component: CourseManage,
+                    meta: {
+                        title:'课程管理',
                         requireAuth: true
                     }
                 },
@@ -148,6 +159,11 @@ export default new Router({
                     path: '/register',
                     name: 'Register',
                     component: Register
+                },
+                {
+                    path: '/phoneLogin',
+                    name: 'PhoneLogin',
+                    component: PhoneLogin
                 }
             ]
         },

@@ -24,11 +24,15 @@
                 </el-table-column>
                 <el-table-column type="index" width="60">
                 </el-table-column>
-                <el-table-column prop="card" label="工号" width="400" sortable>
+                <el-table-column prop="courseId" label="班课号" width="200">
                 </el-table-column>
-                <el-table-column prop="name" label="姓名" width="350" sortable>
+                <el-table-column prop="courseName" label="班课名" width="200">
                 </el-table-column>
-                <el-table-column prop="course" label="课程" width="300" sortable>
+                <el-table-column prop="school" label="学校" width="200">
+                </el-table-column>
+                <el-table-column prop="college" label="学院" width="200">
+                </el-table-column>
+                <el-table-column prop="teacher" label="任课教师" width="200">
                 </el-table-column>
                 <el-table-column label="操作" width="150">
                     <template scope="scope">
@@ -51,14 +55,20 @@
             <!--编辑界面-->
             <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
                 <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                    <el-form-item label="工号" prop="card">
-                        <el-input v-model="editForm.card" auto-complete="off"></el-input>
+                    <el-form-item label="学号" prop="courseId">
+                        <el-input v-model="editForm.courseId" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="姓名" prop="name">
-                        <el-input v-model="editForm.name" auto-complete="off"></el-input>
+                    <el-form-item label="姓名" prop="courseName">
+                        <el-input v-model="editForm.courseName" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="课程" prop="course">
-                        <el-input v-model="editForm.course" auto-complete="off"></el-input>
+                    <el-form-item label="学校" prop="school">
+                        <el-input v-model="editForm.school" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="学院" prop="college">
+                        <el-input v-model="editForm.college" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="任课教师" prop="teacher">
+                        <el-input v-model="editForm.teacher" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -70,14 +80,20 @@
             <!--新增界面-->
             <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
                 <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                    <el-form-item label="工号" prop="card">
-                        <el-input v-model="addForm.card" auto-complete="off"></el-input>
+                    <el-form-item label="学号" prop="courseId">
+                        <el-input v-model="editForm.courseId" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="姓名" prop="name">
-                        <el-input v-model="addForm.name" auto-complete="off"></el-input>
+                    <el-form-item label="姓名" prop="courseName">
+                        <el-input v-model="editForm.courseName" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="课程" prop="course">
-                        <el-input v-model="addForm.course" auto-complete="off"></el-input>
+                    <el-form-item label="学校" prop="school">
+                        <el-input v-model="editForm.school" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="学院" prop="college">
+                        <el-input v-model="editForm.college" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="任课教师" prop="teacher">
+                        <el-input v-model="editForm.teacher" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -91,15 +107,15 @@
 
 <script>
 import {
-    addTeacher,
-    batchRemoveTeacher,
-    editTeacher,
-    getTeacherListPage,
-    removeTeacher
+    addCourse,
+    batchRemoveCourse,
+    editCourse,
+    getCourseListPage,
+    removeCourse
 } from '../../api/api'
+import util from '../../common/js/util'
 
 export default {
-    name: 'TeacherManage',
     data () {
         return {
             filters: {
@@ -114,9 +130,6 @@ export default {
             editFormVisible: false,//编辑界面是否显示
             editLoading: false,
             editFormRules: {
-                card: [
-                    {required: true, message: '请输入工号', trigger: 'blur'}
-                ],
                 name: [
                     {required: true, message: '请输入姓名', trigger: 'blur'}
                 ]
@@ -125,8 +138,10 @@ export default {
             editForm: {
                 id: 0,
                 name: '',
-                card: '',
-                course: ''
+                sex: -1,
+                age: 0,
+                birth: '',
+                addr: ''
             },
 
             addFormVisible: false,//新增界面是否显示
@@ -148,10 +163,6 @@ export default {
         }
     },
     methods: {
-        //性别显示转换
-        formatSex: function (row, column) {
-            return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知'
-        },
         //翻页
         handleCurrentChange (val) {
             this.page = val
@@ -164,7 +175,7 @@ export default {
                 name: this.filters.name
             }
             this.listLoading = true
-            getTeacherListPage(para).then((res) => {
+            getCourseListPage(para).then((res) => {
                 this.total = res.data.total
                 this.users = res.data.users
                 this.listLoading = false
@@ -178,7 +189,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {id: row.id}
-                removeTeacher(para).then((res) => {
+                removeCourse(para).then((res) => {
                     this.listLoading = false
                     //NProgress.done();
                     this.$message({
@@ -215,7 +226,8 @@ export default {
                         this.editLoading = true
                         //NProgress.start();
                         let para = Object.assign({}, this.editForm)
-                        editTeacher(para).then((res) => {
+                        para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
+                        editCourse(para).then((res) => {
                             this.editLoading = false
                             //NProgress.done();
                             this.$message({
@@ -238,7 +250,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
-                        addTeacher(para).then((res) => {
+                        addCourse(para).then((res) => {
                             this.addLoading = false
                             this.$message({
                                 message: '新增成功',
@@ -263,7 +275,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {ids: ids}
-                batchRemoveTeacher(para).then((res) => {
+                batchRemoveCourse(para).then((res) => {
                     this.listLoading = false
                     //NProgress.done();
                     this.$message({

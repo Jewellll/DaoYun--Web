@@ -2,7 +2,7 @@
     <div>
         <el-form ref="checkForm" class="check-container" label-position="left"
                  label-width="0x">
-            <h3 class="check_title">验证手机</h3>
+            <h3 class="check_title">手机登录</h3>
             <el-form-item prop="phoneNum">
                 <el-input type="text" v-model="phoneNum"
                           auto-complete="off" placeholder="请输入手机号码"></el-input>
@@ -23,7 +23,7 @@
             <el-form-item>
                 <el-button type="primary" style="width: 100%;border: none"
                            v-on:click.stop="verificationCode">
-                    确定
+                    登录
                 </el-button>
             </el-form-item>
             <el-link :underline="false" class="back-link" @click="back()">返回</el-link>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import {requestLogin, requestMss, requestPhoneLogin} from '../../api/api'
+
 export default {
     data () {
         return {
@@ -69,19 +71,29 @@ export default {
             this.btnColor = false
             this.timer()
             // 获取验证码请求
-            this.$axios
-                .post('/send', {
-                    phoneNum: this.phoneNum,
-                })
-                .then(res => {
-                    if (res.data.code === 200) {
-                        this.$message('发送成功')
-                    }
-                    if (res.data.code === 400) {
-                        this.$message.error("发送失败");
-                    }
-                })
-                .catch(failResponse => {});
+            const phoneParams={phoneNum: this.phoneNum}
+            requestMss(phoneParams).then(data => {
+                let {msg, code, user, token} = data;
+                if (code === 200) {
+                    this.$message('发送成功')
+                } else if (code === 400) {
+                    this.$message.error("发送失败");
+                }
+            });
+            // this.$http
+            //     .post('/send', {
+            //         phoneNum: this.phoneNum,
+            //     })
+            //     .then(res => {
+            //         if (res.data.code === 200) {
+            //             this.$message('发送成功')
+            //         }
+            //         if (res.data.code === 400) {
+            //             this.$message.error('发送失败')
+            //         }
+            //     })
+            //     .catch(failResponse => {
+            //     })
         },
         timer () {
             if (this.time > 0) {
@@ -98,27 +110,22 @@ export default {
         },
         // 验证验证码
         verificationCode () {
-            this.$axios
-                .post('/check', {
-                    phoneNum: this.phoneNum,
-                    verifyNum: this.verifyNum
+            const loginParams = {phoneNum: this.phoneNum, verifyNum: this.verifyNum}
+            requestPhoneLogin(loginParams).then(data => {
+                let {msg, code, user, token} = data
+                if (code !== 200) {
+                    this.$message.error('手机号号码错误')
+                } else {
+                    _this.$store.commit('login', user)
+                    _this.$store.commit('login2', token)
+                    this.$router.push({path: '/home'})
+                }
+            })
+                .catch(failResponse => {
                 })
-                .then(res => {
-                    if (res.data.code === 200) {
-                        this.$message('验证成功')
-                        var path = this.$route.query.redirect
-                        this.$router.replace({
-                            path: path === '/' || path === undefined ? '/forgetpassword' : path
-                        });
-                    }
-                    if (res.data.code === 400) {
-                        this.$message.error("验证失败");
-                    }
-                })
-                .catch(failResponse => {});
         },
-        back(){
-            this.$router.push({ path: "/login", query: {} });
+        back () {
+            this.$router.push({path: '/login', query: {}})
         }
     }
 }

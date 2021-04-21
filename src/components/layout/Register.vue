@@ -23,6 +23,9 @@
             <el-form-item prop="username">
                 <el-input type="text" v-model="regForm.username" placeholder="用户名"></el-input>
             </el-form-item>
+            <el-form-item prop="email">
+                <el-input type="text" v-model="regForm.email" placeholder="邮箱"></el-input>
+            </el-form-item>
             <el-form-item  prop="newPassword">
                 <el-input type="password" v-model="regForm.newPassword" placeholder="新密码"></el-input>
             </el-form-item>
@@ -35,16 +38,14 @@
                     确定
                 </el-button>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" style="width: 100%;border: none" @click="back()">
-                    取消
-                </el-button>
-            </el-form-item>
+            <el-link :underline="false" class="back-link" @click="back()">返回</el-link>
         </el-form>
     </div>
 </template>
 
 <script>
+import {editUserInfo, requestLogin, requestMss, requireRegister} from '../../api/api'
+
 export default {
     name: 'Register',
     data () {
@@ -69,6 +70,7 @@ export default {
         return {
             regForm: {
                 username:"",
+                email:"",
                 newPassword:"",
                 checkPassword:""
             },
@@ -110,20 +112,29 @@ export default {
             this.time = 60
             this.btnColor = false
             this.timer()
-            // 获取验证码请求
-            this.$axios
-                .post('/send', {
-                    phoneNum: this.phoneNum,
-                })
-                .then(res => {
-                    if (res.data.code === 200) {
-                        this.$message('发送成功')
-                    }
-                    if (res.data.code === 400) {
-                        this.$message.error("发送失败");
-                    }
-                })
-                .catch(failResponse => {});
+            获取验证码请求
+            const phoneParams={phoneNum: this.phoneNum}
+            requestMss(phoneParams).then(data => {
+                let {msg, code, user, token} = data;
+                if (code === 200) {
+                    this.$message('发送成功')
+                } else if (code === 400) {
+                    this.$message.error("发送失败");
+                }
+            });
+            // this.$http
+            //     .post('/send', {
+            //         phoneNum: this.phoneNum,
+            //     })
+            //     .then(res => {
+            //         if (res.data.code === 200) {
+            //             this.$message('发送成功')
+            //         }
+            //         if (res.data.code === 400) {
+            //             this.$message.error("发送失败");
+            //         }
+            //     })
+            //     .catch(failResponse => {});
         },
         timer () {
             if (this.time > 0) {
@@ -140,25 +151,31 @@ export default {
         },
         // 验证验证码
         verificationCode () {
-            this.$axios
-                .post('/register', {
-                    phoneNum: this.phoneNum,
-                    verifyNum: this.verifyNum,
-                    username: this.regForm.username,
-                })
-                .then(res => {
-                    if (res.data.code === 200) {
-                        this.$message('注册成功')
-                        var path = this.$route.query.redirect
-                        this.$router.replace({
-                            path: path === '/' || path === undefined ? '/login' : path
-                        });
-                    }
-                    if (res.data.code === 400) {
-                        this.$message.error("注册失败");
-                    }
-                })
-                .catch(failResponse => {});
+            this.$refs.regForm.validate((valid) => {
+                if (valid) {
+                    const regParams = { phoneNum: this.phoneNum,
+                        verifyNum: this.verifyNum,
+                        username: this.regForm.username,
+                        password:this.regForm.newPassword,
+                        email: this.regForm.email}
+                     requireRegister(regParams).then(data => {
+                        this.logining = false
+                        let {msg, code, user, token} = data
+                        if (code !== 200) {
+                            this.$message.error("注册失败");
+                        } else {
+                            this.$message('注册成功')
+                            var path = this.$route.query.redirect
+                            this.$router.replace({
+                                path: path === '/' || path === undefined ? '/login' : path
+                            });
+                        }
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         },
         back(){
             this.$router.push({ path: "/login", query: {} });
@@ -180,10 +197,16 @@ export default {
     margin-right: auto;
     margin-top: 0px;
     width: 350px;
-    padding: 15px 35px 15px 35px;
+    padding: 0px 35px 8px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
     opacity: 0.9;
+}
+.back-link {
+    position: relative;
+    left: 180px;
+    color: #505458;
+    font-size: 13px;
 }
 </style>

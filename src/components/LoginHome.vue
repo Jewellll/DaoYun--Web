@@ -25,8 +25,8 @@ export default {
     left: 0;
 }
 .title {
-    margin-top: 15px;
-    margin-bottom: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
     font-size: 30px;
     text-align: center;
     text-shadow: 5px 5px 5px black, 0px 0px 2px black;
