@@ -16,6 +16,8 @@ import UserManage from '../components/page/UserManage'
 import SystemManage from '../components/page/SystemManage'
 import CourseManage from '../components/page/CourseManage'
 import PhoneLogin from '../components/page/PhoneLogin'
+import Test from '../components/page/Test'
+import RoleManage from '../components/page/RoleManage'
 
 Vue.use(Router)
 
@@ -104,6 +106,24 @@ export default new Router({
                     component: UserInformation,
                     meta: {
                         title:'个人信息',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/roleManage',
+                    name: 'RoleManage',
+                    component: RoleManage,
+                    meta: {
+                        title:'角色管理',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/test',
+                    name: 'Test',
+                    component: Test,
+                    meta: {
+                        title:'测试页面',
                         requireAuth: true
                     }
                 },

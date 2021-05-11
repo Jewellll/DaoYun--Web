@@ -46,6 +46,27 @@ export default {
                 }, 1000)
             })
         })
+        mock.onPost('/phoneLogin').reply(config => {
+            let {phoneNum, verifyNum} = JSON.parse(config.data)
+            return new Promise((resolve, reject) => {
+                let user = null
+                setTimeout(() => {
+                    let hasUser = LoginUsers.some(u => {
+                        if ('180' === phoneNum && '180' === verifyNum) {
+                            // user = JSON.parse(JSON.stringify(u))
+                            // user.password = undefined
+                            return true
+                        }
+                    })
+
+                    if (hasUser) {
+                        resolve([200, {code: 200, msg: '登录成功',token:'222',user}])
+                    } else {
+                        resolve([200, {code: 400, msg: '账号或密码错误'}])
+                    }
+                }, 1000)
+            })
+        })
 
         //获取用户列表
         mock.onGet('/user/list').reply(config => {

@@ -107,15 +107,14 @@ export default {
                     requestLogin(loginParams).then(data => {
                         this.logining = false;
                         let { msg, code, user,token } = data;
-                        if (code !== 200) {
-                            this.$message.error("账号或密码错误");
-                        } else {
-                            console.log(msg);
-                            console.log('1')
-                            console.log(user.username)
+                        if (code == 300) {
+                            this.$message.error(msg);
+                        } else if(code==200){
                             _this.$store.commit('login', user);
                             _this.$store.commit('login2', token);
-                            this.$router.push({ path: '/home' });
+                            _this.$router.push({ path: '/home' });
+                        }else if(code == 400){
+                            this.$message.error(msg);
                         }
                     } );
                 } else {

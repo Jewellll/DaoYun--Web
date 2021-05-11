@@ -22,7 +22,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" style="width: 100%;border: none"
-                           v-on:click.stop="verificationCode">
+                           v-on:click="verificationCode">
                     登录
                 </el-button>
             </el-form-item>
@@ -110,15 +110,19 @@ export default {
         },
         // 验证验证码
         verificationCode () {
+            const _this = this
             const loginParams = {phoneNum: this.phoneNum, verifyNum: this.verifyNum}
             requestPhoneLogin(loginParams).then(data => {
                 let {msg, code, user, token} = data
-                if (code !== 200) {
-                    this.$message.error('手机号号码错误')
-                } else {
+                if (code == 300) {
+                    this.$message.error(msg)
+                } else if(code ==200){
+                    console.log('11')
                     _this.$store.commit('login', user)
                     _this.$store.commit('login2', token)
-                    this.$router.push({path: '/home'})
+                    _this.$router.push({path: '/home'})
+                }else if(code == 400){
+                    this.$message.error(msg)
                 }
             })
                 .catch(failResponse => {
