@@ -1,9 +1,9 @@
 <template>
     <body id="poster">
     <div class="title">
-        <h1>到云后台管理系统</h1>
+        <h1>DAOYUN</h1>
     </div>
-    <router-view></router-view>
+<router-view></router-view>
     </body>
 </template>
 
@@ -26,10 +26,13 @@ export default {
 }
 .title {
     margin-top: 0px;
-    margin-bottom: 0px;
-    font-size: 30px;
-    text-align: center;
-    text-shadow: 5px 5px 5px black, 0px 0px 2px black;
-    color: #5882FA;
+    height: 80px;
+    font-size: 1em;
+    font-weight:700;
+    color:#fff;
+    font-family:Avenir Next, Helvetica Neue, Helvetica, Tahoma, sans-serif;
 }
+
+
+
 </style>
