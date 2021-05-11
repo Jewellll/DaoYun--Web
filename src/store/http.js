@@ -4,9 +4,8 @@ import {Message} from 'element-ui'
 
 
 axios.defaults.timeout = 5000; // 超时时间
-axios.defaults.baseURL = 'http://192.168.43.242:8443/api'
-// axios.defaults.baseURL = 'http://172.20.10.11:8443/api'
-// axios.defaults.baseURL = 'http://localhost:8443/api'
+axios.defaults.baseURL = 'http://localhost:8443/api'
+
 // http request 拦截器
 axios.interceptors.request.use(
     config => {

@@ -107,34 +107,24 @@ export default {
                 {
                     icon: 'el-icon-files',
                     index: '3',
-                    title: '相关页面',
+                    title: '异常管理',
                     subs: [
                         {
-                            index: 'test',
-                            title: '测试页面'
-                        },{
-                            index: '3-2',
-                            title: '异常管理',
-                            subs: [
-                                {
-                                    index: '500',
-                                    title: '500异常页面'
-                                },
-                                {
-                                    index: '404',
-                                    title: '404异常页面'
-                                },
-                                {
-                                    index: '403',
-                                    title: '403异常页面'
-                                },
-                                {
-                                    index: 'diyError',
-                                    title: '自定义异常页面'
-                                }
-                                ]
+                            index: '500',
+                            title: '500异常页面'
+                        },
+                        {
+                            index: '404',
+                            title: '404异常页面'
+                        },
+                        {
+                            index: '403',
+                            title: '403异常页面'
+                        },
+                        {
+                            index: 'diyError',
+                            title: '自定义异常页面'
                         }
-
                     ]
                 }
             ]
