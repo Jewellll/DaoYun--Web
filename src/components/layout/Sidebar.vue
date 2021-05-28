@@ -69,43 +69,43 @@ export default {
                     title: '系统首页'
                 },
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-collection',
                     index: 'teacherManage',
                     title: '教师管理'
                 },
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-notebook-1',
                     index: 'studentManage',
                     title: '学生管理'
                 },
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-data-analysis',
                     index: 'courseManage',
                     title: '课程管理'
                 },
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-user',
                     index: 'userManage',
                     title: '用户管理'
                 },
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-lock',
                     index: 'roleManage',
                     title: '角色管理'
                 },
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-reading',
                     index: 'dictionary',
                     title: '数据字典管理'
                 },
 
                 {
-                    icon: 'el-icon-tickets',
+                    icon: 'el-icon-set-up',
                     index: 'systemManage',
                     title: '系统参数管理'
                 },
                 {
-                    icon: 'el-icon-files',
+                    icon: 'el-icon-paperclip',
                     index: '3',
                     title: '相关页面',
                     subs: [

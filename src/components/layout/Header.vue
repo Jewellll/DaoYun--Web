@@ -40,25 +40,31 @@
                     <span class="sender">注册时间： {{ userInfo.create_time }}</span>
                 </div>
                 <el-divider></el-divider>
-                <div class="personal-relation">
-                    <div class="relation-item">用户名:
-                        <div style="float: right; padding-right:70px;">{{ userInfo.username }}</div>
-                    </div>
-                </div>
-                <div class="personal-relation">
-                    <div class="relation-item">性别:
-                        <div style="float: right; padding-right:70px;">{{ sex }}</div>
-                    </div>
-                </div>
-                <div class="personal-relation">
-                    <div class="relation-item">手机号:
-                        <div style="float: right; padding-right:70px;">{{ userInfo.telphone }}</div>
-                    </div>
-                </div>
-                <div class="personal-relation">
-                    <div class="relation-item">邮箱:
-                        <div style="float: right; padding-right:70px;">{{ userInfo.email }}</div>
-                    </div>
+                <div class="Info">
+                    <span class="sender">用户名： {{ userInfo.username }}</span>
+                    <span class="sender">性别：  {{ sex }}</span>
+                    <span class="sender">手机号： {{ userInfo.telphone }}</span>
+                    <span class="sender">邮箱： {{ userInfo.email }}</span>
+<!--                <div class="personal-relation">-->
+<!--                    <div class="relation-item">用户名:-->
+<!--                        <div style="float: right; padding-right:70px;">{{ userInfo.username }}</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="personal-relation">-->
+<!--                    <div class="relation-item">性别:-->
+<!--                        <div style="float: right; padding-right:70px;">{{ sex }}</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="personal-relation">-->
+<!--                    <div class="relation-item">手机号:-->
+<!--                        <div style="float: right; padding-right:70px;">{{ userInfo.telphone }}</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="personal-relation">-->
+<!--                    <div class="relation-item">邮箱:-->
+<!--                        <div style="float: right; padding-right:70px;">{{ userInfo.email }}</div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 </div>
             </div>
             <el-button style="width: 50%;margin-top: 100px" @click.native="edit = true" type="primary">修改信息</el-button>
@@ -233,7 +239,6 @@ export default {
         if (user) {
             user = JSON.parse(user)
             this.userInfo = user
-            console.log(this.userInfo.avatar)
             this.formatSex(user)
             this.userForm = this.userInfo
         }
@@ -288,7 +293,7 @@ export default {
     margin: 0px;
     position: relative;
     width: 100%;
-    height: 60px;
+    height: 40px;
     background-color: #5882FA;
     font-size: 30px;
     color: #fff;
@@ -298,15 +303,15 @@ export default {
     float: left;
     width: 157px;
     text-align: center;
-    line-height: 70px;
+    line-height: 40px;
     background-color: #81BEF7;
-    height: 60px;
+    height: 40px;
 }
 
 .user {
     float: right;
     display: flex;
-    height: 60px;
+    height: 40px;
     width: 200px;
     align-items: center;
 }
@@ -319,8 +324,8 @@ export default {
 
 .user-img img {
     display: block;
-    width: 40px;
-    height: 40px;
+    width:30px;
+    height: 30px;
     padding-right: 2px;
 }
 
@@ -333,18 +338,14 @@ export default {
     font-size: 12px;
 }
 
-.info-container {
-
-}
-
 .name-role {
     font-size: 16px;
-    margin-top: 40px;
+    margin-top: 20px;
     padding: 5px;
     text-align: center;
 }
 
-.sender {
+.name-role .sender {
     margin-top: 10px;
     text-align: center;
     display: block;
@@ -357,8 +358,19 @@ export default {
     width: 100%
 }
 
-relation-item {
-    padding: 12px;
+/*relation-item {*/
+/*    padding: 12px;*/
 
+/*}*/
+.Info{
+    font-size: 16px;
+    margin-top: 20px;
+    padding: 5px;
+    text-align: center;
+}
+.Info .sender{
+    margin-top: 10px;
+    text-align: center;
+    display: block;
 }
 </style>

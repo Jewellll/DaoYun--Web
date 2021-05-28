@@ -18,4 +18,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+body .el-table th.gutter{
+    display: table-cell!important;
+}
 </style>

@@ -105,13 +105,13 @@ export default {
 
         //获取教师列表（分页）
         mock.onGet('/teacher/listpage').reply(config => {
-            let {page, name} = config.params
+            let {pagenum,pagesize,query} = config.params
             let mockUsers = _Teacher.filter(user => {
-                if (name && user.name.indexOf(name) == -1) return false
+                if (query && user.name.indexOf(query) == -1) return false
                 return true
             })
             let total = mockUsers.length
-            mockUsers = mockUsers.filter((u, index) => index < 10 * page && index >= 10 * (page - 1))
+            mockUsers = mockUsers.filter((u, index) => index < pagesize * pagenum && index >= pagesize * (pagenum - 1))
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
@@ -241,10 +241,13 @@ export default {
         })
         //编辑教师
         mock.onGet('/teacher/edit').reply(config => {
-            let {id,card, name, course} = config.params
+            let {id,card,sex,mobile,email, name, course} = config.params
             _Teacher.some(u => {
                 if (u.id === id) {
                     u.card=card
+                    u.sex=sex
+                    u.email=email
+                    u.mobile=mobile
                     u.name = name
                     u.course = course
                     return true
@@ -282,8 +285,11 @@ export default {
 
         //新增教师
         mock.onGet('/teacher/add').reply(config => {
-            let {card, name, course} = config.params
+            let {card,sex,mobile,email, name, course} = config.params
             _Teacher.push({
+                sex:sex,
+                mobile:mobile,
+                email:email,
                 card:card,
                 name: name,
                 course: course
