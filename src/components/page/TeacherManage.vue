@@ -62,33 +62,45 @@
 
         <!-- 添加用户的对话框 -->
         <el-dialog
-            title="添加用户"
+            title="添加教师"
             :visible.sync="addFormVisible"
-            width="50%"
-            @close="addDialogClosed">
+            width="40%"
+            @close="addDialogClosed" >
             <!-- 内容的主体区域 -->
-            <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="70px">
-                <el-form-item label="用户名" prop="name">
-                    <el-input v-model="addForm.name"></el-input>
+            <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
+                <el-form-item label="教师姓名" prop="name">
+                    <el-col :span="8">
+                    <el-input v-model="addForm.name" ></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="工号" prop="card">
+                    <el-col :span="8">
                     <el-input v-model="addForm.card"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
+                    <el-col :span="14">
                     <el-radio-group v-model="addForm.sex">
                         <el-radio class="radio" label="1">男</el-radio>
                         <el-radio class="radio" label="2">女</el-radio>
                         <el-radio class="radio" label="0">未知</el-radio>
                     </el-radio-group>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
+                    <el-col :span="14">
                     <el-input v-model="addForm.email"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="手机号" prop="mobile">
+                    <el-col :span="14">
                     <el-input v-model="addForm.mobile"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="课程" prop="course">
+                    <el-col :span="14">
                     <el-input v-model="addForm.course"></el-input>
+                    </el-col>
                 </el-form-item>
             </el-form>
             <!-- 底部区域 -->
@@ -99,29 +111,41 @@
         </el-dialog>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="用户名" prop="name">
+                    <el-col :span="8">
                     <el-input v-model="editForm.name"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="工号" prop="card">
+                    <el-col :span="8">
                     <el-input v-model="editForm.card"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
+                    <el-col :span="14">
                     <el-radio-group v-model="editForm.sex">
                         <el-radio class="radio" label="1">男</el-radio>
                         <el-radio class="radio" label="2">女</el-radio>
                         <el-radio class="radio" label="0">未知</el-radio>
                     </el-radio-group>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
+                    <el-col :span="14">
                     <el-input v-model="editForm.email"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="手机号" prop="mobile">
+                    <el-col :span="14">
                     <el-input v-model="editForm.mobile"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="课程" prop="course">
+                    <el-col :span="14">
                     <el-input v-model="editForm.course"></el-input>
+                    </el-col>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">

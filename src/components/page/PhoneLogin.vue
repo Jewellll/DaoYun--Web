@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form ref="checkForm" class="check-container" label-position="left"
-                 label-width="0x">
+                 label-width="0x" >
             <h3 class="check_title">手机登录</h3>
             <el-form-item prop="phoneNum">
                 <el-input type="text" v-model="phoneNum"
@@ -36,6 +36,16 @@ import {requestLogin, requestMss, requestPhoneLogin} from '../../api/api'
 
 export default {
     data () {
+        var checkMobile = (rule, value, callback) => {
+            // 验证手机号的正则表达式
+            const regMobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
+            if (regMobile.test(value)) {
+                // 验证通过，合法的手机号
+                return callback()
+            }
+            // 验证不通过，不合法
+            callback(new Error('请输入合法的手机号'))
+        }
         return {
             phoneNum: '', //手机号
             verifyNum: '', //验证码
@@ -54,14 +64,14 @@ export default {
             var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
             var phoneNum = this.phoneNum
             if (!phoneNum) {//未输入手机号
-                this.$message({
+                this.$message.error({
                     message: '手机号不能为空',
                     center: true
                 })
                 return
             }
             if (!reg.test(phoneNum)) {//手机号不合法
-                this.$message({
+                this.$message.error({
                     message: '手机号格式不正确',
                     center: true
                 })
@@ -110,6 +120,22 @@ export default {
         },
         // 验证验证码
         verificationCode () {
+            var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
+            var phoneNum = this.phoneNum
+            if (!phoneNum) {//未输入手机号
+                this.$message.error({
+                    message: '手机号不能为空',
+                    center: true
+                })
+                return
+            }
+            if (!reg.test(phoneNum)) {//手机号不合法
+                this.$message.error({
+                    message: '手机号格式不正确',
+                    center: true
+                })
+                return
+            }
             const _this = this
             const loginParams = {phoneNum: this.phoneNum, verifyNum: this.verifyNum}
             requestPhoneLogin(loginParams).then(data => {
@@ -117,7 +143,6 @@ export default {
                 if (code == 300) {
                     this.$message.error(msg)
                 } else if(code ==200){
-                    console.log('11')
                     _this.$store.commit('login', user)
                     _this.$store.commit('login2', token)
                     _this.$router.push({path: '/home'})

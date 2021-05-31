@@ -86,22 +86,32 @@
                     <input type="file" accept="image/*" @change="handleFile" class="hiddenInput"/>
                 </div>
                 <el-form-item label="姓名" prop="name">
+                    <el-col :span="8">
                     <el-input v-model="userForm.name" auto-complete="off"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="用户名" prop="username">
+                    <el-col :span="8">
                     <el-input v-model="userForm.username" auto-complete="off"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex">
+                    <el-col :span="14">
                     <el-radio-group v-model="userForm.sex">
-                        <el-radio class="radio" :label="1">男</el-radio>
-                        <el-radio class="radio" :label="0">女</el-radio>
+                        <el-radio class="radio" label="1">男</el-radio>
+                        <el-radio class="radio" label="0">女</el-radio>
                     </el-radio-group>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="手机号" prop="telphone">
+                    <el-col :span="14">
                     <el-input v-model="userForm.telphone" auto-complete="off"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="name">
+                    <el-col :span="14">
                     <el-input v-model="userForm.email" auto-complete="off"></el-input>
+                    </el-col>
                 </el-form-item>
                 <el-form-item>
                     <el-button @click.native="edit = false">返回</el-button>

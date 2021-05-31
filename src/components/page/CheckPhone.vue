@@ -52,14 +52,14 @@ export default {
             var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
             var phoneNum = this.phoneNum
             if (!phoneNum) {//未输入手机号
-                this.$message({
+                this.$message.error({
                     message: '手机号不能为空',
                     center: true
                 })
                 return
             }
             if (!reg.test(phoneNum)) {//手机号不合法
-                this.$message({
+                this.$message.error({
                     message: '手机号格式不正确',
                     center: true
                 })
@@ -98,6 +98,22 @@ export default {
         },
         // 验证验证码
         verificationCode () {
+            var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
+            var phoneNum = this.phoneNum
+            if (!phoneNum) {//未输入手机号
+                this.$message.error({
+                    message: '手机号不能为空',
+                    center: true
+                })
+                return
+            }
+            if (!reg.test(phoneNum)) {//手机号不合法
+                this.$message.error({
+                    message: '手机号格式不正确',
+                    center: true
+                })
+                return
+            }
             this.$axios
                 .post('/check', {
                     phoneNum: this.phoneNum,
