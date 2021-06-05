@@ -5,17 +5,17 @@
             <h1>欢迎来到到云</h1>
         </div>
     <div class="info">
-        <el-carousel :interval="5000" arrow="always" class="car">
-            <el-carousel-item v-for="(img,index) in imgList" :key="index">
-                <img v-bind:src="img.url">
-            </el-carousel-item>
-        </el-carousel>
+<!--        <el-carousel :interval="5000" arrow="always" class="car">-->
+<!--            <el-carousel-item v-for="(img,index) in imgList" :key="index">-->
+<!--                <img v-bind:src="img.url">-->
+<!--            </el-carousel-item>-->
+<!--        </el-carousel>-->
             <el-table :data="tableData" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}"
                       :row-style="{height:'25px'}" :cell-style="{padding:'1px'}"
                       highlight-current-row class="table" >
-                <el-table-column prop="name" label="姓名" width="400">
+                <el-table-column prop="name" label="姓名" >
                 </el-table-column>
-                <el-table-column prop="card" label="学号" width="400">
+                <el-table-column prop="card" label="学号">
                 </el-table-column>
             </el-table>
 
@@ -61,15 +61,19 @@ export default {
     text-shadow: 5px 5px 5px black, 0px 0px 2px black;
 }
 .info{
-
+    width: 100%;
+    position: absolute;
+    top:500px;
+    padding-left: 25%;
 }
 .container{
     margin-top: 8px;
     margin-left: 10px;
     margin-right: 10px;
-    height:650px;
+    height:100vh;
     border-radius: 5px;
-    background: url("../../assets/img/school1.jpg") no-repeat center;
+    background: url("../../assets/img/school1.jpeg") no-repeat;
+    background-size: cover;
 }
 .el-carousel__item h3 {
     color: #475669;
@@ -80,9 +84,7 @@ export default {
 }
 .table{
     border: none;
-    width: 800px;
-    margin-top: 20px;
-    margin-left: 300px;
+    width: 50%;
     align-content: center;
 }
 .car{

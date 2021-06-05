@@ -1,6 +1,7 @@
 <template>
     <div class="header">
-        <div class="logo">到云</div>
+        <div class="logo">
+            到云</div>
         <div class="user">
             <div class="username">
                 你好，{{ userInfo.username }}！
@@ -11,8 +12,8 @@
             <el-col :span="12">
                 <el-dropdown>
                 <span class="el-dropdown-link">
-                <i class="el-icon-user-solid"></i>
-                <i class="el-icon-arrow-down el-icon--right"></i>
+                <i class="el-icon-user" style="color: white"></i>
+                <i class="el-icon-arrow-down el-icon--right" style="color: white"></i>
                 </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-user" @click.native="view = true">个人信息</el-dropdown-item>
@@ -304,7 +305,7 @@ export default {
     position: relative;
     width: 100%;
     height: 40px;
-    background-color: #5882FA;
+    background-color: #324157;
     font-size: 30px;
     color: #fff;
 }
@@ -314,7 +315,7 @@ export default {
     width: 157px;
     text-align: center;
     line-height: 40px;
-    background-color: #81BEF7;
+    background-color: #586489;
     height: 40px;
 }
 

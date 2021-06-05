@@ -1,10 +1,7 @@
 <template>
-    <div>
+    <div class="container">
         <!--工具栏-->
         <div style="margin-top: 20px;display: flex;margin-bottom: 20px">
-            <div class="buttons">
-                <el-button @click="toggleSelection()" type="warning">取消选择</el-button>
-            </div>
             <div class="buttons">
                 <el-popconfirm
                     title="确定删除这些条目吗？"
@@ -13,14 +10,13 @@
                 </el-popconfirm>
             </div>
             <div class="buttons">
-                <el-button @click="addItem" type="primary">添加</el-button>
+                <el-button @click="addItem" type="primary">添加用户</el-button>
             </div>
             <div style="margin-left: 20px">
-                <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
-                    <el-select v-model="select" slot="prepend" placeholder="请选择">
-                        <el-option label="学号" value="1"></el-option>
-                        <el-option label="姓名" value="2"></el-option>
-                        <el-option label="用户电话" value="3"></el-option>
+                <el-input placeholder="请输入内容" v-model="queryInfo.query" class="input-with-select">
+                    <el-select v-model="queryInfo.select" slot="prepend" placeholder="请选择">
+                        <el-option label="姓名" value="1"></el-option>
+                        <el-option label="用户电话" value="2"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search"></el-button>
                 </el-input>
@@ -34,13 +30,18 @@
                     <div slot="header" class="clearfix">
                         <span class="role-span">角色列表</span>
                     </div>
-                    <el-table ref="multipleTable" highlight-current-row style="width: 100%;" :data="TableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange">
+                    <el-table :data="TableData" :stripe="true" :border="true" v-loading="listLoading"
+                              @selection-change="handleSelectionChange"
+                              :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
+<!--                    <el-table ref="multipleTable" highlight-current-row style="width: 100%;"-->
+<!--                              v-loading="listLoading" :data="TableData" @selection-change="handleSelectionChange">-->
                         <el-table-column type="selection" width="55" />
-                        <el-table-column prop="id" label="ID" />
+                        <el-table-column type="index"></el-table-column>
                         <el-table-column prop="name" label="名称" />
-                        <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
+                        <el-table-column prop="level" label="角色级别" />
                         <el-table-column :show-overflow-tooltip="true" width="135px" prop="create_time" label="创建日期" />
-                        <el-table-column label="操作" width="200px" align="center" fixed="right">
+                        <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
+                        <el-table-column label="操作" width="200px"  fixed="right" align="center">
                             <template slot-scope="scope">
                                 <el-button
                                     size="mini"
@@ -58,17 +59,28 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!--分页组件-->
-                    <div class="block">
+                    <div class="page">
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
-                            :current-page.sync="currentPage"
-                            :page-size="pageSize"
-                            layout="prev, pager, next, jumper"
-                            :total="TableData.length">
+                            :current-page="queryInfo.pagenum"
+                            :page-sizes="[1, 2, 5, 10]"
+                            :page-size="queryInfo.pagesize"
+                            layout="total, sizes, prev, pager, next, jumper"
+                            :total="total">
                         </el-pagination>
                     </div>
+                    <!--分页组件-->
+<!--                    <div class="block">-->
+<!--                        <el-pagination-->
+<!--                            @size-change="handleSizeChange"-->
+<!--                            @current-change="handleCurrentChange"-->
+<!--                            :current-page.sync="currentPage"-->
+<!--                            :page-size="pageSize"-->
+<!--                            layout="prev, pager, next, jumper"-->
+<!--                            :total="TableData.length">-->
+<!--                        </el-pagination>-->
+<!--                    </div>-->
                 </el-card>
             </el-col>
             <!-- 菜单授权 -->
@@ -102,19 +114,19 @@
         </el-row>
         <!-- 编辑角色-->
         <el-dialog title="编辑角色" :visible.sync="dialogFormVisible" width="700px">
-            <el-form :model="RoleForm">
+            <el-form :model="editForm">
                 <el-form-item label="角色名称" :label-width="formLabelWidth">
-                    <el-input v-model="RoleForm.name" autocomplete="off"></el-input>
+                    <el-input v-model="editForm.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-row :gutter="24">
                     <el-col :span="10">
                         <el-form-item label="角色级别" prop="level" :label-width="formLabelWidth">
-                            <el-input-number v-model.number="RoleForm.level" :min="1" controls-position="right" />
+                            <el-input-number v-model.number="editForm.level" :min="1" controls-position="right" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="10">
                         <el-form-item label="数据范围" prop="dataScope" :label-width="formLabelWidth">
-                            <el-select v-model="RoleForm.dataScope" placeholder="请选择数据范围">
+                            <el-select v-model="editForm.dataScope" placeholder="请选择数据范围">
                                 <el-option
                                     v-for="item in dateScopes"
                                     :key="item"
@@ -130,7 +142,7 @@
                         type="textarea"
                         :rows="5"
                         placeholder="请输入内容"
-                        v-model="RoleForm.description">
+                        v-model="editForm.remark">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -145,14 +157,26 @@
 <script>
 // import {getRequest} from "@/utils/api";
 
+import {getParaListPage} from '../../api/api'
+
 export default {
     data() {
         return {
-            pageSize: 9,
-            currentPage: 1,
+            // 获取用户列表的参数对象
+            queryInfo: {
+                //查询类型
+                select: '',
+                // 查询参数
+                query: '',
+                // 当前的页码数
+                pagenum: 1,
+                // 每页显示多少条数据
+                pagesize: 5
+            },
+            listLoading: false,
             multipleSelection: [],
-            query: '',
-            select: '',
+            // 总数
+            total: 0,
             rules: {
                 name: [
                     { required: true, message: '请输入名称', trigger: 'blur' }
@@ -168,11 +192,11 @@ export default {
                 '本级',
                 '自定义'
             ],
-            RoleForm: {
+            editForm: {
                 name: '',
                 dataScope: '',
                 level: '',
-                description: '-'
+                remark: ''
             },
             TableData: [],
             menus: [
@@ -219,34 +243,43 @@ export default {
                     ]
                 }
             ],
-            currentId: 0, menuLoading: false, showButton: false,
+            currentId: 0,
+            menuLoading: false,
+            showButton: false,
             defaultProps: { children: 'children', label: 'label', isLeaf: 'leaf' },
             menuIds: [], depts: [], deptDatas: [], // 多选时使用
         }
     },
+    created () {
+        this.getUserList()
+    },
     methods: {
-        toggleSelection(rows) {
-            if (rows) {
-                rows.forEach(row => {
-                    this.$refs.multipleTable.toggleRowSelection(row);
-                });
-            } else {
-                this.$refs.multipleTable.clearSelection();
-            }
+        async getUserList () {
+            this.listLoading = true
+            getParaListPage(this.queryInfo).then((res) => {
+                console.log(res)
+                this.total = res.data.total
+                this.TableData = res.data.users
+                this.listLoading = false
+            })
         },
-        getAllRole: function () {
-            let _this = this
-            // getRequest('/roles',{
-            //     pageNum: this.currentPage,
-            //     pageSize: this.pageSize
-            // }).then(resp => {
-            //     if (resp.data.status == 200) {
-            //         _this.TableData = resp.data.data
-            //     } else {
-            //         _this.$alert(resp.data.msg)
-            //     }
-            // })
+        // 监听 pageSize 改变的事件
+        handleSizeChange (newSize) {
+            //   console.log(newSize)
+            //  将监听接受到的每页显示多少条的数据 newSzie 赋值给 pagesize
+            this.queryInfo.pagesize = newSize
+            //  修改完以后，重新发起请求获取一次数据
+            this.getUserList()
         },
+        // 监听 页码值  改变的事件
+        handleCurrentChange (newPage) {
+            //   console.log(newPage)
+            //  将监听接受到的页码值的数据 newPage 赋值给 pagenum
+            this.queryInfo.pagenum = newPage
+            //  修改完以后，重新发起请求获取一次数据
+            this.getUserList()
+        },
+
         deleteSelected() {
         },
         addItem () {
@@ -256,26 +289,26 @@ export default {
         getMenuDatas: function () {},
         handleEdit: function (index, row){
             this.dialogFormVisible = true
-            this.RoleForm.name = row.name
+            this.editForm = Object.assign({}, row)
         },
         handleDelete: function (){},
         handleSelectionChange(val) {
             this.multipleSelection = val;
-        },
-        handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
         }
-    },
-    mounted() {
-        // this.getAllRole()
     }
 }
 </script>
 
 <style scoped>
+.container {
+    margin-top: 8px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px 10px;
+    background-color: #FFFFFF;
+    height: 100vh;
+    border-radius: 5px;
+}
 .buttons {
     margin-left: 20px;
 }

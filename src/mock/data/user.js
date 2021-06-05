@@ -23,11 +23,13 @@ const Parameter =[];
 for (let i = 0; i < 20; i++) {
     Users.push(Mock.mock({
         id: Mock.Random.guid(),
-        name: Mock.Random.cname(),
+        username: Mock.Random.cname(),
         addr: Mock.mock('@county(true)'),
         'age|18-60': 1,
         birth: Mock.Random.date(),
-        sex: Mock.Random.integer(0, 1)
+        sex: Mock.Random.integer(1, 2),
+        telphone:/^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,  //用正则匹配1开头的11位数字的手机号
+        'loginType|1':['管理员','教师','学生']
         // id: Mock.Random.guid(),
         // userName: Mock.Random.cname(),
         // userPhone:/^1[0-9]{11}$/,  //用正则匹配1开头的11位数字的手机号

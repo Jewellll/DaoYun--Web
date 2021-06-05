@@ -86,13 +86,14 @@ export default {
 
         //获取用户列表（分页）
         mock.onGet('/user/listpage').reply(config => {
-            let {page, name} = config.params
+            console.log('ss')
+            let {pagenum,pagesize,query} = config.params
             let mockUsers = _Users.filter(user => {
-                if (name && user.name.indexOf(name) == -1) return false
+                if (query && user.name.indexOf(query) == -1) return false
                 return true
             })
             let total = mockUsers.length
-            mockUsers = mockUsers.filter((u, index) => index < 10 * page && index >= 10 * (page - 1))
+            mockUsers = mockUsers.filter((u, index) => index < pagesize * pagenum && index >= pagesize * (pagenum - 1))
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
@@ -141,13 +142,13 @@ export default {
         })
         //获取系统参数
         mock.onGet('/systemManage/listpage').reply(config => {
-            let {page, name} = config.params
+            let {pagenum,pagesize,query} = config.params
             let mockUsers = _Parameter.filter(user => {
-                if (name && user.name.indexOf(name) == -1) return false
+                if (query && user.name.indexOf(query) == -1) return false
                 return true
             })
             let total = mockUsers.length
-            mockUsers = mockUsers.filter((u, index) => index < 10 * page && index >= 10 * (page - 1))
+            mockUsers = mockUsers.filter((u, index) => index < pagesize * pagenum && index >= pagesize * (pagenum - 1))
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
@@ -219,14 +220,16 @@ export default {
 
         //编辑用户
         mock.onGet('/user/edit').reply(config => {
-            let {id, name, addr, age, birth, sex} = config.params
+            console.log('sdsd')
+            let {id,username, telphone, sex, email,loginType} = config.params
+            console.log(config.params)
             _Users.some(u => {
                 if (u.id === id) {
-                    u.name = name
-                    u.addr = addr
-                    u.age = age
-                    u.birth = birth
+                    u.username = username
                     u.sex = sex
+                    u.telphone = telphone
+                    u.email = email
+                    u.loginType = loginType
                     return true
                 }
             })

@@ -15,15 +15,14 @@ export const editUserInfo = params => { return axios.post(`${base}/editUser`, pa
 export const requireRegister = params => { return axios.post(`${base}/register`, params).then(res => res.data); };
 
 //用户管理
-export const getUserList = params => { return http.post(`${base}/user/list`, { params: params }); };
 
-export const getUserListPage = params => { return http.post(`${base}/user/listpage`, params).then(res => res.data); };
+export const getUserListPage = params => { return http.get(`${base}/user/listpage`, { params: params }); };
 
 export const removeUser = params => { return http.post(`${base}/user/remove`, params ).then(res => res.data); };
 
 export const batchRemoveUser = params => { return http.post(`${base}/user/batchremove`, params ).then(res => res.data); };
 
-export const editUser = params => { return http.post(`${base}/user/edit`,  params ).then(res => res.data); };
+export const editUser = params => { return http.get(`${base}/user/edit`,  params ).then(res => res.data); };
 
 export const addUser = params => { return http.post(`${base}/user/add`,  params ).then(res => res.data); };
 
@@ -70,6 +69,8 @@ export const addDic = params => { return http.get(`${base}/dictionaries/id`, { p
 export const removeDic = params => { return http.get(`${base}/dictionaries/remove`, { params: params }); };
 
 export const batchRemoveDic = params => { return http.get(`${base}/dictionary/batchremove`, { params: params }); };
+
+export const editDictionary = params => { return http.get(`${base}/dictionary/edit`, { params: params }); };
 
 //系统参数管理
 

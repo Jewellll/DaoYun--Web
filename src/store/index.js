@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     // 共享状态（即变量）
     state: {
-         token:{}
+         token:{},
+         user:{},
+         dicCode:''
     },
     // 更改vuex的store中状态的唯一方法 - 同步操作
     mutations: {
@@ -17,8 +19,12 @@ export default new Vuex.Store({
         login2 (state,token) {
             state.token = token
             window.localStorage.setItem('token', token)
+        },
+        setDiction(state,data){
+            state.dicCode = data
         }
     },
+    //异步操作
     Action:{
 
     }

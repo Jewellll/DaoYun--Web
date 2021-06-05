@@ -16,7 +16,7 @@ export default {
     width: auto;
     height: 20px;
     font-size: 12px;
-    background-color: #5882FA;
+    background-color: #324157;
     text-align: center;
     color: #FFF;
 }

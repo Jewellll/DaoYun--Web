@@ -1,10 +1,12 @@
 <template>
     <div class="container">
         <!-- 面包屑导航区域 -->
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>教师管理</el-breadcrumb-item>
-        </el-breadcrumb>
+        <div class="crumb">
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size: 5px">
+                <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>教师管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
 
         <!-- 卡片视图区域 -->
         <div class="table">
@@ -17,33 +19,33 @@
                         </el-input>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="primary" @click="dialogVisible=true">添加用户</el-button>
+                        <el-button type="primary" @click="addFormVisible=true">添加用户</el-button>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
                     </el-col>
                 </el-row>
             </div>
-            <!-- 用户列表区域 -->
-            <el-table :data="userList" :stripe="true" :border="true">
-                <el-table-column type="index"></el-table-column>
-                <el-table-column prop="name" label="用户名称"></el-table-column>
-                <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="mobile" label="电话"></el-table-column>
-                <el-table-column prop="role_name" label="角色"></el-table-column>
-                <el-table-column prop="mg_state" label="状态">
-                    <template slot-scope="scope">
-                        <el-switch v-model="scope.row.mg_state" @change="userStateChange(scope.row)">
-                        </el-switch>
-                    </template>
+            <el-table :data="userList" :stripe="true" :border="true" v-loading="listLoading" @selection-change="selsChange"
+                      :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
+                <el-table-column type="selection" >
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column type="index" >
+                </el-table-column>
+                <el-table-column prop="username" label="用户名"  >
+                </el-table-column>
+                <el-table-column prop="telphone" label="手机号">
+                </el-table-column>
+                <el-table-column prop="sex" label="性别" :formatter="formatSex" >
+                </el-table-column>
+                <el-table-column prop="loginType" label="角色" >
+                </el-table-column>
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
-                        <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
                         <!-- 删除按钮 -->
-                        <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
-                        <!-- 分配角色按钮 -->
-                        <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-                            <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
-                        </el-tooltip>
+                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDel(scope.$index, scope.row)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -64,42 +66,79 @@
         <!-- 添加用户的对话框 -->
         <el-dialog
             title="添加用户"
-            :visible.sync="dialogVisible"
-            width="50%"
-            @close="addDialogClosed">
+            :visible.sync="addFormVisible"
+            width="40%"
+            @close="addDialogClosed" >
             <!-- 内容的主体区域 -->
-            <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="70px">
+            <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
                 <el-form-item label="用户名" prop="username">
-                    <el-input v-model="addForm.username"></el-input>
+                    <el-col :span="8">
+                        <el-input v-model="addForm.name" ></el-input>
+                    </el-col>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="addForm.password"></el-input>
+                <el-form-item label="角色" prop="loginType">
+                    <el-col :span="8">
+                        <el-input v-model="addForm.loginType"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="性别">
+                    <el-col :span="14">
+                        <el-radio-group v-model="addForm.sex">
+                            <el-radio class="radio" label="1">男</el-radio>
+                            <el-radio class="radio" label="2">女</el-radio>
+                            <el-radio class="radio" label="0">未知</el-radio>
+                        </el-radio-group>
+                    </el-col>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="addForm.email"></el-input>
+                    <el-col :span="14">
+                        <el-input v-model="addForm.email"></el-input>
+                    </el-col>
                 </el-form-item>
-                <el-form-item label="手机号" prop="mobile">
-                    <el-input v-model="addForm.mobile"></el-input>
+                <el-form-item label="手机号" prop="telphone">
+                    <el-col :span="14">
+                        <el-input v-model="addForm.telphone"></el-input>
+                    </el-col>
                 </el-form-item>
             </el-form>
             <!-- 底部区域 -->
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addUser">确 定</el-button>
+                <el-button @click="addFormVisible = false">取 消</el-button>
+                <el-button type="primary" :loading="addLoading" @click.native="addUser">确 定</el-button>
             </span>
         </el-dialog>
 
         <!--编辑界面-->
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
+        <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="工号" prop="card">
-                    <el-input v-model="editForm.card" auto-complete="off"></el-input>
+                <el-form-item label="用户名" prop="username">
+                    <el-col :span="8">
+                        <el-input v-model="editForm.username" auto-complete="off"></el-input>
+                    </el-col>
                 </el-form-item>
-                <el-form-item label="姓名" prop="name">
-                    <el-input v-model="editForm.name" auto-complete="off"></el-input>
+                <el-form-item label="角色" prop="loginType">
+                    <el-col :span="8">
+                        <el-input v-model="editForm.loginType"></el-input>
+                    </el-col>
                 </el-form-item>
-                <el-form-item label="课程" prop="course">
-                    <el-input v-model="editForm.course" auto-complete="off"></el-input>
+                <el-form-item label="手机号" prop="telphone">
+                    <el-col :span="14">
+                        <el-input v-model="editForm.telphone" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="性别">
+                    <el-col :span="14">
+                        <el-radio-group v-model="editForm.sex">
+                            <el-radio class="radio" :label="1">男</el-radio>
+                            <el-radio class="radio" :label="2">女</el-radio>
+                            <el-radio class="radio" :label="0">未知</el-radio>
+                        </el-radio-group>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                    <el-col :span="14">
+                        <el-input v-model="editForm.email"></el-input>
+                    </el-col>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -108,16 +147,15 @@
             </div>
         </el-dialog>
     </div>
-
 </template>
 
 <script>
 import {
-    addTeacher,
-    batchRemoveTeacher,
-    editTeacher,
-    getTeacherListPage,
-    removeTeacher
+     addUser,
+     batchRemoveUser,
+    editUser,
+    getUserListPage,
+     removeUser
 } from '../../api/api'
 
 export default {
@@ -156,41 +194,72 @@ export default {
             },
             // 获取的用户列表
             userList: [],
+            sels: [],//列表选中列
             // 总数
             total: 0,
+            //列表加载
+            listLoading:false,
             // 控制添加用户对话框的显示与隐藏，默认为隐藏
-            dialogVisible: false,
+            addFormVisible: false,
+            addLoading:false,
             // 添加用户的表单数据
             addForm: {
                 username: '',
-                password: '',
-                email: '',
-                mobile: ''
+                telphone:'',
+                loginType:'',
+                sex: '0',
+                email:''
             },
             // 添加表单的验证规则对象
             addFormRules: {
                 username: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
+                    {min: 2, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
                 ],
-                password: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 3, max: 10, message: '长度在 6 到 15 个字符', trigger: 'blur'}
+                sex: [
+                    {required: true, message: '请输入性别', trigger: 'blur'},
                 ],
                 email: [
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
                     {validator: checkEmail, trigger: 'blur'}
                 ],
-                mobile: [
+                loginType: [
+                    {required: true, message: '请输入角色类型', trigger: 'blur'},
+                ],
+                telphone: [
                     {required: true, message: '请输入手机号', trigger: 'blur'},
                     {validator: checkMobile, trigger: 'blur'}
                 ]
             },
+            //编辑
+            editLoading: false,
+            editFormVisible:false,
             editForm: {
-                id: 0,
-                name: '',
-                mobile: '',
-                course: ''
+                username: '',
+                telphone:'',
+                loginType:'',
+                sex:'',
+                email:''
+            },
+            editFormRules: {
+                username: [
+                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {min: 2, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
+                ],
+                sex: [
+                    {required: true, message: '请输入性别', trigger: 'blur'},
+                ],
+                email: [
+                    {required: true, message: '请输入邮箱', trigger: 'blur'},
+                    {validator: checkEmail, trigger: 'blur'}
+                ],
+                loginType: [
+                    {required: true, message: '请输入角色类型', trigger: 'blur'},
+                ],
+                telphone: [
+                    {required: true, message: '请输入手机号', trigger: 'blur'},
+                    {validator: checkMobile, trigger: 'blur'}
+                ]
             },
         }
     },
@@ -198,12 +267,16 @@ export default {
         this.getUserList()
     },
     methods: {
+        //性别显示转换
+        formatSex: function (row, column) {
+            return row.sex == 1 ? '男' : row.sex == 2 ? '女' : '未知'
+        },
         async getUserList () {
-            getTeacherListPage(this.queryInfo).then((res) => {
+            this.listLoading=true
+            getUserListPage(this.queryInfo).then((res) => {
                 this.total = res.data.total
                 this.userList = res.data.users
-                // this.listLoading = false
-                //NProgress.done();
+                this.listLoading=false
             })
         },
         // 监听 pageSize 改变的事件
@@ -236,30 +309,112 @@ export default {
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {
             this.$refs.addFormRef.resetFields()
+            this.$refs.editForm.resetFields()
         },
         // 点击按钮，添加新用户
         addUser () {
             this.$refs.addFormRef.validate(async valid => {
-                // 校验失败
-                if (!valid) return
-                // 校验成功，可以发起添加用户的网络请求
-                const {data: res} = await this.$http.post('users', this.addForm)
-                if (res.meta.status !== 201) {
-                    this.$message.error('添加用户失败！')
+                if (valid) {
+                    this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        this.addLoading = true
+                        let para = Object.assign({}, this.addForm)
+                        addUser(para).then((res) => {
+                            if(res.data.code==200) {
+                                this.addLoading = false
+                                this.$message({
+                                    message: '新增成功',
+                                    type: 'success'
+                                })
+                                this.addFormVisible = false
+                                this.getUserList()
+                            }
+                        })
+                    })
                 }
-                this.$message.success('添加用户成功！')
-                // 隐藏添加用户的对话框
-                this.dialogVisible = false
-                // 重新获取用户列表数据
-                this.getUserList()
+            })
+        },
+        //显示编辑
+        handleEdit: function (index, row) {
+            this.editFormVisible = true
+            this.editForm = Object.assign({}, row)
+        },
+        //编辑提交
+        editSubmit: function () {
+            this.$refs.editForm.validate((valid) => {
+                if (valid) {
+                    this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                        this.editLoading = true
+                        let para = Object.assign({}, this.editForm)
+                        editUser(para).then((res) => {
+                            if(res.data.code==200) {
+                                this.editLoading = false
+                                this.$message({
+                                    message: res.data.msg,
+                                    type: 'success'
+                                })
+                                this.editFormVisible = false
+                                this.getUserList()
+                            }
+                        })
+                    })
+                }
+            })
+        },
+        //删除
+        handleDel: function (index, row) {
+            this.$confirm('确认删除该记录吗?', '提示', {
+                type: 'warning'
+            }).then(() => {
+                this.listLoading = true
+                let para = {id: row.id}
+                removeUser(para).then((res) => {
+                    if(res.data.code==200) {
+                        this.listLoading = false
+                        //NProgress.done();
+                        this.$message({
+                            message: res.data.msg,
+                            type: 'success'
+                        })
+                        this.getUserList()
+                    }
+                })
+            }).catch(() => {
+
+            })
+        },
+        //选择多行
+        selsChange: function (sels) {
+            this.sels = sels
+        },
+        //批量删除
+        batchRemove: function () {
+            var ids = this.sels.map(item => item.id).toString()
+            this.$confirm('确认删除选中记录吗？', '提示', {
+                type: 'warning'
+            }).then(() => {
+                this.listLoading = true
+                let para = {ids: ids}
+                batchRemoveUser(para).then((res) => {
+                    if(res.data.code==200) {
+                        this.listLoading = false
+                        //NProgress.done();
+                        this.$message({
+                            message: '删除成功',
+                            type: 'success'
+                        })
+                        this.getUserList()
+                    }
+                })
+            }).catch(() => {
+
             })
         }
     }
-
 }
 </script>
 
 <style scoped>
+
 .container {
     margin-top: 8px;
     margin-left: 10px;
@@ -268,6 +423,9 @@ export default {
     background-color: #FFFFFF;
     height: 100vh;
     border-radius: 5px;
+}
+.crumb{
+    margin-left: 2px;
 }
 .table{
     margin-top: 20px;
@@ -278,8 +436,8 @@ export default {
 .page{
     margin-top: 10px;
 }
-
 </style>
+
 
 <!--<template>-->
 <!--    <div class="container">-->

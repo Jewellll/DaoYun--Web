@@ -18,6 +18,7 @@ import CourseManage from '../components/page/CourseManage'
 import PhoneLogin from '../components/page/PhoneLogin'
 import Test from '../components/page/Test'
 import RoleManage from '../components/page/RoleManage'
+import AddDictionary from '../components/page/AddDictionary'
 
 Vue.use(Router)
 
@@ -77,6 +78,15 @@ export default new Router({
                     path: '/dictionary',
                     name: 'Dictionary',
                     component: Dictionary,
+                    meta: {
+                        title:'数据字典',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/addDictionary',
+                    name: 'AddDictionary',
+                    component: AddDictionary,
                     meta: {
                         title:'数据字典',
                         requireAuth: true

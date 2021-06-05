@@ -1,19 +1,18 @@
 <template>
     <div class="sidebar">
         <el-aside width="auto">
-            <transition name="el-zoom-in-center">
-        <el-menu
-            class="sidebar-el-menu"
-            :collapse="isCollapse"
-            :collapse-transition="true"
-            background-color="#f5f5f5"
-            text-color="#777"
-            active-text-color="#ffd04b"
-            unique-opened
-            router
-        >
+            <el-menu
+                class="sidebar-el-menu"
+                :collapse="isCollapse"
+                background-color="#fff"
+                text-color="#bfcbd9"
+                active-text-color="#20a0ff"
+                unique-opened
+                router
+            >
             <el-menu-item  @click="isC">
-                <i class="el-icon-s-fold" ></i>
+                <i v-if="!isCollapse" class="el-icon-s-fold" ></i>
+                <i v-else class="el-icon-s-unfold"></i>
             </el-menu-item>
             <template v-for="item in items">
                 <template v-if="item.subs">
@@ -51,7 +50,6 @@
                 </template>
             </template>
         </el-menu>
-            </transition>
         </el-aside>
     </div>
 </template>

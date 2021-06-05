@@ -37,7 +37,7 @@
                 <el-table-column prop="email" label="邮箱"></el-table-column>
                 <el-table-column prop="mobile" label="电话"></el-table-column>
                 <el-table-column prop="course" label="课程名"></el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
                         <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
@@ -212,7 +212,6 @@ export default {
             // 添加用户的表单数据
             addForm: {
                 name: '',
-                card:'',
                 sex:'0',
                 email: '',
                 course:'',
@@ -245,7 +244,6 @@ export default {
             editFormVisible:false,
             editForm: {
                 name: '',
-                card:'',
                 sex:'',
                 email: '',
                 course:'',
@@ -285,6 +283,7 @@ export default {
         async getUserList () {
             this.listLoading=true
             getTeacherListPage(this.queryInfo).then((res) => {
+                console.log(res)
                 this.total = res.data.total
                 this.userList = res.data.users
                 this.listLoading=false
