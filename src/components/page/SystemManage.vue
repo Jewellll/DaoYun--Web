@@ -128,30 +128,7 @@ import {
 
 export default {
     data () {
-        // 验证邮箱的校验规则
-        var checkEmail = (rule, value, callback) => {
-            // 验证邮箱的正则表达式
-            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-            if (regEmail.test(value)) {
-                // 验证通过，合法的邮箱
-                return callback()
-            }
-            // 验证不通过，不合法
-            callback(new Error('请输入合法的邮箱'))
-        }
-        // 验证手机号的验证规则
-        var checkMobile = (rule, value, callback) => {
-            // 验证手机号的正则表达式
-            const regMobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
-            if (regMobile.test(value)) {
-                // 验证通过，合法的手机号
-                return callback()
-            }
-            // 验证不通过，不合法
-            callback(new Error('请输入合法的手机号'))
-        }
         return {
-            // 获取用户列表的参数对象
             queryInfo: {
                 // 查询参数
                 query: '',
@@ -207,10 +184,6 @@ export default {
         this.getUserList()
     },
     methods: {
-        //性别显示转换
-        formatSex: function (row, column) {
-            return row.sex == 1 ? '男' : row.sex == 2 ? '女' : '未知'
-        },
         async getUserList () {
             this.listLoading = true
             getParaListPage(this.queryInfo).then((res) => {
@@ -235,17 +208,6 @@ export default {
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
             this.getUserList()
-        },
-        // 监听 switch 开关状态的改变
-        async userStateChange (userInfo) {
-            console.log(userInfo)
-            const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
-            if (res.meta.status !== 200) {
-                // 更新失败，将状态返回初始状态
-                this.userInfo.mg_state = !this.userInfo.mg_state
-                this.$message.error('更新用户状态失败！')
-            }
-            this.$message.success('更新用户状态成功！')
         },
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {

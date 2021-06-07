@@ -162,7 +162,7 @@ export default {
 
 .el-aside {
     color: #333;
-    height: 100%;
+    height: 100vh;
     text-align: left;
 }
 .el-menu {
@@ -170,7 +170,7 @@ export default {
     border-right-width: 0;
 }
 .el-menu-vertical:not(.el-menu--collapse) {
-    width: 157px;
+    width: 200px;
 }
 
 </style>

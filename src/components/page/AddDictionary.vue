@@ -8,19 +8,19 @@
                 </div>
                 <hr>
                 <el-form :model="dicForm" label-width="80px" :rules="dicFormRules" ref="editForm">
-                    <el-form-item label="中文标识" prop="typeName">
+                    <el-form-item label="中文标识" prop="typename">
                         <el-col :span="8">
-                            <el-input v-model="dicForm.typeName"></el-input>
+                            <el-input v-model="dicForm.typename"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="英文标识" prop="typeCode">
+                    <el-form-item label="英文标识" prop="code">
                         <el-col :span="8">
-                            <el-input v-model="dicForm.typeCode"></el-input>
+                            <el-input v-model="dicForm.code"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="备注" prop="remark">
-                        <el-col :span="14">
-                            <el-input type="textarea" :rows="4" v-model="dicForm.remark"></el-input>
+                    <el-form-item label="创建时间" prop="create_time">
+                        <el-col :span="8">
+                            <el-input  v-model="dicForm.create_time"></el-input>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -33,9 +33,9 @@
                 <hr>
                 <el-table :data="userList" :stripe="true" :border="true" v-loading="listLoading" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
                     <el-table-column type="index" label="序号"></el-table-column>
-                    <el-table-column prop="valueId" label="数据数值"></el-table-column>
-                    <el-table-column prop="valueName" label="数值名称" ></el-table-column>
-                    <el-table-column prop="createTime" label="创建时间" ></el-table-column>
+                    <el-table-column prop="value" label="数据数值"></el-table-column>
+                    <el-table-column prop="name" label="数值名称" ></el-table-column>
+                    <el-table-column prop="create_time" label="创建时间" ></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <!-- 修改按钮 -->
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <!-- 添加用户的对话框 -->
+            <!-- 添加字典项的对话框 -->
             <el-dialog
                 title="添加数据项"
                 :visible.sync="addFormVisible"
@@ -72,19 +72,14 @@
                 @close="addDialogClosed" >
                 <!-- 内容的主体区域 -->
                 <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
-                    <el-form-item label="数据数值" prop="valueId">
+                    <el-form-item label="数据数值" prop="value">
                         <el-col :span="8">
-                            <el-input v-model="addForm.valueId" ></el-input>
+                            <el-input v-model="addForm.value" ></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="数据名称" prop="valueName">
+                    <el-form-item label="数据名称" prop="name">
                         <el-col :span="8">
-                            <el-input v-model="addForm.valueName"></el-input>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item label="创建时间" prop="createTime">
-                        <el-col :span="14">
-                            <el-input  v-model="addForm.createTime"></el-input>
+                            <el-input v-model="addForm.name"></el-input>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -98,20 +93,14 @@
             <!--编辑界面-->
             <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
                 <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                    <el-form-item label="数据数值" prop="valueId">
+                    <el-form-item label="数据数值" prop="value">
                         <el-col :span="8">
-                            <el-input v-model="editForm.valueId"></el-input>
+                            <el-input v-model="editForm.value"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="数据名称" prop="valueName">
+                    <el-form-item label="数据名称" prop="name">
                         <el-col :span="8">
-                            <el-input v-model="editForm.valueName"></el-input>
-                        </el-col>
-                    </el-form-item>
-
-                    <el-form-item label="创建时间" prop="createTime">
-                        <el-col :span="14">
-                            <el-input  v-model="editForm.createTime"></el-input>
+                            <el-input v-model="editForm.name"></el-input>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -124,13 +113,14 @@
     </template>
 
     <script>
-        import {
-            addTeacher,
-            batchRemoveTeacher,
-            editTeacher,
-            getTeacherListPage,
-            removeTeacher
-        } from '../../api/api'
+    import {
+        addDic,
+        addTeacher,
+        batchRemoveTeacher, editDic,
+        editTeacher, getDicDetail,
+        getTeacherListPage, removeDicDetail,
+        removeTeacher
+    } from '../../api/api'
         import dicList from './Dictionary'
 
         export default {
@@ -147,9 +137,8 @@
                         // 每页显示多少条数据
                         pagesize: 5
                     },
-                    // 获取的用户列表
-                    userList: [],
-                    sels: [],//列表选中列
+                    // 获取的字典列表
+                    dicList: [],
                     // 总数
                     total: 0,
                     //列表加载
@@ -173,16 +162,16 @@
                     },
                     // 添加用户的表单数据
                     addForm: {
-                        valueName:'',
-                        valueId:'',
-                        CreateTime:''
+                        value:'',
+                        name:'',
+                        update_time:''
                     },
                     // 添加表单的验证规则对象
                     addFormRules: {
-                        valueName: [
+                        value: [
                             {required: true, message: '请输入用户名', trigger: 'blur'},
                         ],
-                        valueId: [
+                        name: [
                             {required: true, message: '请输入密码', trigger: 'blur'},
                         ]
                     },
@@ -190,15 +179,15 @@
                     editLoading: false,
                     editFormVisible:false,
                     editForm: {
-                        valueName:'',
-                        valueId:'',
-                        CreateTime:''
+                        value:'',
+                        name:'',
+                        update_time:''
                     },
                     editFormRules: {
-                        valueName: [
+                        value: [
                             {required: true, message: '请输入用户名', trigger: 'blur'},
                         ],
-                        valueId: [
+                        name: [
                             {required: true, message: '请输入密码', trigger: 'blur'},
                         ]
                     },
@@ -211,10 +200,10 @@
                 async getUserList () {
                     this.queryInfo.dicCode=this.$store.state.dicCode
                     this.listLoading=true
-                    getTeacherListPage(this.queryInfo).then((res) => {
+                    getDicDetail(this.queryInfo).then((res) => {
                         this.total = res.data.total
-                        this.dicForm=res.data
-                        this.userList = res.data.users
+                        this.dicForm=res.data          //字典
+                        this.dicList = res.data.users    //字典项
                         this.listLoading=false
                     })
                 },
@@ -234,17 +223,6 @@
                     //  修改完以后，重新发起请求获取一次数据
                     this.getUserList()
                 },
-                // 监听 switch 开关状态的改变
-                async userStateChange (userInfo) {
-                    console.log(userInfo)
-                    const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
-                    if (res.meta.status !== 200) {
-                        // 更新失败，将状态返回初始状态
-                        this.userInfo.mg_state = !this.userInfo.mg_state
-                        this.$message.error('更新用户状态失败！')
-                    }
-                    this.$message.success('更新用户状态成功！')
-                },
                 // 监听添加用户对话框的关闭事件
                 addDialogClosed () {
                     this.$refs.addFormRef.resetFields()
@@ -257,7 +235,7 @@
                             this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                 this.addLoading = true
                                 let para = Object.assign({}, this.addForm)
-                                addTeacher(para).then((res) => {
+                                addDic(para).then((res) => {
                                     if(res.data.code==200) {
                                         this.addLoading = false
                                         this.$message({
@@ -284,7 +262,7 @@
                             this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                 this.editLoading = true
                                 let para = Object.assign({}, this.editForm)
-                                editTeacher(para).then((res) => {
+                                editDic(para).then((res) => {
                                     if(res.data.code==200) {
                                         this.editLoading = false
                                         this.$message({
@@ -305,8 +283,8 @@
                         type: 'warning'
                     }).then(() => {
                         this.listLoading = true
-                        let para = {id: row.id}
-                        removeTeacher(para).then((res) => {
+                        let para = {name: row.name}
+                        removeDicDetail(para).then((res) => {
                             if(res.data.code==200) {
                                 this.listLoading = false
                                 //NProgress.done();

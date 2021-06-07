@@ -312,7 +312,7 @@ export default {
 
 .logo {
     float: left;
-    width: 157px;
+    width: 200px;
     text-align: center;
     line-height: 40px;
     background-color: #0a4b84;

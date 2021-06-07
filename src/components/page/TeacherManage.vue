@@ -305,17 +305,6 @@ export default {
             //  修改完以后，重新发起请求获取一次数据
             this.getUserList()
         },
-        // 监听 switch 开关状态的改变
-        async userStateChange (userInfo) {
-            console.log(userInfo)
-            const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
-            if (res.meta.status !== 200) {
-                // 更新失败，将状态返回初始状态
-                this.userInfo.mg_state = !this.userInfo.mg_state
-                this.$message.error('更新用户状态失败！')
-            }
-            this.$message.success('更新用户状态成功！')
-        },
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {
             this.$refs.addFormRef.resetFields()
