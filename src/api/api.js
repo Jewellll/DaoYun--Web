@@ -60,21 +60,24 @@ export const removeCourse = params => { return http.post(`${base}/course/remove`
 export const batchRemoveCourse = params => { return http.post(`${base}/course/batchremove`, params ); };
 
 //字典管理
-export const getDicListPage = params => { return http.post(`${base}/dictionaries/listpage`,  params ); };
 
-export const getDicDetail = params => { return http.post(`${base}/dictionaries/dicDetail`,  params ); };
+export const getDictory = params => { return http.post(`${base}/dictionaries/dicName`,  params ).then(res => res.data);; };
 
-export const editDic = params => { return http.post(`${base}/dictionaries/code`, params ); };
+export const getDicListPage = params => { return http.post(`${base}/dictionaries/listpage`,  params ).then(res => res.data);; };
 
-export const addDic = params => { return http.post(`${base}/dictionaries/id`,  params ); };
+export const getDicDetail = params => { return http.post(`${base}/dictionaries/dicDetail`,  params ).then(res => res.data); };
 
-export const removeDic = params => { return http.post(`${base}/dictionaries/remove`,  params); };
+export const editDic = params => { return http.post(`${base}/dictionaries/code`, params ).then(res => res.data); };
 
-export const removeDicDetail = params => { return http.post(`${base}/dictionaries/removeDic`,  params); };
+export const addDic = params => { return http.post(`${base}/dictionaries/id`,  params ).then(res => res.data); };
 
-export const batchRemoveDic = params => { return http.post(`${base}/dictionary/batchremove`,  params ); };
+export const removeDic = params => { return http.post(`${base}/dictionaries/remove`,  params).then(res => res.data); };
 
-export const editDictionary = params => { return http.post(`${base}/dictionary/edit`, params ); };
+export const removeDicDetail = params => { return http.post(`${base}/dictionaries/removeDic`,  params).then(res => res.data); };
+
+export const batchRemoveDic = params => { return http.post(`${base}/dictionary/batchremove`,  params ).then(res => res.data); };
+
+export const editDictionary = params => { return http.post(`${base}/dictionary/edit`, params ).then(res => res.data); };
 
 //系统参数管理
 

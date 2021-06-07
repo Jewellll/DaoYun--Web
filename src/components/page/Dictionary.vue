@@ -208,8 +208,8 @@ export default {
         async getUserList () {
             this.listLoading=true
             getDicListPage(this.queryInfo).then((res) => {
-                this.total = res.data.total
-                this.userList = res.data.data
+                this.total = res.total
+                this.userList = res.data
                 this.listLoading=false
             })
         },

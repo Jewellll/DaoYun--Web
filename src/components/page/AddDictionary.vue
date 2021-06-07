@@ -18,9 +18,9 @@
                             <el-input v-model="dicForm.code"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="创建时间" prop="create_time">
+                    <el-form-item label="创建时间" prop="createTime">
                         <el-col :span="8">
-                            <el-input  v-model="dicForm.create_time"></el-input>
+                            <el-input  v-model="dicForm.createTime"></el-input>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -31,11 +31,11 @@
                     数据项
                 </div>
                 <hr>
-                <el-table :data="userList" :stripe="true" :border="true" v-loading="listLoading" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
+                <el-table :data="dicList" :stripe="true" :border="true" v-loading="listLoading" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
                     <el-table-column type="index" label="序号"></el-table-column>
                     <el-table-column prop="value" label="数据数值"></el-table-column>
                     <el-table-column prop="name" label="数值名称" ></el-table-column>
-                    <el-table-column prop="create_time" label="创建时间" ></el-table-column>
+                    <el-table-column prop="createTime" label="创建时间" ></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <!-- 修改按钮 -->
@@ -119,10 +119,9 @@
         batchRemoveTeacher, editDic,
         editTeacher, getDicDetail,
         getTeacherListPage, removeDicDetail,
-        removeTeacher
+        removeTeacher,getDictory
     } from '../../api/api'
         import dicList from './Dictionary'
-
         export default {
             data () {
                 return {
@@ -195,6 +194,7 @@
             },
             created () {
                 this.getUserList()
+                this.getDic()
             },
             methods: {
                 async getUserList () {
@@ -202,8 +202,17 @@
                     this.listLoading=true
                     getDicDetail(this.queryInfo).then((res) => {
                         this.total = res.data.total
-                        this.dicForm=res.data          //字典
-                        this.dicList = res.data.users    //字典项
+                        this.dicList = res.data
+                        // console.log(this.dicList)//字典项
+                        this.listLoading=false
+                    })
+                },
+                async getDic() {
+                    this.queryInfo.dicCode=this.$store.state.dicCode
+                    this.listLoading=true
+                    getDictory(this.queryInfo).then((res) => {
+                        this.dicForm = res.data          //字典
+                        console.log(this.dicForm)//字典项
                         this.listLoading=false
                     })
                 },
