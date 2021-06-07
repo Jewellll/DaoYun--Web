@@ -8,7 +8,9 @@ export default new Vuex.Store({
     state: {
          token:{},
          user:{},
-         dicCode:''
+         dicCode:'',
+         isCollapse: true,
+
     },
     // 更改vuex的store中状态的唯一方法 - 同步操作
     mutations: {

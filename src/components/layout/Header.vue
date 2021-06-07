@@ -305,7 +305,7 @@ export default {
     position: relative;
     width: 100%;
     height: 40px;
-    background-color: #324157;
+    background-color: #04315c;
     font-size: 30px;
     color: #fff;
 }
@@ -315,7 +315,7 @@ export default {
     width: 157px;
     text-align: center;
     line-height: 40px;
-    background-color: #586489;
+    background-color: #0a4b84;
     height: 40px;
 }
 

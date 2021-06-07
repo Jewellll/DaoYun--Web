@@ -1,65 +1,69 @@
 <template>
-    <div class="sidebar">
-        <el-aside width="auto">
-            <el-menu
-                class="sidebar-el-menu"
-                :collapse="isCollapse"
-                background-color="#fff"
-                text-color="#bfcbd9"
-                active-text-color="#20a0ff"
-                unique-opened
-                router
-            >
-            <el-menu-item  @click="isC">
-                <i v-if="!isCollapse" class="el-icon-s-fold" ></i>
-                <i v-else class="el-icon-s-unfold"></i>
-            </el-menu-item>
-            <template v-for="item in items">
-                <template v-if="item.subs">
-                    <el-submenu :index="item.index" :key="item.index">
-                        <template slot="title">
-                            <i :class="item.icon"></i>
-                            <span slot="title">{{ item.title }}</span>
-                        </template>
-                        <template v-for="subItem in item.subs">
-                            <el-submenu
-                                v-if="subItem.subs"
-                                :index="subItem.index"
-                                :key="subItem.index"
-                            >
-                                <template slot="title">{{ subItem.title }}</template>
-                                <el-menu-item
-                                    v-for="(threeItem,i) in subItem.subs"
-                                    :key="i"
-                                    :index="threeItem.index"
-                                >{{ threeItem.title }}</el-menu-item>
-                            </el-submenu>
-                            <el-menu-item
-                                v-else
-                                :index="subItem.index"
-                                :key="subItem.index"
-                            >{{ subItem.title }}</el-menu-item>
-                        </template>
-                    </el-submenu>
-                </template>
-                <template v-else>
-                    <el-menu-item :index="item.index" :key="item.index">
-                        <i :class="item.icon"></i>
-                        <span slot="title">{{ item.title }}</span>
+    <div>
+        <el-container>
+            <el-aside width="collapse">
+                <el-menu
+                    class="el-menu-vertical"
+                    :collapse="isCollapse"
+                    background-color="#fff"
+                    text-color="#bfcbd9"
+                    active-text-color="#20a0ff"
+                    unique-opened
+                    router
+                >
+                    <el-menu-item  @click="isC">
+                        <i class="el-icon-s-fold" v-show="block"></i>
+                        <i class="el-icon-s-unfold" v-show="toggle"></i>
                     </el-menu-item>
-                </template>
-            </template>
-        </el-menu>
-        </el-aside>
+                    <template v-for="item in items">
+                        <template v-if="item.subs">
+                            <el-submenu :index="item.index" :key="item.index">
+                                <template slot="title">
+                                    <i :class="item.icon"></i>
+                                    <span slot="title">{{ item.title }}</span>
+                                </template>
+                                <template v-for="subItem in item.subs">
+                                    <el-submenu
+                                        v-if="subItem.subs"
+                                        :index="subItem.index"
+                                        :key="subItem.index"
+                                    >
+                                        <template slot="title">{{ subItem.title }}</template>
+                                        <el-menu-item
+                                            v-for="(threeItem,i) in subItem.subs"
+                                            :key="i"
+                                            :index="threeItem.index"
+                                        >{{ threeItem.title }}</el-menu-item>
+                                    </el-submenu>
+                                    <el-menu-item
+                                        v-else
+                                        :index="subItem.index"
+                                        :key="subItem.index"
+                                    >{{ subItem.title }}</el-menu-item>
+                                </template>
+                            </el-submenu>
+                        </template>
+                        <template v-else>
+                            <el-menu-item :index="item.index" :key="item.index">
+                                <i :class="item.icon"></i>
+                                <span slot="title">{{ item.title }}</span>
+                            </el-menu-item>
+                        </template>
+                    </template>
+                </el-menu>
+            </el-aside>
+        </el-container>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Sidebar',
+    name: "Main",
     data() {
         return {
-            isCollapse: true,
+            isCollapse: true, //导航栏默认为折叠
+            toggle: false, //第二个图标默认隐藏
+            block: true, //默认显示第一个图标
             items: [
                 {
                     icon: 'el-icon-house',
@@ -94,13 +98,13 @@ export default {
                 {
                     icon: 'el-icon-reading',
                     index: 'dictionary',
-                    title: '数据字典管理'
+                    title: '字典管理'
                 },
 
                 {
                     icon: 'el-icon-set-up',
                     index: 'systemManage',
-                    title: '系统参数管理'
+                    title: '参数管理'
                 },
                 {
                     icon: 'el-icon-paperclip',
@@ -130,7 +134,7 @@ export default {
                                     index: 'diyError',
                                     title: '自定义异常页面'
                                 }
-                                ]
+                            ]
                         }
 
                     ]
@@ -138,31 +142,35 @@ export default {
             ]
         };
     },
+    methods: {
+        // 动态控制展开与收起和切换对应图标
+        isC() {
+            this.isCollapse = !this.isCollapse;
+            this.toggle = !this.toggle;
+            this.block = !this.block;
+        },
+    },
     computed: {
-        tohome() {
-            return this.$route.path.replace('/manage', '');
+        onRoutes() {
+            return this.$route.path.replace('/', '/manage');
         }
     },
-    methods: {
-        isC(){
-            this.isCollapse = !this.isCollapse
-        },
-        handleOpen (key, keyPath) {
-            console.log(key, keyPath)
-        },
-        handleClose (key, keyPath) {
-            console.log(key, keyPath)
-        }
-    }
-}
+};
 </script>
 
 <style scoped>
-.sidebar-el-menu{
-}
-.sidebar {
-    margin-top: 10px;
+
+.el-aside {
+    color: #333;
+    height: 100%;
     text-align: left;
+}
+.el-menu {
+    margin-top: 10px;
+    border-right-width: 0;
+}
+.el-menu-vertical:not(.el-menu--collapse) {
+    width: 157px;
 }
 
 </style>
