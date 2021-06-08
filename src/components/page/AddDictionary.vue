@@ -306,10 +306,11 @@ export default {
             console.log(this.editForm)
         },
         top (index, row) {
-            this.para = Object.assign({}, row)
-            let para1=dicList[0]
-            dicList[0]=para
-            dicList[2]=para1
+            console.log(this.dicList)
+            let para = Object.assign({}, row)
+            let para1=this.dicList[0]
+            this.dicList[0]=para
+            this.dicList[2]=para1
         },
         //编辑提交
         editSubmit: function () {
