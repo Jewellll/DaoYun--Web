@@ -61,7 +61,7 @@
 
         <!-- 添加用户的对话框 -->
         <el-dialog
-            title="添加教师"
+            title="添加系统参数"
             :visible.sync="addFormVisible"
             width="40%"
             @close="addDialogClosed">
@@ -289,11 +289,11 @@ export default {
                 this.listLoading = true
                 let para = {id: row.id}
                 removePara(para).then((res) => {
-                    if (res.data.code == 200) {
+                    if (res.code == 200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getUserList()

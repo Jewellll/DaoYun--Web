@@ -174,7 +174,8 @@ export default {
             addForm: {
                 value:num,
                 name:'',
-                isDefault:'否'
+                isDefault:'否',
+                code:''
             },
             // 添加表单的验证规则对象
             addFormRules: {
@@ -260,12 +261,14 @@ export default {
                 if (valid) {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.addLoading = true
+                        this.addForm.code=this.dicForm.code
+                        console.log(this.addForm.code)
                         let para1 = Object.assign({}, this.addForm)
-                        console.log(para1)
                         let para2 = Object.assign({}, this.dicForm)
                         let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
                         console.log(para)
                         addDic(para).then((res) => {
+
                             if(res.code==200) {
                                 this.addLoading = false
                                 console.log(this.dicForm.code)
