@@ -35,7 +35,7 @@
                     <el-table-column type="index" label="序号"></el-table-column>
                     <el-table-column prop="value" label="数据数值"></el-table-column>
                     <el-table-column prop="name" label="数值名称" ></el-table-column>
-                    <el-table-column prop="is_default" label="默认值" ></el-table-column>
+                    <el-table-column prop="isDefault" label="默认值" ></el-table-column>
                     <el-table-column prop="createTime" label="创建时间" ></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -83,9 +83,9 @@
                             <el-input v-model="addForm.name"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="默认值" prop="is_default">
+                    <el-form-item label="默认值" prop="isDefault">
                         <el-col :span="4">
-                            <el-select v-model="addForm.is_default" placeholder="默认值">
+                            <el-select v-model="addForm.isDefault" placeholder="默认值">
                                 <el-option label="是" value="是"></el-option>
                                 <el-option label="否" value="否"></el-option>
                             </el-select>
@@ -112,9 +112,9 @@
                             <el-input v-model="editForm.name"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="默认值" prop="is_default">
+                    <el-form-item label="默认值" prop="isDefault">
                         <el-col :span="4">
-                        <el-select v-model="editForm.is_default" placeholder="默认值">
+                        <el-select v-model="editForm.isDefault" placeholder="默认值">
                             <el-option label="是" value="是"></el-option>
                             <el-option label="否" value="否"></el-option>
                         </el-select>
@@ -184,7 +184,7 @@
                         value:num,
                         name:'',
                         update_time:'',
-                        is_default:'否'
+                        isDefault:'否'
                     },
                     // 添加表单的验证规则对象
                     addFormRules: {
@@ -201,7 +201,7 @@
                     editForm: {
                         value:'',
                         name:'',
-                        is_default:'否',
+                        isDefault:'否',
                         update_time:''
                     },
                     editFormRules: {
@@ -223,6 +223,8 @@
                     await this.getDic()
                 },
                 async getDic () {
+                    console.log(1)
+                    console.log(this.$store.state.dicCode)
                     this.queryInfo.dicCode=this.$store.state.dicCode
                     this.listLoading=true
                     getDicDetail(this.queryInfo).then((res) => {
@@ -276,7 +278,7 @@
                                 let para2 = Object.assign({}, this.dicForm)
                                 let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
                                 console.log(para)
-                                addDic(para1).then((res) => {
+                                addDic(para).then((res) => {
                                     if(res.code==200) {
                                         this.addLoading = false
                                         this.$message({
