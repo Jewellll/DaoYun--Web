@@ -332,7 +332,7 @@ export default {
                 this.listLoading = true
                 let para = {name: row.name}
                 removeDicDetail(para).then((res) => {
-                    if(res.data.code==200) {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({

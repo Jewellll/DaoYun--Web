@@ -37,7 +37,8 @@
                             <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
                             <!-- 删除按钮 -->
                             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDel(scope.$index, scope.row)"></el-button>
-                            <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
+
+                            <el-button type="primary" icon="el-icon-caret-top" size="mini" @click="handleEdit(scope.$index, scope.row)"></el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -343,7 +344,7 @@
                         this.listLoading = true
                         let para = {name: row.name}
                         removeDicDetail(para).then((res) => {
-                            if(res.data.code==200) {
+                            if(res.code==200) {
                                 this.listLoading = false
                                 //NProgress.done();
                                 this.$message({

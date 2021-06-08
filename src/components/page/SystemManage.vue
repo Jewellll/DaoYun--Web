@@ -316,7 +316,7 @@ export default {
                 this.listLoading = true
                 let para = {ids: ids}
                 batchRemovePara(para).then((res) => {
-                    if (res.data.code == 200) {
+                    if (res.code == 200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
