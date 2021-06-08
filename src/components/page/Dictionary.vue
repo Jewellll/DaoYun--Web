@@ -33,7 +33,7 @@
                 <el-table-column type="index"></el-table-column>
                 <el-table-column prop="typename" label="中文标识"></el-table-column>
                 <el-table-column prop="code" label="英文标识"></el-table-column>
-                <el-table-column prop="create_time" label="创建时间"  :formatter="formatSex"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -163,39 +163,39 @@ export default {
             //列表加载
             listLoading:false,
             // 控制添加用户对话框的显示与隐藏，默认为隐藏
-            addFormVisible: false,
-            addLoading:false,
-            // 添加用户的表单数据
-            addForm: {
-                typename: '',
-                code:'',
-                create_time: ''
-            },
-            // 添加表单的验证规则对象
-            addFormRules: {
-                typename: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
-                ],
-                code: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                ]
-            },
-            //编辑
-            editLoading: false,
-            editFormVisible:false,
-            editForm: {
-                typename: '',
-                code:'',
-                create_time: ''
-            },
-            editFormRules: {
-                typename: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
-                ],
-                code: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                ]
-            },
+            // addFormVisible: false,
+            // addLoading:false,
+            // // 添加用户的表单数据
+            // addForm: {
+            //     typename: '',
+            //     code:'',
+            //     createTime: ''
+            // },
+            // // 添加表单的验证规则对象
+            // addFormRules: {
+            //     typename: [
+            //         {required: true, message: '请输入用户名', trigger: 'blur'},
+            //     ],
+            //     code: [
+            //         {required: true, message: '请输入密码', trigger: 'blur'},
+            //     ]
+            // },
+            // //编辑
+            // editLoading: false,
+            // editFormVisible:false,
+            // editForm: {
+            //     typename: '',
+            //     code:'',
+            //     createTime: ''
+            // },
+            // editFormRules: {
+            //     typename: [
+            //         {required: true, message: '请输入用户名', trigger: 'blur'},
+            //     ],
+            //     code: [
+            //         {required: true, message: '请输入密码', trigger: 'blur'},
+            //     ]
+            // },
         }
     },
     created () {

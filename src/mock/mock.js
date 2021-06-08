@@ -123,23 +123,64 @@ export default {
             })
         })
         //获取字典
-        mock.onGet('/dictionary/listpage').reply(config => {
-            let {page, name} = config.params
-            let mockUsers = _Dictionary.filter(user => {
-                if (name && user.name.indexOf(name) == -1) return false
-                return true
-            })
+        mock.onPost('/dictionaries/listpage').reply(config => {
+            let {pagenum,pagesize,query} = config
+            // let mockUsers = _Dictionary.filter(user => {
+            //     if (query && user.name.indexOf(query) == -1) return false
+            //     return true
+            // })
+            let mockUsers = _Dictionary
             let total = mockUsers.length
-            mockUsers = mockUsers.filter((u, index) => index < 10 * page && index >= 10 * (page - 1))
+            // mockUsers = mockUsers.filter((u, index) => index < pagesize * pagenum && index >= pagesize * (pagenum - 1))
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     resolve([200, {
                         total: total,
-                        users: mockUsers
+                        data: mockUsers
                     }])
                 }, 1000)
             })
         })
+        mock.onPost('/dictionaries/dicDetail').reply(config => {
+            let {pagenum,pagesize,query} = config
+            // let mockUsers = _Dictionary.filter(user => {
+            //     if (query && user.name.indexOf(query) == -1) return false
+            //     return true
+            // })
+            let mockUsers = _Dictionary
+            let total = mockUsers.length
+            // mockUsers = mockUsers.filter((u, index) => index < pagesize * pagenum && index >= pagesize * (pagenum - 1))
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        total: total,
+                        data: mockUsers
+                    }])
+                }, 1000)
+            })
+        })
+        mock.onPost('/dictionaries/dicName').reply(config => {
+            let {pagenum,pagesize,query} = config
+            // let mockUsers = _Dictionary.filter(user => {
+            //     if (query && user.name.indexOf(query) == -1) return false
+            //     return true
+            // })
+            let mockUsers = _Dictionary
+            let total = mockUsers.length
+            // mockUsers = mockUsers.filter((u, index) => index < pagesize * pagenum && index >= pagesize * (pagenum - 1))
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        total: total,
+                        data: mockUsers
+                    }])
+                }, 1000)
+            })
+        })
+
+
+
+
         //获取系统参数
         mock.onGet('/systemManage/listpage').reply(config => {
             let {pagenum,pagesize,query} = config.params
@@ -266,6 +307,26 @@ export default {
             })
         })
 
+        mock.onPost('/dictionaries/code').reply(config => {
+            let {value,name,is_default,code} = config
+            _Dictionary.some(u => {
+                if (u.code === code) {
+                    u.value=value
+                    u.name=name
+                    u.is_default=is_default
+                    return true
+                }
+            })
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 200,
+                        msg: '编辑成功'
+                    }])
+                }, 500)
+            })
+        })
+
         //新增用户
         mock.onGet('/user/add').reply(config => {
             let {name, addr, age, birth, sex} = config.params
@@ -302,6 +363,26 @@ export default {
                     resolve([200, {
                         code: 200,
                         msg: '新增成功'
+                    }])
+                }, 500)
+            })
+        })
+        //新增字典
+        mock.onPost('/dictionaries/id').reply(config => {
+            let {value,name,is_default} = config.data
+            console.log(config.data.value)
+            console.log(name)
+            _Dictionary.push({
+                value:value,
+                name:name,
+                is_default:is_default
+            })
+            console.log(_Dictionary)
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve([200, {
+                        code: 200,
+                        msg: '添加成功'
                     }])
                 }, 500)
             })

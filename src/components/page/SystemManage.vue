@@ -156,10 +156,10 @@ export default {
             // 添加表单的验证规则对象
             addFormRules: {
                 parameter: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {required: true, message: '请输入参数名', trigger: 'blur'},
                 ],
                 value: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
+                    {required: true, message: '请输入参数值', trigger: 'blur'},
                 ]
             },
             //编辑
@@ -172,10 +172,10 @@ export default {
             },
             editFormRules: {
                 parameter: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {required: true, message: '请输入参数名', trigger: 'blur'},
                 ],
                 value: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
+                    {required: true, message: '请输入参数值', trigger: 'blur'},
                 ]
             },
         }
@@ -188,8 +188,8 @@ export default {
             this.listLoading = true
             getParaListPage(this.queryInfo).then((res) => {
                 console.log(res)
-                this.total = res.data.total
-                this.userList = res.data.users
+                this.total = res.total
+                this.userList = res.data
                 this.listLoading = false
             })
         },
@@ -221,7 +221,7 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
-                        addTeacher(para).then((res) => {
+                        addPara(para).then((res) => {
                             if (res.data.code == 200) {
                                 this.addLoading = false
                                 this.$message({
@@ -248,7 +248,7 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
-                        editTeacher(para).then((res) => {
+                        editPara(para).then((res) => {
                             if (res.data.code == 200) {
                                 this.editLoading = false
                                 this.$message({
@@ -270,7 +270,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {id: row.id}
-                removeTeacher(para).then((res) => {
+                removePara(para).then((res) => {
                     if (res.data.code == 200) {
                         this.listLoading = false
                         //NProgress.done();
@@ -297,7 +297,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {ids: ids}
-                batchRemoveTeacher(para).then((res) => {
+                batchRemovePara(para).then((res) => {
                     if (res.data.code == 200) {
                         this.listLoading = false
                         //NProgress.done();

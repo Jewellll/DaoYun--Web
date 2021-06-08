@@ -100,7 +100,6 @@ export default {
                     index: 'dictionary',
                     title: '字典管理'
                 },
-
                 {
                     icon: 'el-icon-set-up',
                     index: 'systemManage',

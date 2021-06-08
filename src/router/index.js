@@ -88,7 +88,7 @@ export default new Router({
                     name: 'AddDictionary',
                     component: AddDictionary,
                     meta: {
-                        title:'数据字典',
+                        title:'数据项',
                         requireAuth: true
                     }
                 },

@@ -35,6 +35,7 @@
                     <el-table-column type="index" label="序号"></el-table-column>
                     <el-table-column prop="value" label="数据数值"></el-table-column>
                     <el-table-column prop="name" label="数值名称" ></el-table-column>
+                    <el-table-column prop="is_default" label="默认值" ></el-table-column>
                     <el-table-column prop="createTime" label="创建时间" ></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -57,7 +58,7 @@
                         :total="total">
                     </el-pagination>
                 </div>
-                <el-button  @click="addFormVisible=true" class="button">创建数据项</el-button>
+                <el-button  @click="addDic" class="button">创建数据项</el-button>
                 <div class="submit">
                     <el-button @click="addFormVisible = false">重  置</el-button>
                     <el-button type="primary" :loading="addLoading" @click.native="addUser">提  交</el-button>
@@ -73,13 +74,21 @@
                 <!-- 内容的主体区域 -->
                 <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
                     <el-form-item label="数据数值" prop="value">
-                        <el-col :span="8">
+                        <el-col :span="10">
                             <el-input v-model="addForm.value" ></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="数据名称" prop="name">
-                        <el-col :span="8">
+                        <el-col :span="10">
                             <el-input v-model="addForm.name"></el-input>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="默认值" prop="is_default">
+                        <el-col :span="4">
+                            <el-select v-model="addForm.is_default" placeholder="默认值">
+                                <el-option label="是" value="是"></el-option>
+                                <el-option label="否" value="否"></el-option>
+                            </el-select>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -94,13 +103,21 @@
             <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
                 <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
                     <el-form-item label="数据数值" prop="value">
-                        <el-col :span="8">
+                        <el-col :span="10">
                             <el-input v-model="editForm.value"></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="数据名称" prop="name">
-                        <el-col :span="8">
+                        <el-col :span="10">
                             <el-input v-model="editForm.name"></el-input>
+                        </el-col>
+                    </el-form-item>
+                    <el-form-item label="默认值" prop="is_default">
+                        <el-col :span="4">
+                        <el-select v-model="editForm.is_default" placeholder="默认值">
+                            <el-option label="是" value="是"></el-option>
+                            <el-option label="否" value="否"></el-option>
+                        </el-select>
                         </el-col>
                     </el-form-item>
                 </el-form>
@@ -122,8 +139,10 @@
         removeTeacher,getDictory
     } from '../../api/api'
         import dicList from './Dictionary'
+       let num=0
         export default {
             data () {
+
                 return {
                     // 获取用户列表的参数对象
                     queryInfo: {
@@ -147,31 +166,33 @@
                     addLoading:false,
                     //数据字典
                     dicForm:{
-                        typeName:'',
-                        typeCode:'',
-                        remark:''
+                        typename:'',
+                        code:'',
+                        createTime:'',
+                        index:'six'
                     },
                     dicFormRules: {
                         typeName: [
-                            {required: true, message: '请输入用户名', trigger: 'blur'},
+                            {required: true, message: '请输入中文标识', trigger: 'blur'},
                         ],
                         typeCode: [
-                            {required: true, message: '请输入密码', trigger: 'blur'},
+                            {required: true, message: '关键字必填', trigger: 'blur'},
                         ]
                     },
                     // 添加用户的表单数据
                     addForm: {
-                        value:'',
+                        value:num,
                         name:'',
-                        update_time:''
+                        update_time:'',
+                        is_default:'否'
                     },
                     // 添加表单的验证规则对象
                     addFormRules: {
                         value: [
-                            {required: true, message: '请输入用户名', trigger: 'blur'},
+                            {required: true, message: '请输入数据数值', trigger: 'blur'},
                         ],
                         name: [
-                            {required: true, message: '请输入密码', trigger: 'blur'},
+                            {required: true, message: '请输入数据名称', trigger: 'blur'},
                         ]
                     },
                     //编辑
@@ -180,24 +201,28 @@
                     editForm: {
                         value:'',
                         name:'',
+                        is_default:'否',
                         update_time:''
                     },
                     editFormRules: {
                         value: [
-                            {required: true, message: '请输入用户名', trigger: 'blur'},
+                            {required: true, message: '请输入数据数值', trigger: 'blur'},
                         ],
                         name: [
-                            {required: true, message: '请输入密码', trigger: 'blur'},
+                            {required: true, message: '请输入数据名称', trigger: 'blur'},
                         ]
                     },
                 }
             },
             created () {
                 this.getUserList()
-                this.getDic()
             },
             methods: {
-                async getUserList () {
+                async getUserList(){
+                    await this.getDicDetail()
+                    await this.getDic()
+                },
+                async getDic () {
                     this.queryInfo.dicCode=this.$store.state.dicCode
                     this.listLoading=true
                     getDicDetail(this.queryInfo).then((res) => {
@@ -207,12 +232,11 @@
                         this.listLoading=false
                     })
                 },
-                async getDic() {
+                async getDicDetail() {
                     this.queryInfo.dicCode=this.$store.state.dicCode
                     this.listLoading=true
                     getDictory(this.queryInfo).then((res) => {
-                        this.dicForm = res.data          //字典
-                        console.log(this.dicForm)//字典项
+                        this.dicForm = res.data[0]          //字典
                         this.listLoading=false
                     })
                 },
@@ -237,22 +261,37 @@
                     this.$refs.addFormRef.resetFields()
                     this.$refs.editForm.resetFields()
                 },
+                addDic(){
+                    this.addForm.value=num
+                    this.addFormVisible=true
+                },
                 // 点击按钮，添加新用户
                 addUser () {
                     this.$refs.addFormRef.validate(async valid => {
                         if (valid) {
                             this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                 this.addLoading = true
-                                let para = Object.assign({}, this.addForm)
-                                addDic(para).then((res) => {
-                                    if(res.data.code==200) {
+                                let para1 = Object.assign({}, this.addForm)
+                                console.log(para1)
+                                let para2 = Object.assign({}, this.dicForm)
+                                let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
+                                console.log(para)
+                                addDic(para1).then((res) => {
+                                    if(res.code==200) {
                                         this.addLoading = false
                                         this.$message({
                                             message: '新增成功',
                                             type: 'success'
                                         })
+                                        num++
                                         this.addFormVisible = false
                                         this.getUserList()
+                                    }else if(res.code==400){
+                                        this.addLoading = false
+                                        this.$message({
+                                            message: '数值重复',
+                                            type: 'fail'
+                                        })
                                     }
                                 })
                             })
@@ -270,12 +309,14 @@
                         if (valid) {
                             this.$confirm('确认提交吗？', '提示', {}).then(() => {
                                 this.editLoading = true
-                                let para = Object.assign({}, this.editForm)
+                                let para1 = Object.assign({}, this.editForm)
+                                let para2 = Object.assign({}, this.dicForm)
+                                let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
                                 editDic(para).then((res) => {
-                                    if(res.data.code==200) {
+                                    if(res.code==200) {
                                         this.editLoading = false
                                         this.$message({
-                                            message: res.data.msg,
+                                            message: res.msg,
                                             type: 'success'
                                         })
                                         this.editFormVisible = false

@@ -54,13 +54,14 @@ for (let i = 0; i < 20; i++) {
 }
 
 //字典
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 1; i++) {
     Dictionary.push(Mock.mock({
         id: Mock.Random.guid(),
-        dicId:/^0[0-9]{6}$/, //用正则匹配1开头的11位数字的手机号
-        'dicName|1':['用户名','手机号','学号'],
-        'dicCode|1':['CARD_TYPE','CARD_TYPE','STUDENT_TYPE'],
-        'dicText|1':['用户类型','用户类型','学生类型']
+        typename:'性别',
+        code:'sex',
+        value:1,
+        name:'男',
+        is_default:'是'
     }));
 }
 

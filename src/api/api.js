@@ -81,13 +81,13 @@ export const editDictionary = params => { return http.post(`${base}/dictionary/e
 
 //系统参数管理
 
-export const getParaListPage = params => { return http.post(`${base}/systemManage/listpage`,  params); };
+export const getParaListPage = params => { return http.post(`${base}/systemManage/listpage`,  params).then(res => res.data); };
 
-export const editPara = params => { return http.post(`${base}/systemManage/edit`,  params ); };
+export const editPara = params => { return http.post(`${base}/systemManage/edit`,  params ).then(res => res.data); };
 
-export const addPara = params => { return http.post(`${base}/systemManage/add`,  params ); };
+export const addPara = params => { return http.post(`${base}/systemManage/add`,  params ).then(res => res.data); };
 
-export const removePara = params => { return http.post(`${base}/systemManage/remove`, params); };
+export const removePara = params => { return http.post(`${base}/systemManage/remove`, params).then(res => res.data); };
 
-export const batchRemovePara = params => { return http.post(`${base}/systemManage/batchremove`,  params ); };
+export const batchRemovePara = params => { return http.post(`${base}/systemManage/batchremove`,  params ).then(res => res.data); };
 
