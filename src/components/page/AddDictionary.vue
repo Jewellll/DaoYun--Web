@@ -306,8 +306,8 @@
                                 this.editLoading = true
                                 let para1 = Object.assign({}, this.editForm)
                                 let para2 = Object.assign({}, this.dicForm)
-                                let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
-                                editDic(para).then((res) => {
+                                //let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
+                                editDic(para1).then((res) => {
                                     if(res.code==200) {
                                         this.editLoading = false
                                         this.$message({
@@ -316,6 +316,12 @@
                                         })
                                         this.editFormVisible = false
                                         this.getUserList()
+                                    }else if(res.code==400){
+                                        this.addLoading = false
+                                        this.$message({
+                                            message: '数值重复',
+                                            type: 'fail'
+                                        })
                                     }
                                 })
                             })
