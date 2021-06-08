@@ -31,9 +31,9 @@
                       :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
                 <el-table-column type="selection" ></el-table-column>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column prop="parameter" label="系统参数名" ></el-table-column>
+                <el-table-column prop="name" label="系统参数名" ></el-table-column>
+                <el-table-column prop="keyword" label="关键字" ></el-table-column>
                 <el-table-column prop="value" label="系统参数值" ></el-table-column>
-                <el-table-column prop="remark" label="备注" ></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -67,19 +67,19 @@
             @close="addDialogClosed">
             <!-- 内容的主体区域 -->
             <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
-                <el-form-item label="系统参数名" prop="parameter">
+                <el-form-item label="系统参数名" prop="name">
                     <el-col :span="8">
-                        <el-input v-model="addForm.parameter" auto-complete="off"></el-input>
+                        <el-input v-model="addForm.name" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="关键字" prop="keyword">
+                    <el-col :span="14">
+                        <el-input v-model="addForm.keyword" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="系统参数值" prop="value">
                     <el-col :span="8">
                         <el-input v-model="addForm.value" auto-complete="off"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="备注" prop="remark">
-                    <el-col :span="14">
-                        <el-input v-model="addForm.remark" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -93,19 +93,19 @@
         <!--编辑界面-->
         <el-dialog title="编辑" width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="系统参数名" prop="parameter">
+                <el-form-item label="系统参数名" prop="name">
                     <el-col :span="8">
-                        <el-input v-model="editForm.parameter" auto-complete="off"></el-input>
+                        <el-input v-model="editForm.name" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="关键字" prop="keyword">
+                    <el-col :span="14">
+                        <el-input v-model="editForm.keyword" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="系统参数值" prop="value">
                     <el-col :span="8">
                         <el-input v-model="editForm.value"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="备注" prop="remark">
-                    <el-col :span="14">
-                        <el-input v-model="editForm.remark" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -149,14 +149,17 @@ export default {
             addLoading: false,
             // 添加用户的表单数据
             addForm: {
-                parameter: '',
+                name: '',
                 value: '',
-                remark: ''
+                keyword: ''
             },
             // 添加表单的验证规则对象
             addFormRules: {
-                parameter: [
+                name: [
                     {required: true, message: '请输入参数名', trigger: 'blur'},
+                ],
+                keyword: [
+                    {required: true, message: '请输入关键字', trigger: 'blur'},
                 ],
                 value: [
                     {required: true, message: '请输入参数值', trigger: 'blur'},
@@ -166,13 +169,16 @@ export default {
             editLoading: false,
             editFormVisible: false,
             editForm: {
-                parameter: '',
-                value: '0',
-                remark: ''
+                name: '',
+                value: '',
+                keyword: ''
             },
             editFormRules: {
-                parameter: [
+                name: [
                     {required: true, message: '请输入参数名', trigger: 'blur'},
+                ],
+                keyword: [
+                    {required: true, message: '请输入关键字', trigger: 'blur'},
                 ],
                 value: [
                     {required: true, message: '请输入参数值', trigger: 'blur'},

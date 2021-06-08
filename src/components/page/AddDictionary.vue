@@ -18,11 +18,6 @@
                             <el-input v-model="dicForm.code"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="创建时间" prop="createTime">
-                        <el-col :span="8">
-                            <el-input  v-model="dicForm.createTime"></el-input>
-                        </el-col>
-                    </el-form-item>
                 </el-form>
             </div>
 
@@ -36,7 +31,6 @@
                     <el-table-column prop="value" label="数据数值"></el-table-column>
                     <el-table-column prop="name" label="数值名称" ></el-table-column>
                     <el-table-column prop="isDefault" label="默认值" ></el-table-column>
-                    <el-table-column prop="createTime" label="创建时间" ></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <!-- 修改按钮 -->
@@ -60,8 +54,8 @@
                 </div>
                 <el-button  @click="addDic" class="button">创建数据项</el-button>
                 <div class="submit">
-                    <el-button @click="addFormVisible = false">重  置</el-button>
-                    <el-button type="primary" :loading="addLoading" @click.native="addUser">提  交</el-button>
+                    <el-button @click="back">返  回</el-button>
+                    <el-button type="primary" :loading="addLoading" @click.native="submit">提  交</el-button>
                 </div>
             </div>
 
@@ -168,14 +162,13 @@
                     dicForm:{
                         typename:'',
                         code:'',
-                        createTime:'',
                         index:'six'
                     },
                     dicFormRules: {
-                        typeName: [
+                        typename: [
                             {required: true, message: '请输入中文标识', trigger: 'blur'},
                         ],
-                        typeCode: [
+                        code: [
                             {required: true, message: '关键字必填', trigger: 'blur'},
                         ]
                     },
@@ -183,7 +176,6 @@
                     addForm: {
                         value:num,
                         name:'',
-                        update_time:'',
                         isDefault:'否'
                     },
                     // 添加表单的验证规则对象
@@ -201,8 +193,8 @@
                     editForm: {
                         value:'',
                         name:'',
-                        isDefault:'否',
-                        update_time:''
+                        id:'',
+                        isDefault:'否'
                     },
                     editFormRules: {
                         value: [
@@ -304,6 +296,7 @@
                 handleEdit: function (index, row) {
                     this.editFormVisible = true
                     this.editForm = Object.assign({}, row)
+                    console.log(this.editForm)
                 },
                 //编辑提交
                 editSubmit: function () {
@@ -328,6 +321,12 @@
                             })
                         }
                     })
+                },
+                back(){
+                    this.$router.push({ path: "/dictionary", query: {} });
+                },
+                submit(){
+                    this.$router.push({ path: "/dictionary", query: {} });
                 },
                 //删除
                 handleDel: function (index, row) {

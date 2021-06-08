@@ -19,6 +19,7 @@ import PhoneLogin from '../components/page/PhoneLogin'
 import Test from '../components/page/Test'
 import RoleManage from '../components/page/RoleManage'
 import AddDictionary from '../components/page/AddDictionary'
+import EditDictionary from '../components/page/EditDictionary'
 
 Vue.use(Router)
 
@@ -89,6 +90,15 @@ export default new Router({
                     component: AddDictionary,
                     meta: {
                         title:'数据项',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/editDictionary',
+                    name: 'EditDictionary',
+                    component: EditDictionary,
+                    meta: {
+                        title:'数据',
                         requireAuth: true
                     }
                 },

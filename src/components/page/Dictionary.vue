@@ -203,7 +203,7 @@ export default {
     },
     methods: {
         toAdd(){
-            this.$router.push({ path: "/addDictionary", query: {} });
+            this.$router.push({ path: "/editDictionary", query: {} });
         },
         async getUserList () {
             this.listLoading=true
