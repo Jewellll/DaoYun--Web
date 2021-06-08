@@ -122,7 +122,7 @@ import {
     addTeacher,
     batchRemoveTeacher,
     editTeacher, getParaListPage,
-    getTeacherListPage,
+    getTeacherListPage,addPara,
     removeTeacher
 } from '../../api/api'
 
