@@ -9,6 +9,7 @@ export default new Vuex.Store({
          token:{},
          user:{},
          dicCode:'',
+         addDicCode:'',
          isCollapse: true,
 
     },
@@ -24,6 +25,9 @@ export default new Vuex.Store({
         },
         setDiction(state,data){
             state.dicCode = data
+        },
+        addDiction(state,data){
+            state.addDicCode = data
         }
     },
     //异步操作

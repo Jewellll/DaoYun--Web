@@ -161,7 +161,6 @@ export default {
             dicForm:{
                 typename:'',
                 code:'',
-                index:'six'
             },
             dicFormRules: {
                 typename: [
@@ -213,6 +212,7 @@ export default {
             await this.getDic()
         },
         async getDic () {
+            this.queryInfo.dicCode=this.$store.state.addDicCode
             this.listLoading=true
             getDicDetail(this.queryInfo).then((res) => {
                 this.total = res.data.total
@@ -222,6 +222,7 @@ export default {
             })
         },
         async getDicDetail() {
+            this.queryInfo.dicCode=this.$store.state.addDicCode
             this.listLoading=true
             getDictory(this.queryInfo).then((res) => {
                 this.dicForm = res.data[0]          //字典
@@ -267,6 +268,8 @@ export default {
                         addDic(para).then((res) => {
                             if(res.code==200) {
                                 this.addLoading = false
+                                console.log(this.dicForm.code)
+                                this.$store.commit('addDiction',this.dicForm.code);
                                 this.$message({
                                     message: '新增成功',
                                     type: 'success'

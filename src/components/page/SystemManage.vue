@@ -122,8 +122,8 @@ import {
     addTeacher,
     batchRemoveTeacher,
     editTeacher, getParaListPage,
-    getTeacherListPage,addPara,
-    removeTeacher
+    getTeacherListPage, addPara,
+    removeTeacher, editPara, removePara, batchRemovePara
 } from '../../api/api'
 
 export default {
@@ -228,7 +228,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         addPara(para).then((res) => {
-                            if (res.data.code == 200) {
+                            if (res.code == 200) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '新增成功',
@@ -236,6 +236,12 @@ export default {
                                 })
                                 this.addFormVisible = false
                                 this.getUserList()
+                            }else if(res.code==400){
+                                this.addLoading = false
+                                this.$message({
+                                    message: '关键字重复，请重新填写',
+                                    type: 'fail'
+                                })
                             }
                         })
                     })
@@ -255,7 +261,7 @@ export default {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
                         editPara(para).then((res) => {
-                            if (res.data.code == 200) {
+                            if (res.code == 200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.data.msg,
@@ -263,6 +269,12 @@ export default {
                                 })
                                 this.editFormVisible = false
                                 this.getUserList()
+                            }else if(res.code==400){
+                                this.addLoading = false
+                                this.$message({
+                                    message: '关键字重复，请重新填写',
+                                    type: 'fail'
+                                })
                             }
                         })
                     })
