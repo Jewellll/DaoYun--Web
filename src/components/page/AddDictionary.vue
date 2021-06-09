@@ -26,7 +26,7 @@
                 数据项
             </div>
             <hr>
-            <el-table :data="dicList" :stripe="true" :border="true" v-loading="listLoading"
+            <el-table name="flip-list" :data="dicList" :stripe="true" :border="true" v-loading="listLoading"
                       :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
                 <el-table-column type="index" label="序号"></el-table-column>
                 <el-table-column prop="value" label="数据数值"></el-table-column>
@@ -43,6 +43,8 @@
 
                         <el-button type="primary" icon="el-icon-caret-top" size="mini"
                                    @click="top(scope.$index, scope.row)"></el-button>
+                        <el-button type="primary" icon="el-icon-caret-bottom" size="mini"
+                                   @click="bottom(scope.$index, scope.row)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -136,7 +138,7 @@ import {
     batchRemoveTeacher, editDic,
     editTeacher, getDicDetail,
     getTeacherListPage, removeDicDetail,
-    removeTeacher, getDictory
+    removeTeacher, getDictory, saveEdit
 } from '../../api/api'
 import dicList from './Dictionary'
 
@@ -306,11 +308,22 @@ export default {
             console.log(this.editForm)
         },
         top (index, row) {
+            if(index === 0){
+                this.$message.warning('该条数据已置顶！');
+                return;
+            }
+            [this.dicList[index], this.dicList[index - 1]] = [this.dicList[index - 1], this.dicList[index]]
+            this.dicList.sort()
             console.log(this.dicList)
-            let para = Object.assign({}, row)
-            let para1=this.dicList[0]
-            this.dicList[0]=para
-            this.dicList[2]=para1
+        },
+        bottom(index, row) {
+            if(index === this.dicList.length-1){
+                this.$message.warning('该条数据已置底！');
+                return;
+            }
+            [this.dicList[index], this.dicList[index + 1]] = [this.dicList[index + 1], this.dicList[index]]
+            this.dicList.sort()
+            console.log(this.dicList)
         },
         //编辑提交
         editSubmit: function () {
@@ -322,7 +335,7 @@ export default {
                         let para2 = Object.assign({}, this.dicForm)
                         //let para= JSON.parse((JSON.stringify(para1) + JSON.stringify(para2)).replace(/}{/, ','));
                         editDic(para1).then((res) => {
-                            if (res.code == 200) {
+                            if (res.code === 200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.msg,
@@ -330,7 +343,7 @@ export default {
                                 })
                                 this.editFormVisible = false
                                 this.getUserList()
-                            } else if (res.code == 400) {
+                            } else if (res.code === 400) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '数值重复',
@@ -346,7 +359,19 @@ export default {
             this.$router.push({path: '/dictionary', query: {}})
         },
         submit () {
-            this.$router.push({path: '/dictionary', query: {}})
+            console.log(this.dicList)
+            let para = this.dicList
+            saveEdit(para).then((res) => {
+                if (res.code === 200) {
+                    //NProgress.done();
+                    this.$message({
+                        message: res.data.msg,
+                        type: 'success'
+                    })
+                    this.$router.push({path: '/dictionary', query: {}})
+                }
+            })
+
         },
         //删除
         handleDel: function (index, row) {
@@ -400,7 +425,6 @@ export default {
     margin-top: 10px;
     text-align: right;
 }
-
 </style>
 
 

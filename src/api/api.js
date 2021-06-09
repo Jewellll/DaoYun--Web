@@ -65,6 +65,8 @@ export const getDictory = params => { return http.post(`${base}/dictionaries/dic
 
 export const getDicListPage = params => { return http.post(`${base}/dictionaries/listpage`,  params ).then(res => res.data);; };
 
+export const saveEdit = params => { return http.post(`${base}/dictionaries/saveEdit`,  params ).then(res => res.data);; };
+
 export const getDicDetail = params => { return http.post(`${base}/dictionaries/dicDetail`,  params ).then(res => res.data); };
 
 export const editDic = params => { return http.post(`${base}/dictionaries/code`, params ).then(res => res.data); };

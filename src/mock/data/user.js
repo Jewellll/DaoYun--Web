@@ -54,14 +54,14 @@ for (let i = 0; i < 20; i++) {
 }
 
 //字典
-for (let i = 0; i < 1; i++) {
+for (let i = 0; i < 3; i++) {
     Dictionary.push(Mock.mock({
         id: Mock.Random.guid(),
         typename:'性别',
         code:'sex',
         value:1,
-        name:'男',
-        is_default:'是'
+        'name|1':['男','女'],
+        'isDefault|1':['是','否']
     }));
 }
 

@@ -4,7 +4,7 @@
         <!-- 面包屑导航区域 -->
         <div class="add">
             <div style="text-align: left;margin-left: 5px">
-                数据字典
+                创建数据字典
             </div>
             <hr>
             <el-form :model="dicForm" label-width="80px" :rules="dicFormRules" ref="editForm">
