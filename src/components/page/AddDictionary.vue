@@ -359,6 +359,7 @@ export default {
             this.$router.push({path: '/dictionary', query: {}})
         },
         submit () {
+            let _this = this
             console.log(this.dicList)
             let para = this.dicList
             saveEdit(para).then((res) => {
@@ -368,7 +369,7 @@ export default {
                         message: res.data.msg,
                         type: 'success'
                     })
-                    this.$router.push({path: '/dictionary', query: {}})
+                    _this.$router.push({path: '/dictionary', query: {}})
                 }
             })
 
