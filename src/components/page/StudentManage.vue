@@ -62,7 +62,7 @@
 
         <!-- 添加用户的对话框 -->
         <el-dialog
-            title="添加教师"
+            title="添加学生"
             :visible.sync="addFormVisible"
             width="40%"
             @close="addDialogClosed" >
@@ -158,10 +158,11 @@
 
 <script>
 import {
-    addTeacher,
-    batchRemoveTeacher,
-    editTeacher,
-    getTeacherListPage,
+    addStudent,
+    addTeacher, batchRemoveStudent,
+    batchRemoveTeacher, editStudent,
+    editTeacher, getStudentListPage,
+    getTeacherListPage, removeStudent,
     removeTeacher
 } from '../../api/api'
 
@@ -282,7 +283,7 @@ export default {
         },
         async getUserList () {
             this.listLoading=true
-            getTeacherListPage(this.queryInfo).then((res) => {
+            getStudentListPage(this.queryInfo).then((res) => {
                 console.log(res)
                 this.total = res.data.total
                 this.userList = res.data.users
@@ -317,8 +318,8 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
-                        addTeacher(para).then((res) => {
-                            if(res.data.code==200) {
+                        addStudent(para).then((res) => {
+                            if(res.code==200) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '新增成功',
@@ -344,8 +345,8 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
-                        editTeacher(para).then((res) => {
-                            if(res.data.code==200) {
+                        editStudent(para).then((res) => {
+                            if(res.code==200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.data.msg,
@@ -366,8 +367,8 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {id: row.id}
-                removeTeacher(para).then((res) => {
-                    if(res.data.code==200) {
+                removeStudent(para).then((res) => {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
@@ -393,8 +394,8 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {ids: ids}
-                batchRemoveTeacher(para).then((res) => {
-                    if(res.data.code==200) {
+                batchRemoveStudent(para).then((res) => {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({

@@ -318,7 +318,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         addTeacher(para).then((res) => {
-                            if(res.data.code==200) {
+                            if(res.code==200) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '新增成功',
@@ -345,7 +345,7 @@ export default {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
                         editTeacher(para).then((res) => {
-                            if(res.data.code==200) {
+                            if(res.code==200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.data.msg,
@@ -367,7 +367,7 @@ export default {
                 this.listLoading = true
                 let para = {id: row.id}
                 removeTeacher(para).then((res) => {
-                    if(res.data.code==200) {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
@@ -394,7 +394,7 @@ export default {
                 this.listLoading = true
                 let para = {ids: ids}
                 batchRemoveTeacher(para).then((res) => {
-                    if(res.data.code==200) {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({

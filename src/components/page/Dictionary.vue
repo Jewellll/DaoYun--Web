@@ -56,91 +56,13 @@
                 </el-pagination>
             </div>
         </div>
-
-<!--        &lt;!&ndash; 添加用户的对话框 &ndash;&gt;-->
-<!--        <el-dialog-->
-<!--            title="编辑字典"-->
-<!--            :visible.sync="addFormVisible"-->
-<!--            width="40%"-->
-<!--            @close="addDialogClosed" >-->
-<!--            &lt;!&ndash; 内容的主体区域 &ndash;&gt;-->
-<!--            <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">-->
-<!--                <el-form-item label="中文标识" prop="typename">-->
-<!--                    <el-col :span="8">-->
-<!--                        <el-input v-model="addForm.typename" ></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="英文标识" prop="code">-->
-<!--                    <el-col :span="8">-->
-<!--                        <el-input v-model="addForm.code"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="创建时间" prop="createtime">-->
-<!--                    <el-col :span="14">-->
-<!--                        <el-input v-model="addForm.createtime"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--            </el-form>-->
-<!--            &lt;!&ndash; 底部区域 &ndash;&gt;-->
-<!--            <span slot="footer" class="dialog-footer">-->
-<!--                <el-button @click="addFormVisible = false">取 消</el-button>-->
-<!--                <el-button type="primary" :loading="addLoading" @click.native="addUser">确 定</el-button>-->
-<!--            </span>-->
-<!--        </el-dialog>-->
-
-<!--        &lt;!&ndash;编辑界面&ndash;&gt;-->
-<!--        <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">-->
-<!--            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">-->
-<!--                <el-form-item label="用户名" prop="name">-->
-<!--                    <el-col :span="8">-->
-<!--                        <el-input v-model="editForm.name"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="工号" prop="card">-->
-<!--                    <el-col :span="8">-->
-<!--                        <el-input v-model="editForm.card"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="性别">-->
-<!--                    <el-col :span="14">-->
-<!--                        <el-radio-group v-model="editForm.sex">-->
-<!--                            <el-radio class="radio" label="1">男</el-radio>-->
-<!--                            <el-radio class="radio" label="2">女</el-radio>-->
-<!--                            <el-radio class="radio" label="0">未知</el-radio>-->
-<!--                        </el-radio-group>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="邮箱" prop="email">-->
-<!--                    <el-col :span="14">-->
-<!--                        <el-input v-model="editForm.email"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="手机号" prop="mobile">-->
-<!--                    <el-col :span="14">-->
-<!--                        <el-input v-model="editForm.mobile"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="课程" prop="course">-->
-<!--                    <el-col :span="14">-->
-<!--                        <el-input v-model="editForm.course"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--            </el-form>-->
-<!--            <div slot="footer" class="dialog-footer">-->
-<!--                <el-button @click.native="editFormVisible = false">取消</el-button>-->
-<!--                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>-->
-<!--            </div>-->
-<!--        </el-dialog>-->
     </div>
 </template>
 
 <script>
 import {
-    addTeacher, batchRemoveDic,
-    batchRemoveTeacher, editDictionary,
-    editTeacher, getDicListPage,
-    getTeacherListPage,
-    removeTeacher
+batchRemoveDic,
+getDicListPage
 } from '../../api/api'
 
 export default {
@@ -162,40 +84,6 @@ export default {
             total: 0,
             //列表加载
             listLoading:false,
-            // 控制添加用户对话框的显示与隐藏，默认为隐藏
-            // addFormVisible: false,
-            // addLoading:false,
-            // // 添加用户的表单数据
-            // addForm: {
-            //     typename: '',
-            //     code:'',
-            //     createTime: ''
-            // },
-            // // 添加表单的验证规则对象
-            // addFormRules: {
-            //     typename: [
-            //         {required: true, message: '请输入用户名', trigger: 'blur'},
-            //     ],
-            //     code: [
-            //         {required: true, message: '请输入密码', trigger: 'blur'},
-            //     ]
-            // },
-            // //编辑
-            // editLoading: false,
-            // editFormVisible:false,
-            // editForm: {
-            //     typename: '',
-            //     code:'',
-            //     createTime: ''
-            // },
-            // editFormRules: {
-            //     typename: [
-            //         {required: true, message: '请输入用户名', trigger: 'blur'},
-            //     ],
-            //     code: [
-            //         {required: true, message: '请输入密码', trigger: 'blur'},
-            //     ]
-            // },
         }
     },
     created () {
@@ -229,33 +117,6 @@ export default {
             //  修改完以后，重新发起请求获取一次数据
             this.getUserList()
         },
-        // // 监听添加用户对话框的关闭事件
-        // addDialogClosed () {
-        //     this.$refs.addFormRef.resetFields()
-        //     this.$refs.editForm.resetFields()
-        // },
-        // // 点击按钮，添加新用户
-        // addUser () {
-        //     this.$refs.addFormRef.validate(async valid => {
-        //         if (valid) {
-        //             this.$confirm('确认提交吗？', '提示', {}).then(() => {
-        //                 this.addLoading = true
-        //                 let para = Object.assign({}, this.addForm)
-        //                 addTeacher(para).then((res) => {
-        //                     if(res.data.code==200) {
-        //                         this.addLoading = false
-        //                         this.$message({
-        //                             message: '新增成功',
-        //                             type: 'success'
-        //                         })
-        //                         this.addFormVisible = false
-        //                         this.getUserList()
-        //                     }
-        //                 })
-        //             })
-        //         }
-        //     })
-        // },
         //显示编辑
         handleEdit: function (index, row) {
             // this.editFormVisible = true
@@ -267,28 +128,6 @@ export default {
             //     }
             // })
         },
-        // //编辑提交
-        // editSubmit: function () {
-        //     this.$refs.editForm.validate((valid) => {
-        //         if (valid) {
-        //             this.$confirm('确认提交吗？', '提示', {}).then(() => {
-        //                 this.editLoading = true
-        //                 let para = Object.assign({}, this.editForm)
-        //                 editTeacher(para).then((res) => {
-        //                     if(res.data.code==200) {
-        //                         this.editLoading = false
-        //                         this.$message({
-        //                             message: res.data.msg,
-        //                             type: 'success'
-        //                         })
-        //                         this.editFormVisible = false
-        //                         this.getUserList()
-        //                     }
-        //                 })
-        //             })
-        //         }
-        //     })
-        // },
         //删除
         handleDel: function (index, row) {
             this.$confirm('确认删除该记录吗?', '提示', {

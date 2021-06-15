@@ -16,7 +16,7 @@ export const requireRegister = params => { return axios.post(`${base}/register`,
 
 //用户管理
 
-export const getUserListPage = params => { return http.post(`${base}/user/listpage`, params); };
+export const getUserListPage = params => { return http.post(`${base}/user/listpage`, params).then(res => res.data); };
 
 export const removeUser = params => { return http.post(`${base}/user/remove`, params ).then(res => res.data); };
 
@@ -27,45 +27,45 @@ export const editUser = params => { return http.post(`${base}/user/edit`,  param
 export const addUser = params => { return http.post(`${base}/user/add`,  params ).then(res => res.data); };
 
 //教师管理
-export const getTeacherListPage = params => { return http.post(`${base}/teacher/listpage`, params); };
+export const getTeacherListPage = params => { return http.post(`${base}/teacher/listpage`, params).then(res => res.data); };
 
-export const editTeacher = params => { return http.post(`${base}/teacher/edit`,  params); };
+export const editTeacher = params => { return http.post(`${base}/teacher/edit`,  params).then(res => res.data); };
 
-export const addTeacher = params => { return http.post(`${base}/teacher/add`,  params); };
+export const addTeacher = params => { return http.post(`${base}/teacher/add`,  params).then(res => res.data); };
 
-export const removeTeacher = params => { return http.post(`${base}/teacher/remove`,  params); };
+export const removeTeacher = params => { return http.post(`${base}/teacher/remove`,  params).then(res => res.data); };
 
-export const batchRemoveTeacher = params => { return http.post(`${base}/teacher/batchremove`,  params); };
+export const batchRemoveTeacher = params => { return http.post(`${base}/teacher/batchremove`,  params).then(res => res.data); };
 
 //学生管理
-export const getStudentListPage = params => { return http.post(`${base}/student/listpage`,  params); };
+export const getStudentListPage = params => { return http.post(`${base}/student/listpage`,  params).then(res => res.data); };
 
-export const editStudent = params => { return http.post(`${base}/student/edit`,  params ); };
+export const editStudent = params => { return http.post(`${base}/student/edit`,  params ).then(res => res.data); };
 
-export const addStudent = params => { return http.post(`${base}/student/add`,  params ); };
+export const addStudent = params => { return http.post(`${base}/student/add`,  params ).then(res => res.data); };
 
-export const removeStudent = params => { return http.post(`${base}/student/remove`,  params); };
+export const removeStudent = params => { return http.post(`${base}/student/remove`,  params).then(res => res.data); };
 
-export const batchRemoveStudent = params => { return http.post(`${base}/student/batchremove`,  params); };
+export const batchRemoveStudent = params => { return http.post(`${base}/student/batchremove`,  params).then(res => res.data); };
 
 //课程管理
-export const getCourseListPage = params => { return http.post(`${base}/course/listpage`,  params ); };
+export const getCourseListPage = params => { return http.post(`${base}/course/listpage`,  params ).then(res => res.data); };
 
-export const editCourse = params => { return http.post(`${base}/course/edit`,  params); };
+export const editCourse = params => { return http.post(`${base}/course/edit`,  params).then(res => res.data); };
 
-export const addCourse = params => { return http.post(`${base}/course/add`,  params); };
+export const addCourse = params => { return http.post(`${base}/course/add`,  params).then(res => res.data); };
 
-export const removeCourse = params => { return http.post(`${base}/course/remove`,  params); };
+export const removeCourse = params => { return http.post(`${base}/course/remove`,  params).then(res => res.data); };
 
-export const batchRemoveCourse = params => { return http.post(`${base}/course/batchremove`, params ); };
+export const batchRemoveCourse = params => { return http.post(`${base}/course/batchremove`, params ).then(res => res.data); };
 
 //字典管理
 
-export const getDictory = params => { return http.post(`${base}/dictionaries/dicName`,  params ).then(res => res.data);; };
+export const getDictory = params => { return http.post(`${base}/dictionaries/dicName`,  params ).then(res => res.data); };
 
-export const getDicListPage = params => { return http.post(`${base}/dictionaries/listpage`,  params ).then(res => res.data);; };
+export const getDicListPage = params => { return http.post(`${base}/dictionaries/listpage`,  params ).then(res => res.data); };
 
-export const saveEdit = params => { return http.post(`${base}/dictionaries/saveEdit`,  params ).then(res => res.data);; };
+export const saveEdit = params => { return http.post(`${base}/dictionaries/saveEdit`,  params ).then(res => res.data); };
 
 export const getDicDetail = params => { return http.post(`${base}/dictionaries/dicDetail`,  params ).then(res => res.data); };
 
