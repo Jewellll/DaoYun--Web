@@ -15,7 +15,7 @@ export default {
 <style scoped>
 #poster {
     margin: 0;
-    background: url("../assets/img/login.jpg") no-repeat;
+    background: url("../assets/img/login.jpeg") no-repeat;
     background-position: center;
     height: 100%;
     width: 100%;

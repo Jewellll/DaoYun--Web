@@ -2,9 +2,9 @@
         <div class="forget">
             <div class="title">修改密码</div>
             <el-form :model="forgetForm" :rules="rules" ref="forgetForm" class="forget-container">
-                <el-form-item label="旧密码" prop="password">
-                    <el-input type="password" v-model="forgetForm.password" placeholder="请输入旧密码"></el-input>
-                </el-form-item>
+<!--                <el-form-item label="旧密码" prop="password">-->
+<!--                    <el-input type="password" v-model="forgetForm.password" placeholder="请输入旧密码"></el-input>-->
+<!--                </el-form-item>-->
                 <el-form-item label="新密码" prop="newPassword">
                     <el-input type="password" v-model="forgetForm.newPassword" placeholder="请输入新密码"></el-input>
                 </el-form-item>
@@ -15,10 +15,13 @@
                         <el-button type="primary" style="width: 100%"  @click.native.prevent="change">确定修改</el-button>
                 </el-form-item>
             </el-form>
+            <el-link :underline="false" class="back-link" @click="back()">返回</el-link>
         </div>
 </template>
 
 <script>
+import {requireForget} from '../../api/api'
+
 export default {
     name: 'ForgetPassword',
     data() {
@@ -57,27 +60,24 @@ export default {
         change(){
             this.$refs.forgetForm.validate((valid) => {
                 if (valid) {
-                    this.$axios
-                        .post('/forget', {
-                            password: this.forgetForm.password,
-                        })
-                        .then(res => {
-                            if (res.data.code === 200) {
-                                var path = this.$route.query.redirect
-                                this.$router.replace({
-                                    path: path === '/' || path === undefined ? '/login' : path
-                                });
-                            }
-                            if (res.data.code === 400) {
-                                this.$message.error("旧密码错误");
-                            }
-                        })
-                        .catch(failResponse => {});
+                    const regParams = this.forgetForm
+                    requireForget(regParams).then(res => {
+                        let {msg, code} = res
+                        if (code !== 200) {
+                            this.$message.error(msg);
+                        } else {
+                            this.$message.success(msg)
+                            this.$router.push("/login");
+                        }
+                    })
                 } else {
                     this.$message.error('请输入账号和密码')
                     return false
                 }
             })
+        },
+        back(){
+            this.$router.push( "/login");
         }
     }
 }
@@ -97,12 +97,18 @@ export default {
     padding: 30px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    box-shadow: 0 0 10px #cac6c6;
     opacity: 0.9;
 }
 .passwordreset-btn button {
     width: 100%;
     height: 36px;
     margin-bottom: 10px;
+}
+.back-link {
+    position: relative;
+    left: 180px;
+    color: #505458;
+    font-size: 13px;
 }
 </style>

@@ -4,17 +4,15 @@
                  label-width="0x">
             <h3 class="check_title">注册</h3>
             <el-form-item prop="phoneNum">
-                <el-input type="text" v-model="phoneNum"
+                <el-input type="text" v-model="regForm.phoneNum"
                           auto-complete="off" placeholder="请输入手机号码"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="verifyNum">
                 <div class="iden">
-                    <el-input type="text" v-model="verifyNum" style=""
-                              auto-complete="off" @keyup.enter.native="verificationCode"
+                    <el-input type="text" v-model="regForm.verifyNum" auto-complete="off"
                               placeholder="请输入验证码"></el-input>
                     <el-button :style="{border: none,background:btnColor?'#2E9AFE':'#617079',color:'#FFF',width:'50%'}"
-                               v-on:click="sendSmsCode"
-                               class="verify-btn" v-model="btnContent"
+                               v-on:click="sendSmsCode" class="verify-btn" v-model="btnContent"
                                v-bind="{'disabled':disabled}">
                         {{ btnContent }}
                     </el-button>
@@ -44,11 +42,32 @@
 </template>
 
 <script>
-import {editUserInfo, requestLogin, requestMss, requireRegister} from '../../api/api'
+import {requestMss, requireRegister} from '../../api/api'
 
 export default {
     name: 'Register',
     data () {
+        var checkEmail = (rule, value, cb) => {
+            // 验证邮箱的正则表达式
+            const regEmail = /^[A-Za-z0-9]+([_.][A-Za-z0-9]+)*@([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}$/
+
+            if (regEmail.test(value)) {
+                // 合法的邮箱
+                return cb()
+            }
+
+            cb(new Error('请输入合法的邮箱'))
+        };
+        var checkMobile = (rule, value, cb) => {
+            // 先定义一个验证手机号的正则表达式
+            const regMobile = /^1[34578]\d{9}$/
+            // 合法： regMobile.test(value)进过测试后放回的值
+            if (regMobile.test(value)) {
+                return cb()
+            }
+            // 不合法
+            cb(new Error('请输入合法的手机号'))
+        };
         var validatePass = (rule, value, callback) => {
             if (!value) {
                 callback(new Error("请输入新密码"));
@@ -69,18 +88,23 @@ export default {
         };
         return {
             regForm: {
+                phoneNum:'',
                 username:"",
+                verifyNum:'',
                 email:"",
                 newPassword:"",
                 checkPassword:""
             },
             rules: {
                 username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+                verifyNum: [{ required: true, message: "请输入验证码", trigger: "blur" }],
                 newPassword: [{ validator: validatePass, trigger: "blur" }],
-                checkPassword: [{ validator: validatePass2, trigger: "blur" }]
+                checkPassword: [{ validator: validatePass2, trigger: "blur" }],
+                phoneNum:[{ required: true, message: "请输入手机号", trigger: "blur" },
+                    { validator: checkMobile, trigger: "blur" }],
+                email: [{ required: true, message: "请输入邮箱", trigger: "blur" },
+                    { validator: checkEmail, trigger: 'blur' }],
             },
-            phoneNum: '', //手机号
-            verifyNum: '', //验证码
             btnContent: '获取验证码', //获取验证码按钮内文字
             time: 0, //发送验证码间隔时间
             disabled: false, //按钮状态
@@ -93,48 +117,19 @@ export default {
     methods: {
         // 获取验证码
         sendSmsCode () {
-            var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
-            var phoneNum = this.phoneNum
-            if (!phoneNum) {//未输入手机号
-                this.$message({
-                    message: '手机号不能为空',
-                    center: true
-                })
-                return
-            }
-            if (!reg.test(phoneNum)) {//手机号不合法
-                this.$message({
-                    message: '手机号格式不正确',
-                    center: true
-                })
-                return
-            }
             this.time = 60
             this.btnColor = false
             this.timer()
-            获取验证码请求
-            const phoneParams={phoneNum: this.phoneNum}
-            requestMss(phoneParams).then(data => {
-                let {msg, code, user, token} = data;
+            // 获取验证码请求
+            const phoneParams={phoneNum: this.regForm.phoneNum}
+            requestMss(phoneParams).then(res => {
+                let {msg, code} = res;
                 if (code === 200) {
-                    this.$message('发送成功')
+                    this.$message(msg)
                 } else if (code === 400) {
                     this.$message.error("发送失败");
                 }
             });
-            // this.$http
-            //     .post('/send', {
-            //         phoneNum: this.phoneNum,
-            //     })
-            //     .then(res => {
-            //         if (res.data.code === 200) {
-            //             this.$message('发送成功')
-            //         }
-            //         if (res.data.code === 400) {
-            //             this.$message.error("发送失败");
-            //         }
-            //     })
-            //     .catch(failResponse => {});
         },
         timer () {
             if (this.time > 0) {
@@ -149,26 +144,18 @@ export default {
                 this.btnColor = true
             }
         },
-        // 验证验证码
+        // 注册
         verificationCode () {
             this.$refs.regForm.validate((valid) => {
                 if (valid) {
-                    const regParams = { phoneNum: this.phoneNum,
-                        verifyNum: this.verifyNum,
-                        username: this.regForm.username,
-                        password:this.regForm.newPassword,
-                        email: this.regForm.email}
-                     requireRegister(regParams).then(data => {
-                        this.logining = false
-                        let {msg, code, user, token} = data
+                    const regParams = this.regForm
+                     requireRegister(regParams).then(res => {
+                        let {msg, code} = res
                         if (code !== 200) {
-                            this.$message.error("注册失败");
+                            this.$message.error(msg);
                         } else {
-                            this.$message('注册成功')
-                            var path = this.$route.query.redirect
-                            this.$router.replace({
-                                path: path === '/' || path === undefined ? '/login' : path
-                            });
+                            this.$message.success(msg)
+                            this.$router.push("/login");
                         }
                     })
                 } else {
@@ -178,7 +165,7 @@ export default {
             });
         },
         back(){
-            this.$router.push({ path: "/login", query: {} });
+            this.$router.go(-1);
         }
     }
 }
@@ -200,12 +187,12 @@ export default {
     padding: 0px 35px 8px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    box-shadow: 0 0 10px #cac6c6;
     opacity: 0.9;
 }
 .back-link {
     position: relative;
-    left: 180px;
+    left: 190px;
     color: #505458;
     font-size: 13px;
 }

@@ -1,15 +1,15 @@
 <template>
     <div>
-        <el-form ref="checkForm" class="check-container" label-position="left"
-                 label-width="0x">
+        <el-form :model="checkForm" ref="checkForm" class="check-container" label-position="left"
+                 label-width="0px" :rules="rules">
             <h3 class="check_title">验证手机</h3>
             <el-form-item prop="phoneNum">
-                <el-input type="text" v-model="phoneNum"
+                <el-input type="text" v-model="checkForm.phoneNum"
                           auto-complete="off" placeholder="请输入手机号码"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="verifyNum">
                 <div class="iden">
-                    <el-input type="text" v-model="verifyNum" style=""
+                    <el-input type="text" v-model="checkForm.verifyNum" style=""
                               auto-complete="off" @keyup.enter.native="verificationCode"
                               placeholder="请输入验证码"></el-input>
                     <el-button :style="{border: none,background:btnColor?'#2E9AFE':'#617079',color:'#FFF',width:'50%'}"
@@ -32,11 +32,30 @@
 </template>
 
 <script>
+import {requestCheck, requestMss, requireRegister} from '../../api/api'
+
 export default {
     data () {
+        var checkMobile = (rule, value, cb) => {
+            // 先定义一个验证手机号的正则表达式
+            const regMobile = /^1[34578]\d{9}$/
+            // 合法： regMobile.test(value)进过测试后放回的值
+            if (regMobile.test(value)) {
+                return cb()
+            }
+            // 不合法
+            cb(new Error('请输入合法的手机号'))
+        };
         return {
-            phoneNum: '', //手机号
-            verifyNum: '', //验证码
+            checkForm:{
+                phoneNum: '', //手机号
+                verifyNum: '', //验证码
+            },
+            rules: {
+                verifyNum: [{ required: true, message: "请输入验证码", trigger: "blur" }],
+                phoneNum:[{ required: true, message: "请输入手机号", trigger: "blur" },
+                    { validator: checkMobile, trigger: "blur" }],
+            },
             btnContent: '获取验证码', //获取验证码按钮内文字
             time: 0, //发送验证码间隔时间
             disabled: false, //按钮状态
@@ -49,39 +68,18 @@ export default {
     methods: {
         // 获取验证码
         sendSmsCode () {
-            var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
-            var phoneNum = this.phoneNum
-            if (!phoneNum) {//未输入手机号
-                this.$message.error({
-                    message: '手机号不能为空',
-                    center: true
-                })
-                return
-            }
-            if (!reg.test(phoneNum)) {//手机号不合法
-                this.$message.error({
-                    message: '手机号格式不正确',
-                    center: true
-                })
-                return
-            }
             this.time = 60
             this.btnColor = false
             this.timer()
-            // 获取验证码请求
-            this.$axios
-                .post('/send', {
-                    phoneNum: this.phoneNum,
-                })
-                .then(res => {
-                    if (res.data.code === 200) {
-                        this.$message('发送成功')
-                    }
-                    if (res.data.code === 400) {
-                        this.$message.error("发送失败");
-                    }
-                })
-                .catch(failResponse => {});
+            const phoneParams={phoneNum: this.checkForm.phoneNum}
+            requestMss(phoneParams).then(res => {
+                let {msg, code} = res;
+                if (code === 200) {
+                    this.$message(msg)
+                } else if (code === 400) {
+                    this.$message.error(msg);
+                }
+            });
         },
         timer () {
             if (this.time > 0) {
@@ -98,43 +96,26 @@ export default {
         },
         // 验证验证码
         verificationCode () {
-            var reg = 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$///手机号正则验证
-            var phoneNum = this.phoneNum
-            if (!phoneNum) {//未输入手机号
-                this.$message.error({
-                    message: '手机号不能为空',
-                    center: true
-                })
-                return
-            }
-            if (!reg.test(phoneNum)) {//手机号不合法
-                this.$message.error({
-                    message: '手机号格式不正确',
-                    center: true
-                })
-                return
-            }
-            this.$axios
-                .post('/check', {
-                    phoneNum: this.phoneNum,
-                    verifyNum: this.verifyNum
-                })
-                .then(res => {
-                    if (res.data.code === 200) {
-                        this.$message('验证成功')
-                        var path = this.$route.query.redirect
-                        this.$router.replace({
-                            path: path === '/' || path === undefined ? '/forgetpassword' : path
-                        });
-                    }
-                    if (res.data.code === 400) {
-                        this.$message.error("验证失败");
-                    }
-                })
-                .catch(failResponse => {});
+            this.$refs.checkForm.validate((valid) => {
+                if (valid) {
+                    const params = this.checkForm
+                    requestCheck(params).then(res => {
+                        let {msg, code} = res
+                        if (code !== 200) {
+                            this.$message.error(msg);
+                        } else {
+                            this.$message.success(msg)
+                            this.$router.push("/forgetpassword");
+                        }
+                    })
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
         },
         back(){
-            this.$router.push({ path: "/login", query: {} });
+            this.$router.push( "/login");
         }
     }
 }
@@ -154,7 +135,7 @@ export default {
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    box-shadow: 0 0 10px #cac6c6;
     opacity: 0.9;
 }
 .back-link {
