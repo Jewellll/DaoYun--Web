@@ -110,7 +110,7 @@ export default {
                         if (code == 300) {
                             this.$message.error(msg);
                         } else if(code==200){
-                            _this.$store.commit('setUser', user);
+                            _this.$store.commit('setUser', res.data[0]);
                             _this.$store.commit('setToken', token);
                             this.$message.success(msg)
                             _this.$router.push({ path: '/home' });
