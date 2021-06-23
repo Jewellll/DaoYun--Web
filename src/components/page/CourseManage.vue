@@ -33,8 +33,8 @@
                 <el-table-column type="index"></el-table-column>
                 <el-table-column prop="name" label="课程名"></el-table-column>
                 <el-table-column prop="college" label="学院"></el-table-column>
-                <el-table-column prop="schoolName" label="学校"></el-table-column>
-                <el-table-column prop="tname" label="授课教师" ></el-table-column>
+                <el-table-column prop="schoolname" label="学校"></el-table-column>
+                <el-table-column prop="teacherName" label="授课教师" ></el-table-column>
                 <el-table-column prop="state" label="能否加入课程" :formatter="formatState"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -77,14 +77,14 @@
                         <el-input v-model="addForm.college"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="学校" prop="schoolName">
+                <el-form-item label="学校" prop="schoolname">
                     <el-col :span="8">
-                        <el-input v-model="addForm.schoolName"></el-input>
+                        <el-input v-model="addForm.schoolname"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="授课教师" prop="tname">
+                <el-form-item label="授课教师" prop="teacherName">
                     <el-col :span="8">
-                        <el-input v-model="addForm.tname"></el-input>
+                        <el-input v-model="addForm.teacherName"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="能否加入课程">
@@ -117,14 +117,14 @@
                         <el-input v-model="editForm.college"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="学校" prop="schoolName">
+                <el-form-item label="学校" prop="schoolname">
                     <el-col :span="8">
-                        <el-input v-model="editForm.schoolName"></el-input>
+                        <el-input v-model="editForm.schoolname"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="授课教师" prop="tname">
+                <el-form-item label="授课教师" prop="teacherName">
                     <el-col :span="8">
-                        <el-input v-model="editForm.mobile"></el-input>
+                        <el-input v-model="editForm.teacherName"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="能否加入课程">
@@ -181,8 +181,8 @@ export default {
             addForm: {
                 name: '',
                 college:'',
-                schoolName: '',
-                tname: '',
+                schoolname: '',
+                teacherName: '',
                 state:'2'
             },
             // 添加表单的验证规则对象
@@ -194,10 +194,10 @@ export default {
                 college: [
                     {required: true, message: '请输入学院', trigger: 'blur'},
                 ],
-                schoolName: [
+                schoolname: [
                     {required: true, message: '请输入学校', trigger: 'blur'},
                 ],
-                tname: [
+                teacherName: [
                     {required: true, message: '请输入教师姓名', trigger: 'blur'},
                 ]
 
@@ -208,8 +208,8 @@ export default {
             editForm: {
                 name: '',
                 college:'',
-                schoolName: '',
-                tname: '',
+                schoolname: '',
+                teacherName: '',
                 state:'2'
             },
             editFormRules: {
@@ -220,10 +220,10 @@ export default {
                 college: [
                     {required: true, message: '请输入学院', trigger: 'blur'},
                 ],
-                schoolName: [
+                schoolname: [
                     {required: true, message: '请输入学校', trigger: 'blur'},
                 ],
-                tname: [
+                teacherName: [
                     {required: true, message: '请输入教师姓名', trigger: 'blur'},
                 ]
             },
