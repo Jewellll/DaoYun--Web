@@ -21,6 +21,16 @@
             <el-form-item prop="username">
                 <el-input type="text" v-model="regForm.username" placeholder="用户名"></el-input>
             </el-form-item>
+            <el-form-item prop="name">
+                <el-input type="text" v-model="regForm.name" placeholder="姓名"></el-input>
+            </el-form-item>
+            <el-form-item prop="name">
+                <el-radio-group v-model="regForm.sex">
+                    <el-radio class="radio" label="1">男</el-radio>
+                    <el-radio class="radio" label="2">女</el-radio>
+                    <el-radio class="radio" label="0">未知</el-radio>
+                </el-radio-group>
+            </el-form-item>
             <el-form-item prop="email">
                 <el-input type="text" v-model="regForm.email" placeholder="邮箱"></el-input>
             </el-form-item>
@@ -88,15 +98,18 @@ export default {
         };
         return {
             regForm: {
+                name:'',
                 phoneNum:'',
                 username:"",
                 verifyNum:'',
+                sex:'0',
                 email:"",
                 newPassword:"",
                 checkPassword:""
             },
             rules: {
                 username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+                name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
                 verifyNum: [{ required: true, message: "请输入验证码", trigger: "blur" }],
                 newPassword: [{ validator: validatePass, trigger: "blur" }],
                 checkPassword: [{ validator: validatePass2, trigger: "blur" }],

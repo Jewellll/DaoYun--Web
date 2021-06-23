@@ -31,12 +31,12 @@
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column prop="card" label="工号"></el-table-column>
+                <el-table-column prop="sno" label="工号"></el-table-column>
                 <el-table-column prop="name" label="姓名"></el-table-column>
                 <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex"></el-table-column>
+                <el-table-column prop="telphone" label="电话"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="mobile" label="电话"></el-table-column>
-                <el-table-column prop="course" label="课程名"></el-table-column>
+                <el-table-column prop="schoolName" label="学校"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -68,14 +68,14 @@
             @close="addDialogClosed" >
             <!-- 内容的主体区域 -->
             <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
-                <el-form-item label="教师姓名" prop="name">
+                <el-form-item label="姓名" prop="name">
                     <el-col :span="8">
                     <el-input v-model="addForm.name" ></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="工号" prop="card">
                     <el-col :span="8">
-                    <el-input v-model="addForm.card"></el-input>
+                    <el-input v-model="addForm.sno"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
@@ -92,14 +92,14 @@
                     <el-input v-model="addForm.email"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="手机号" prop="mobile">
+                <el-form-item label="手机号" prop="telphone">
                     <el-col :span="14">
-                    <el-input v-model="addForm.mobile"></el-input>
+                    <el-input v-model="addForm.telphone"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="课程" prop="course">
+                <el-form-item label="学校" prop="schoolName">
                     <el-col :span="14">
-                    <el-input v-model="addForm.course"></el-input>
+                    <el-input v-model="addForm.schoolName"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -113,14 +113,14 @@
         <!--编辑界面-->
         <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="用户名" prop="name">
+                <el-form-item label="姓名" prop="name">
                     <el-col :span="8">
                     <el-input v-model="editForm.name"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="工号" prop="card">
+                <el-form-item label="工号" prop="sno">
                     <el-col :span="8">
-                    <el-input v-model="editForm.card"></el-input>
+                    <el-input v-model="editForm.sno"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
@@ -137,14 +137,14 @@
                     <el-input v-model="editForm.email"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="手机号" prop="mobile">
+                <el-form-item label="手机号" prop="telphone">
                     <el-col :span="14">
-                    <el-input v-model="editForm.mobile"></el-input>
+                    <el-input v-model="editForm.telphone"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="课程" prop="course">
+                <el-form-item label="学校" prop="schoolName">
                     <el-col :span="14">
-                    <el-input v-model="editForm.course"></el-input>
+                    <el-input v-model="editForm.schoolName"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -213,17 +213,18 @@ export default {
             addForm: {
                 name: '',
                 sex:'0',
+                sno:'',
                 email: '',
-                course:'',
-                mobile: ''
+                schoolName:'',
+                telphone: ''
             },
             // 添加表单的验证规则对象
             addFormRules: {
                 name: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 2, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
+                    {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
                 ],
-                card: [
+                sno: [
                     {required: true, message: '请输入密码', trigger: 'blur'},
                     {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
                 ],
@@ -231,10 +232,10 @@ export default {
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
                     {validator: checkEmail, trigger: 'blur'}
                 ],
-                course: [
-                    {required: true, message: '请输入课程名', trigger: 'blur'},
+                schoolName: [
+                    {required: true, message: '请输入学校名', trigger: 'blur'},
                 ],
-                mobile: [
+                telphone: [
                     {required: true, message: '请输入手机号', trigger: 'blur'},
                     {validator: checkMobile, trigger: 'blur'}
                 ]
@@ -244,17 +245,18 @@ export default {
             editFormVisible:false,
             editForm: {
                 name: '',
-                sex:'',
+                sex:'0',
+                sno:'',
                 email: '',
-                course:'',
-                mobile: ''
+                schoolName:'',
+                telphone: ''
             },
             editFormRules: {
                 name: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 2, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
+                    {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
                 ],
-                card: [
+                sno: [
                     {required: true, message: '请输入密码', trigger: 'blur'},
                     {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
                 ],
@@ -262,10 +264,10 @@ export default {
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
                     {validator: checkEmail, trigger: 'blur'}
                 ],
-                course: [
-                    {required: true, message: '请输入课程名', trigger: 'blur'},
+                schoolName: [
+                    {required: true, message: '请输入学校名', trigger: 'blur'},
                 ],
-                mobile: [
+                telphone: [
                     {required: true, message: '请输入手机号', trigger: 'blur'},
                     {validator: checkMobile, trigger: 'blur'}
                 ]

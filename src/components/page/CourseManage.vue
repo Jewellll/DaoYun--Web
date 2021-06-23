@@ -31,12 +31,10 @@
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column prop="card" label="工号"></el-table-column>
-                <el-table-column prop="name" label="姓名"></el-table-column>
-                <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex"></el-table-column>
-                <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="mobile" label="电话"></el-table-column>
-                <el-table-column prop="course" label="课程名"></el-table-column>
+                <el-table-column prop="name" label="课程名"></el-table-column>
+                <el-table-column prop="college" label="学院"></el-table-column>
+                <el-table-column prop="schoolName" label="学校"></el-table-column>
+                <el-table-column prop="tname" label="授课教师" ></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -68,38 +66,24 @@
             @close="addDialogClosed" >
             <!-- 内容的主体区域 -->
             <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
-                <el-form-item label="教师姓名" prop="name">
+                <el-form-item label="课程名" prop="name">
                     <el-col :span="8">
                         <el-input v-model="addForm.name" ></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="工号" prop="card">
+                <el-form-item label="学院" prop="college">
                     <el-col :span="8">
-                        <el-input v-model="addForm.card"></el-input>
+                        <el-input v-model="addForm.college"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="性别">
-                    <el-col :span="14">
-                        <el-radio-group v-model="addForm.sex">
-                            <el-radio class="radio" label="1">男</el-radio>
-                            <el-radio class="radio" label="2">女</el-radio>
-                            <el-radio class="radio" label="0">未知</el-radio>
-                        </el-radio-group>
+                <el-form-item label="学校" prop="schoolName">
+                    <el-col :span="8">
+                        <el-input v-model="addForm.schoolName"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-col :span="14">
-                        <el-input v-model="addForm.email"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="手机号" prop="mobile">
-                    <el-col :span="14">
-                        <el-input v-model="addForm.mobile"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="课程" prop="course">
-                    <el-col :span="14">
-                        <el-input v-model="addForm.course"></el-input>
+                <el-form-item label="授课教师" prop="tname">
+                    <el-col :span="8">
+                        <el-input v-model="addForm.tname"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -113,38 +97,24 @@
         <!--编辑界面-->
         <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="用户名" prop="name">
+                <el-form-item label="课程名" prop="name">
                     <el-col :span="8">
                         <el-input v-model="editForm.name"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="工号" prop="card">
+                <el-form-item label="学院" prop="college">
                     <el-col :span="8">
-                        <el-input v-model="editForm.card"></el-input>
+                        <el-input v-model="editForm.college"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="性别">
-                    <el-col :span="14">
-                        <el-radio-group v-model="editForm.sex">
-                            <el-radio class="radio" label="1">男</el-radio>
-                            <el-radio class="radio" label="2">女</el-radio>
-                            <el-radio class="radio" label="0">未知</el-radio>
-                        </el-radio-group>
+                <el-form-item label="学校" prop="schoolName">
+                    <el-col :span="8">
+                        <el-input v-model="editForm.schoolName"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-col :span="14">
-                        <el-input v-model="editForm.email"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="手机号" prop="mobile">
-                    <el-col :span="14">
+                <el-form-item label="授课教师" prop="tname">
+                    <el-col :span="8">
                         <el-input v-model="editForm.mobile"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="课程" prop="course">
-                    <el-col :span="14">
-                        <el-input v-model="editForm.course"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -161,35 +131,13 @@ import {
     addCourse,
     addTeacher, batchRemoveCourse,
     batchRemoveTeacher, editCourse,
-    editTeacher,
+    editTeacher, getCourseListPage,
     getTeacherListPage, removeCourse,
     removeTeacher
 } from '../../api/api'
 
 export default {
     data () {
-        // 验证邮箱的校验规则
-        var checkEmail = (rule, value, callback) => {
-            // 验证邮箱的正则表达式
-            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-            if (regEmail.test(value)) {
-                // 验证通过，合法的邮箱
-                return callback()
-            }
-            // 验证不通过，不合法
-            callback(new Error('请输入合法的邮箱'))
-        }
-        // 验证手机号的验证规则
-        var checkMobile = (rule, value, callback) => {
-            // 验证手机号的正则表达式
-            const regMobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
-            if (regMobile.test(value)) {
-                // 验证通过，合法的手机号
-                return callback()
-            }
-            // 验证不通过，不合法
-            callback(new Error('请输入合法的手机号'))
-        }
         return {
             // 获取用户列表的参数对象
             queryInfo: {
@@ -213,62 +161,49 @@ export default {
             // 添加用户的表单数据
             addForm: {
                 name: '',
-                sex:'0',
-                email: '',
-                course:'',
-                mobile: ''
+                college:'',
+                schoolName: '',
+                tname: ''
             },
             // 添加表单的验证规则对象
             addFormRules: {
                 name: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 2, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
-                ],
-                card: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
-                ],
-                email: [
-                    {required: true, message: '请输入邮箱', trigger: 'blur'},
-                    {validator: checkEmail, trigger: 'blur'}
-                ],
-                course: [
                     {required: true, message: '请输入课程名', trigger: 'blur'},
+                    {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
                 ],
-                mobile: [
-                    {required: true, message: '请输入手机号', trigger: 'blur'},
-                    {validator: checkMobile, trigger: 'blur'}
+                college: [
+                    {required: true, message: '请输入学院', trigger: 'blur'},
+                ],
+                schoolName: [
+                    {required: true, message: '请输入学校', trigger: 'blur'},
+                ],
+                tname: [
+                    {required: true, message: '请输入教师姓名', trigger: 'blur'},
                 ]
+
             },
             //编辑
             editLoading: false,
             editFormVisible:false,
             editForm: {
                 name: '',
-                sex:'',
-                email: '',
-                course:'',
-                mobile: ''
+                college:'',
+                schoolName: '',
+                tname: ''
             },
             editFormRules: {
                 name: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 2, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur'}
-                ],
-                card: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
-                ],
-                email: [
-                    {required: true, message: '请输入邮箱', trigger: 'blur'},
-                    {validator: checkEmail, trigger: 'blur'}
-                ],
-                course: [
                     {required: true, message: '请输入课程名', trigger: 'blur'},
+                    {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
                 ],
-                mobile: [
-                    {required: true, message: '请输入手机号', trigger: 'blur'},
-                    {validator: checkMobile, trigger: 'blur'}
+                college: [
+                    {required: true, message: '请输入学院', trigger: 'blur'},
+                ],
+                schoolName: [
+                    {required: true, message: '请输入学校', trigger: 'blur'},
+                ],
+                tname: [
+                    {required: true, message: '请输入教师姓名', trigger: 'blur'},
                 ]
             },
         }
