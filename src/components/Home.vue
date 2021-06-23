@@ -45,7 +45,7 @@ export default {
         },
         //路由变化,设置标签
         $route (newValue, oldValue) {
-            this.setTags(newValue)
+            // this.setTags(newValue)
         }
     }
 }

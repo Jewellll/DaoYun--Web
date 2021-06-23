@@ -287,8 +287,9 @@ export default {
             this.listLoading=true
             getStudentListPage(this.queryInfo).then((res) => {
                 console.log(res)
+                this.$message.success(res.msg)
                 this.total = res.data.total
-                this.userList = res.data.users
+                this.userList = res.data
                 this.listLoading=false
             })
         },

@@ -240,10 +240,13 @@ export default {
         async getUserList () {
             this.listLoading=true
             getCourseListPage(this.queryInfo).then((res) => {
-                console.log(res)
-                this.total = res.data.total
-                this.userList = res.data.users
-                this.listLoading=false
+                if(res.code===200) {
+                    this.$message.success(res.msg)
+                    console.log(res)
+                    this.total = res.data.total
+                    this.userList = res.data
+                    this.listLoading = false
+                }
             })
         },
         // 监听 pageSize 改变的事件

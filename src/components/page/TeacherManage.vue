@@ -285,10 +285,13 @@ export default {
         async getUserList () {
             this.listLoading=true
             getTeacherListPage(this.queryInfo).then((res) => {
-                console.log(res)
-                this.total = res.data.total
-                this.userList = res.data.users
-                this.listLoading=false
+                if(res.code===200) {
+                    console.log(res)
+                    this.$message.success(res.msg)
+                    this.total = res.data.total
+                    this.userList = res.data
+                    this.listLoading = false
+                }
             })
         },
         // 监听 pageSize 改变的事件

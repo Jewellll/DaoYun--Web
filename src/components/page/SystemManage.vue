@@ -193,10 +193,13 @@ export default {
         async getUserList () {
             this.listLoading = true
             getParaListPage(this.queryInfo).then((res) => {
-                console.log(res)
-                this.total = res.total
-                this.userList = res.data
-                this.listLoading = false
+                if(res.code===200) {
+                    console.log(res)
+                    this.$message.success(res.msg)
+                    this.total = res.total
+                    this.userList = res.data
+                    this.listLoading = false
+                }
             })
         },
         // 监听 pageSize 改变的事件
