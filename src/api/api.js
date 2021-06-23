@@ -18,7 +18,7 @@ export const requireForget = params => { return axios.post(`${base}/forget`, par
 // 修改个人信息
 export const editUserInfo = params => { return axios.post(`${base}/editUser`, params).then(res => res.data); };
 // 注册
-export const requireRegister = params => { return axios.post(`${base}/register`, params).then(res => res.data); };
+export const requireRegister = params => { return axios.post(`${base}/register/one`, params).then(res => res.data); };
 
 //用户管理
 

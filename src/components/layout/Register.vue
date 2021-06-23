@@ -127,7 +127,7 @@ export default {
                 if (code === 200) {
                     this.$message(msg)
                 } else if (code === 400) {
-                    this.$message.error("发送失败");
+                    this.$message.error(msg);
                 }
             });
         },
