@@ -35,6 +35,7 @@
                 <el-table-column prop="college" label="学院"></el-table-column>
                 <el-table-column prop="schoolName" label="学校"></el-table-column>
                 <el-table-column prop="tname" label="授课教师" ></el-table-column>
+                <el-table-column prop="state" label="能否加入课程" :formatter="formatState"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -86,6 +87,15 @@
                         <el-input v-model="addForm.tname"></el-input>
                     </el-col>
                 </el-form-item>
+                <el-form-item label="能否加入课程">
+                    <el-col :span="14">
+                        <el-radio-group v-model="addForm.state">
+                            <el-radio class="radio" label="0">能</el-radio>
+                            <el-radio class="radio" label="1">否</el-radio>
+                            <el-radio class="radio" label="2">未知</el-radio>
+                        </el-radio-group>
+                    </el-col>
+                </el-form-item>
             </el-form>
             <!-- 底部区域 -->
             <span slot="footer" class="dialog-footer">
@@ -115,6 +125,15 @@
                 <el-form-item label="授课教师" prop="tname">
                     <el-col :span="8">
                         <el-input v-model="editForm.mobile"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="能否加入课程">
+                    <el-col :span="14">
+                        <el-radio-group v-model="editForm.state">
+                            <el-radio class="radio" label="0">能</el-radio>
+                            <el-radio class="radio" label="1">否</el-radio>
+                            <el-radio class="radio" label="2">未知</el-radio>
+                        </el-radio-group>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -163,7 +182,8 @@ export default {
                 name: '',
                 college:'',
                 schoolName: '',
-                tname: ''
+                tname: '',
+                state:'2'
             },
             // 添加表单的验证规则对象
             addFormRules: {
@@ -189,7 +209,8 @@ export default {
                 name: '',
                 college:'',
                 schoolName: '',
-                tname: ''
+                tname: '',
+                state:'2'
             },
             editFormRules: {
                 name: [
@@ -213,8 +234,8 @@ export default {
     },
     methods: {
         //性别显示转换
-        formatSex: function (row, column) {
-            return row.sex == 1 ? '男' : row.sex == 2 ? '女' : '未知'
+        formatState: function (row, column) {
+            return row.sex === 0 ? '能' : row.sex === 1 ? '否' : '未知'
         },
         async getUserList () {
             this.listLoading=true
