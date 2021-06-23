@@ -1,5 +1,5 @@
 <template>
-<div class="manage-container">
+<div class="manage-container" >
     <div class="container">
         <div class="title">
             <h1>欢迎来到到云</h1>
@@ -87,17 +87,17 @@ export default {
     width: 50%;
     align-content: center;
 }
-.car{
-    width: 500px;
-    height: 50%;
-    margin-left: 460px;
-    border: none;
-}
-.el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-}
+/*.car{*/
+/*    width: 500px;*/
+/*    height: 50%;*/
+/*    margin-left: 460px;*/
+/*    border: none;*/
+/*}*/
+/*.el-carousel__item:nth-child(2n) {*/
+/*    background-color: #99a9bf;*/
+/*}*/
 
-.el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-}
+/*.el-carousel__item:nth-child(2n+1) {*/
+/*    background-color: #d3dce6;*/
+/*}*/
 </style>

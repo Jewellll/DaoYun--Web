@@ -25,10 +25,10 @@
                 <el-input type="text" v-model="regForm.email" placeholder="邮箱"></el-input>
             </el-form-item>
             <el-form-item  prop="newPassword">
-                <el-input type="password" v-model="regForm.newPassword" placeholder="新密码"></el-input>
+                <el-input type="password" v-model="regForm.newPassword" placeholder="密码"></el-input>
             </el-form-item>
             <el-form-item prop="checkPassword">
-                <el-input type="password" v-model="regForm.checkPassword" placeholder="确认新密码"></el-input>
+                <el-input type="password" v-model="regForm.checkPassword" placeholder="再次输入密码"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" style="width: 100%;border: none"
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {registerMss, requestMss, requireRegister} from '../../api/api'
+import {registerMss, requireRegister} from '../../api/api'
 
 export default {
     name: 'Register',

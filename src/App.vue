@@ -21,4 +21,7 @@ export default {
 body .el-table th.gutter{
     display: table-cell!important;
 }
+body{
+    overflow-x: hidden;
+}
 </style>
