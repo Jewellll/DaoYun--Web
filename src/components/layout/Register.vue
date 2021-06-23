@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {requestMss, requireRegister} from '../../api/api'
+import {registerMss, requestMss, requireRegister} from '../../api/api'
 
 export default {
     name: 'Register',
@@ -122,7 +122,7 @@ export default {
             this.timer()
             // 获取验证码请求
             const phoneParams={phoneNum: this.regForm.phoneNum}
-            requestMss(phoneParams).then(res => {
+            registerMss(phoneParams).then(res => {
                 let {msg, code} = res;
                 if (code === 200) {
                     this.$message(msg)

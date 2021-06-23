@@ -11,6 +11,8 @@ export const requestCheck = params => { return axios.post(`${base}/check`, param
 export const requestPhoneLogin = params => { return axios.post(`${base}/phoneLogin`, params).then(res => res.data); };
 // 短信
 export const requestMss = params => { return axios.post(`${base}/sendMss`, params).then(res => res.data); };
+//注册短信
+export const registerMss = params => { return axios.post(`${base}/register/sendMss`, params).then(res => res.data); };
 // 忘记密码
 export const requireForget = params => { return axios.post(`${base}/forget`, params).then(res => res.data); };
 // 修改个人信息
