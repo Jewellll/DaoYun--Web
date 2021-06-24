@@ -353,7 +353,7 @@ export default {
                             if(res.code==200) {
                                 this.editLoading = false
                                 this.$message({
-                                    message: res.data.msg,
+                                    message: res.msg,
                                     type: 'success'
                                 })
                                 this.editFormVisible = false
@@ -376,7 +376,7 @@ export default {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getUserList()

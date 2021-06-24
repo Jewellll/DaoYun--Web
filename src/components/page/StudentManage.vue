@@ -322,7 +322,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         addStudent(para).then((res) => {
-                            if(res.code==200) {
+                            if(res.code===200) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '新增成功',
@@ -349,7 +349,7 @@ export default {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
                         editStudent(para).then((res) => {
-                            if(res.code==200) {
+                            if(res.code===200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.data.msg,
@@ -371,11 +371,11 @@ export default {
                 this.listLoading = true
                 let para = {id: row.id}
                 removeStudent(para).then((res) => {
-                    if(res.code==200) {
+                    if(res.code===200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getUserList()
