@@ -189,7 +189,7 @@ export default {
             })
         },
         editSubmit: function () {
-            this.$refs.userInfo.validate((valid) => {
+            this.$refs.userForm.validate((valid) => {
                 if (valid) {
                     this.logining = true
                     const editParams = {username: this.userForm.username, name:this.userForm.name,sex:this.userForm.sex,telphone:this.userForm.telphone,

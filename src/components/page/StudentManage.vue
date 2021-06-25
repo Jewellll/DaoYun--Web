@@ -36,7 +36,7 @@
                 <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex"></el-table-column>
                 <el-table-column prop="email" label="邮箱"></el-table-column>
                 <el-table-column prop="telphone" label="电话"></el-table-column>
-                <el-table-column prop="schoolName" label="学校"></el-table-column>
+                <el-table-column prop="schoolname" label="学校"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -97,9 +97,9 @@
                         <el-input v-model="addForm.telphone"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="学校" prop="schoolName">
+                <el-form-item label="学校" prop="schoolname">
                     <el-col :span="14">
-                        <el-input v-model="addForm.schoolName"></el-input>
+                        <el-input v-model="addForm.schoolname"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -142,9 +142,9 @@
                         <el-input v-model="editForm.telphone"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="学校" prop="schoolName">
+                <el-form-item label="学校" prop="schoolname">
                     <el-col :span="14">
-                        <el-input v-model="editForm.schoolName"></el-input>
+                        <el-input v-model="editForm.schoolname"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -216,7 +216,7 @@ export default {
                 sex:'0',
                 sno:'',
                 email: '',
-                schoolName:'',
+                schoolname:'',
                 telphone: ''
             },
             // 添加表单的验证规则对象
@@ -233,7 +233,7 @@ export default {
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
                     {validator: checkEmail, trigger: 'blur'}
                 ],
-                schoolName: [
+                schoolname: [
                     {required: true, message: '请输入学校名', trigger: 'blur'},
                 ],
                 telphone: [
@@ -249,7 +249,7 @@ export default {
                 sex:'0',
                 sno:'',
                 email: '',
-                schoolName:'',
+                schoolname:'',
                 telphone: ''
             },
             editFormRules: {
@@ -265,7 +265,7 @@ export default {
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
                     {validator: checkEmail, trigger: 'blur'}
                 ],
-                schoolName: [
+                schoolname: [
                     {required: true, message: '请输入学校名', trigger: 'blur'},
                 ],
                 telphone: [
@@ -322,7 +322,7 @@ export default {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
                         addStudent(para).then((res) => {
-                            if(res.code==200) {
+                            if(res.code===200) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '新增成功',
@@ -349,7 +349,7 @@ export default {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
                         editStudent(para).then((res) => {
-                            if(res.code==200) {
+                            if(res.code===200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.data.msg,
@@ -371,11 +371,11 @@ export default {
                 this.listLoading = true
                 let para = {id: row.id}
                 removeStudent(para).then((res) => {
-                    if(res.code==200) {
+                    if(res.code===200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getUserList()
