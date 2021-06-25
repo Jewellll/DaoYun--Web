@@ -109,7 +109,7 @@
                     <el-input v-model="userForm.telphone" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="name">
+                <el-form-item label="邮箱" prop="email">
                     <el-col :span="14">
                     <el-input v-model="userForm.email" auto-complete="off"></el-input>
                     </el-col>
