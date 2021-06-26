@@ -20,6 +20,7 @@ import Test from '../components/page/Test'
 import RoleManage from '../components/page/RoleManage'
 import AddDictionary from '../components/page/AddDictionary'
 import EditDictionary from '../components/page/EditDictionary'
+import MenuManage from '../components/page/MenuManage'
 
 Vue.use(Router)
 
@@ -126,6 +127,15 @@ export default new Router({
                     component: UserInformation,
                     meta: {
                         title:'个人信息',
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: '/menuManage',
+                    name: 'MenuManage',
+                    component: MenuManage,
+                    meta: {
+                        title:'菜单管理',
                         requireAuth: true
                     }
                 },

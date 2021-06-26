@@ -73,17 +73,17 @@ export default {
                     title: '系统首页'
                 },
                 {
-                    icon: 'el-icon-collection',
+                    icon: 'el-icon-suitcase',
                     index: 'teacherManage',
                     title: '教师管理'
                 },
                 {
-                    icon: 'el-icon-notebook-1',
+                    icon: 'el-icon-reading',
                     index: 'studentManage',
                     title: '学生管理'
                 },
                 {
-                    icon: 'el-icon-data-analysis',
+                    icon: 'el-icon-collection',
                     index: 'courseManage',
                     title: '课程管理'
                 },
@@ -98,7 +98,12 @@ export default {
                     title: '角色管理'
                 },
                 {
-                    icon: 'el-icon-reading',
+                    icon: 'el-icon-files',
+                    index: 'menuManage',
+                    title: '菜单管理'
+                },
+                {
+                    icon: 'el-icon-notebook-1',
                     index: 'dictionary',
                     title: '字典管理'
                 },

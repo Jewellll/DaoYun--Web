@@ -4,7 +4,7 @@
         <div class="crumb">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size: 5px">
                 <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>教师管理</el-breadcrumb-item>
+                <el-breadcrumb-item>用户管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
 
@@ -13,7 +13,7 @@
             <!-- 搜索与添加区域 -->
             <div class="toolbar">
                 <el-row :gutter="20">
-                    <el-col :span="8">
+                    <el-col :span="4">
                         <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList()">
                             <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
                         </el-input>

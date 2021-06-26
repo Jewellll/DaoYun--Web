@@ -86,6 +86,18 @@ export const batchRemoveDic = params => { return http.post(`${base}/dictionary/b
 
 export const editDictionary = params => { return http.post(`${base}/dictionary/edit`, params ).then(res => res.data); };
 
+//用户管理
+
+export const getMenuListPage = params => { return http.post(`${base}/menu/listpage`, params).then(res => res.data); };
+
+export const removeMenu = params => { return http.post(`${base}/menu/remove`, params ).then(res => res.data); };
+
+export const batchRemoveMenu = params => { return http.post(`${base}/menu/batchremove`, params ).then(res => res.data); };
+
+export const editMenu = params => { return http.post(`${base}/menu/edit`,  params ).then(res => res.data); };
+
+export const addMenu = params => { return http.post(`${base}/menu/add`,  params ).then(res => res.data); };
+
 //系统参数管理
 
 export const getParaListPage = params => { return http.post(`${base}/systemManage/listpage`,  params).then(res => res.data); };
@@ -100,19 +112,19 @@ export const batchRemovePara = params => { return http.post(`${base}/systemManag
 
 // 角色管理
 //根据用户id找菜单
-export const requestMenu = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const requestMenu = params => { return axios.post(`${base}/user/getMenu`, params).then(res => res.data); };
 //根据角色id找菜单
-export const requestMenuByRoleId = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const requestMenuByRoleId = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 
-export const getRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const getRole = params => { return axios.post(`${base}/role/getRole`, params).then(res => res.data); };
 
 
-export const getAllMenus = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const getAllMenus = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 //根据角色id和菜单id分配菜单
-export const distributeMenu = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const distributeMenu = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 
-export const requestAddRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const requestAddRole = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 
-export const requestEditRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const requestEditRole = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 
-export const requestRemoveRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+export const requestRemoveRole = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };

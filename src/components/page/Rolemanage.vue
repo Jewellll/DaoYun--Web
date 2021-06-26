@@ -1,6 +1,11 @@
 <template>
     <div class="container">
-        <!--工具栏-->
+        <div class="crumb">
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size: 5px">
+                <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>角色管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
         <div style="margin-top: 20px;display: flex;margin-bottom: 20px">
             <div style="margin-left: 20px">
                 <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
@@ -16,14 +21,13 @@
                 <el-button @click="toggleSelection()" type="warning">取消选择</el-button>
             </div>
             <div class="buttons">
-                    <el-button slot="reference" @click="deleteSelected()" type="danger">批量删除</el-button>
+                    <el-button slot="reference" @click="deleteSelected()" type="danger" :disabled="this.multipleSelection.length===0">批量删除</el-button>
             </div>
             <div class="buttons">
                 <el-button @click="dialogFormVisibleForAdd = true" type="primary">添加角色</el-button>
             </div>
 
         </div>
-        <el-divider></el-divider>
         <el-row :gutter="15">
             <!--角色管理-->
             <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="17" style="margin-bottom: 10px">
@@ -276,10 +280,9 @@ export default {
                 }
             })
         },
+        deleteSelected(){
 
-
-
-
+        },
         // 显示编辑
         handleEdit: function (index, row) {
             this.dialogFormVisibleForEdit = true

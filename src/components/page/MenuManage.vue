@@ -4,7 +4,7 @@
         <div class="crumb">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size: 5px">
                 <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>学生管理</el-breadcrumb-item>
+                <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
 
@@ -14,12 +14,12 @@
             <div class="toolbar">
                 <el-row :gutter="20">
                     <el-col :span="4">
-                        <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList()">
-                            <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
+                        <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getMenuList()">
+                            <el-button slot="append" icon="el-icon-search" @click="getMenuList()"></el-button>
                         </el-input>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="primary" @click="addFormVisible=true">添加学生</el-button>
+                        <el-button type="primary" @click="addFormVisible=true">添加菜单</el-button>
                     </el-col>
                     <el-col :span="2">
                         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
@@ -28,15 +28,12 @@
             </div>
             <el-table :data="userList" :stripe="true" :border="true" v-loading="listLoading" @selection-change="selsChange"
                       :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
-                <el-table-column type="selection" width="55">
-                </el-table-column>
-                <el-table-column type="index"></el-table-column>
-                <el-table-column prop="sno" label="学号"></el-table-column>
-                <el-table-column prop="name" label="姓名"></el-table-column>
-                <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex"></el-table-column>
-                <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="telphone" label="电话"></el-table-column>
-                <el-table-column prop="schoolname" label="学校"></el-table-column>
+                <el-table-column type="selection" ></el-table-column>
+                <el-table-column type="index" ></el-table-column>
+                <el-table-column prop="title" label="菜单名"></el-table-column>
+                <el-table-column prop="icon" label="图标"></el-table-column>
+                <el-table-column prop="index" label="路径"></el-table-column>
+                <el-table-column prop="component" label="组件"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -62,44 +59,30 @@
 
         <!-- 添加用户的对话框 -->
         <el-dialog
-            title="添加学生"
+            title="添加用户"
             :visible.sync="addFormVisible"
             width="40%"
             @close="addDialogClosed" >
             <!-- 内容的主体区域 -->
             <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
-                <el-form-item label="姓名" prop="name">
+                <el-form-item label="菜单名" prop="title">
                     <el-col :span="8">
-                        <el-input v-model="addForm.name" ></el-input>
+                        <el-input v-model="addForm.title" ></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="工号" prop="card">
-                    <el-col :span="8">
-                        <el-input v-model="addForm.sno"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="性别">
+                <el-form-item label="图标" prop="icon">
                     <el-col :span="14">
-                        <el-radio-group v-model="addForm.sex">
-                            <el-radio class="radio" label="1">男</el-radio>
-                            <el-radio class="radio" label="2">女</el-radio>
-                            <el-radio class="radio" label="0">未知</el-radio>
-                        </el-radio-group>
+                        <icon-picker v-model="addForm.icon"></icon-picker>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
+                <el-form-item label="路径" prop="index">
                     <el-col :span="14">
-                        <el-input v-model="addForm.email"></el-input>
+                        <el-input v-model="addForm.index"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="手机号" prop="telphone">
+                <el-form-item label="组件" prop="component">
                     <el-col :span="14">
-                        <el-input v-model="addForm.telphone"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="学校" prop="schoolname">
-                    <el-col :span="14">
-                        <el-input v-model="addForm.schoolname"></el-input>
+                        <el-input v-model="addForm.component"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -113,38 +96,24 @@
         <!--编辑界面-->
         <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="姓名" prop="name">
+                <el-form-item label="菜单名" prop="title">
                     <el-col :span="8">
-                        <el-input v-model="editForm.name"></el-input>
+                        <el-input v-model="editForm.title" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="工号" prop="sno">
-                    <el-col :span="8">
-                        <el-input v-model="editForm.sno"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="性别">
+                <el-form-item label="图标" prop="icon">
                     <el-col :span="14">
-                        <el-radio-group v-model="editForm.sex">
-                            <el-radio class="radio" label="1">男</el-radio>
-                            <el-radio class="radio" label="2">女</el-radio>
-                            <el-radio class="radio" label="0">未知</el-radio>
-                        </el-radio-group>
+                        <icon-picker v-model="editForm.icon"></icon-picker>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
+                <el-form-item label="路径" prop="index">
                     <el-col :span="14">
-                        <el-input v-model="editForm.email"></el-input>
+                        <el-input v-model="editForm.index" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="手机号" prop="telphone">
+                <el-form-item label="组件" prop="component">
                     <el-col :span="14">
-                        <el-input v-model="editForm.telphone"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="学校" prop="schoolname">
-                    <el-col :span="14">
-                        <el-input v-model="editForm.schoolname"></el-input>
+                        <el-input v-model="editForm.component"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -158,38 +127,16 @@
 
 <script>
 import {
-    addStudent,
-    addTeacher, batchRemoveStudent,
-    batchRemoveTeacher, editStudent,
-    editTeacher, getStudentListPage,
-    getTeacherListPage, removeStudent,
-    removeTeacher
+    addMenu,
+    addUser, batchRemoveMenu,
+    batchRemoveUser, editMenu,
+    editUser, getMenuListPage,
+    getUserListPage, removeMenu,
+    removeUser
 } from '../../api/api'
 
 export default {
     data () {
-        // 验证邮箱的校验规则
-        var checkEmail = (rule, value, callback) => {
-            // 验证邮箱的正则表达式
-            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-            if (regEmail.test(value)) {
-                // 验证通过，合法的邮箱
-                return callback()
-            }
-            // 验证不通过，不合法
-            callback(new Error('请输入合法的邮箱'))
-        }
-        // 验证手机号的验证规则
-        var checkMobile = (rule, value, callback) => {
-            // 验证手机号的正则表达式
-            const regMobile = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
-            if (regMobile.test(value)) {
-                // 验证通过，合法的手机号
-                return callback()
-            }
-            // 验证不通过，不合法
-            callback(new Error('请输入合法的手机号'))
-        }
         return {
             // 获取用户列表的参数对象
             queryInfo: {
@@ -212,85 +159,59 @@ export default {
             addLoading:false,
             // 添加用户的表单数据
             addForm: {
-                name: '',
-                sex:'0',
-                sno:'',
-                email: '',
-                schoolname:'',
-                telphone: ''
+                title: '',
+                icon:'',
+                index:'',
+                component: ''
             },
             // 添加表单的验证规则对象
             addFormRules: {
-                name: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+                title: [
+                    {required: true, message: '请输入菜单名', trigger: 'blur'}
                 ],
-                sno: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
+                icon: [
+                    {required: true, message: '请选择图标', trigger: 'blur'},
                 ],
-                email: [
-                    {required: true, message: '请输入邮箱', trigger: 'blur'},
-                    {validator: checkEmail, trigger: 'blur'}
-                ],
-                schoolname: [
-                    {required: true, message: '请输入学校名', trigger: 'blur'},
-                ],
-                telphone: [
-                    {required: true, message: '请输入手机号', trigger: 'blur'},
-                    {validator: checkMobile, trigger: 'blur'}
+                index: [
+                    {required: true, message: '请输入路径', trigger: 'blur'}
                 ]
             },
             //编辑
             editLoading: false,
             editFormVisible:false,
             editForm: {
-                name: '',
-                sex:'0',
-                sno:'',
-                email: '',
-                schoolname:'',
-                telphone: ''
+                title: '',
+                icon:'',
+                index:'',
+                component: ''
             },
             editFormRules: {
-                name: [
-                    {required: true, message: '请输入用户名', trigger: 'blur'},
-                    {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+                title: [
+                    {required: true, message: '请输入菜单名', trigger: 'blur'}
                 ],
-                sno: [
-                    {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
+                icon: [
+                    {required: true, message: '请选择图标', trigger: 'blur'},
                 ],
-                email: [
-                    {required: true, message: '请输入邮箱', trigger: 'blur'},
-                    {validator: checkEmail, trigger: 'blur'}
-                ],
-                schoolname: [
-                    {required: true, message: '请输入学校名', trigger: 'blur'},
-                ],
-                telphone: [
-                    {required: true, message: '请输入手机号', trigger: 'blur'},
-                    {validator: checkMobile, trigger: 'blur'}
+                index: [
+                    {required: true, message: '请输入路径', trigger: 'blur'}
                 ]
             },
         }
     },
     created () {
-        this.getUserList()
+        this.getMenuList()
     },
     methods: {
-        //性别显示转换
-        formatSex: function (row, column) {
-            return row.sex == 1 ? '男' : row.sex == 2 ? '女' : '未知'
-        },
-        async getUserList () {
+        async getMenuList () {
             this.listLoading=true
-            getStudentListPage(this.queryInfo).then((res) => {
-                console.log(res)
-                this.$message.success(res.msg)
-                this.total = res.data.total
-                this.userList = res.data
-                this.listLoading=false
+            getMenuListPage(this.queryInfo).then((res) => {
+                if(res.code===200) {
+                    this.total = res.data.total
+                    this.userList = res.data.users
+                    this.listLoading = false
+                }else {
+                    this.$message.error(res.msg)
+                }
             })
         },
         // 监听 pageSize 改变的事件
@@ -299,7 +220,7 @@ export default {
             //  将监听接受到的每页显示多少条的数据 newSzie 赋值给 pagesize
             this.queryInfo.pagesize = newSize
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getMenuList()
         },
         // 监听 页码值  改变的事件
         handleCurrentChange (newPage) {
@@ -307,7 +228,18 @@ export default {
             //  将监听接受到的页码值的数据 newPage 赋值给 pagenum
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getMenuList()
+        },
+        // 监听 switch 开关状态的改变
+        async userStateChange (userInfo) {
+            console.log(userInfo)
+            const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+            if (res.meta.status !== 200) {
+                // 更新失败，将状态返回初始状态
+                this.userInfo.mg_state = !this.userInfo.mg_state
+                this.$message.error('更新用户状态失败！')
+            }
+            this.$message.success('更新用户状态成功！')
         },
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {
@@ -321,15 +253,15 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
-                        addStudent(para).then((res) => {
-                            if(res.code===200) {
+                        addMenu(para).then((res) => {
+                            if(res.code==200) {
                                 this.addLoading = false
                                 this.$message({
                                     message: '新增成功',
                                     type: 'success'
                                 })
                                 this.addFormVisible = false
-                                this.getUserList()
+                                this.getMenuList()
                             }
                         })
                     })
@@ -348,15 +280,15 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
-                        editStudent(para).then((res) => {
-                            if(res.code===200) {
+                        editMenu(para).then((res) => {
+                            if(res.code==200) {
                                 this.editLoading = false
                                 this.$message({
                                     message: res.data.msg,
                                     type: 'success'
                                 })
                                 this.editFormVisible = false
-                                this.getUserList()
+                                this.getMenuList()
                             }
                         })
                     })
@@ -370,15 +302,15 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {id: row.id}
-                removeStudent(para).then((res) => {
-                    if(res.code===200) {
+                removeMenu(para).then((res) => {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.msg,
+                            message: res.data.msg,
                             type: 'success'
                         })
-                        this.getUserList()
+                        this.getMenuList()
                     }
                 })
             }).catch(() => {
@@ -397,7 +329,7 @@ export default {
             }).then(() => {
                 this.listLoading = true
                 let para = {ids: ids}
-                batchRemoveStudent(para).then((res) => {
+                batchRemoveMenu(para).then((res) => {
                     if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
@@ -405,7 +337,7 @@ export default {
                             message: '删除成功',
                             type: 'success'
                         })
-                        this.getUserList()
+                        this.getMenuList()
                     }
                 })
             }).catch(() => {
