@@ -371,7 +371,7 @@ export default {
 .button {
     margin-top: 10px;
     width: 100%;
-    boder: 1px dashed;
+    border: 1px dashed #c7c7c7;
 }
 .submit{
     margin-top: 10px;

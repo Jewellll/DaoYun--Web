@@ -1,7 +1,6 @@
 import axios from 'axios';
 import http from '../store/http'
 
-
 let base = ''; //http://localhost:8443/api
 
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
@@ -99,3 +98,21 @@ export const removePara = params => { return http.post(`${base}/systemManage/rem
 
 export const batchRemovePara = params => { return http.post(`${base}/systemManage/batchremove`,  params ).then(res => res.data); };
 
+// 角色管理
+//根据用户id找菜单
+export const requestMenu = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+//根据角色id找菜单
+export const requestMenuByRoleId = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+
+export const getRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+
+
+export const getAllMenus = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+//根据角色id和菜单id分配菜单
+export const distributeMenu = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+
+export const requestAddRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+
+export const requestEditRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };
+
+export const requestRemoveRole = params => { return axios.post(`${base}/getMenu`, params).then(res => res.data); };

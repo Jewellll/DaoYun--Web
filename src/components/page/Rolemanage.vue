@@ -2,25 +2,26 @@
     <div class="container">
         <!--工具栏-->
         <div style="margin-top: 20px;display: flex;margin-bottom: 20px">
-            <div class="buttons">
-                <el-popconfirm
-                    title="确定删除这些条目吗？"
-                >
-                    <el-button slot="reference" @click="deleteSelected()" type="danger">批量删除</el-button>
-                </el-popconfirm>
-            </div>
-            <div class="buttons">
-                <el-button @click="addItem" type="primary">添加用户</el-button>
-            </div>
             <div style="margin-left: 20px">
-                <el-input placeholder="请输入内容" v-model="queryInfo.query" class="input-with-select">
-                    <el-select v-model="queryInfo.select" slot="prepend" placeholder="请选择">
-                        <el-option label="姓名" value="1"></el-option>
-                        <el-option label="用户电话" value="2"></el-option>
-                    </el-select>
+                <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
+<!--                    <el-select v-model="select" slot="prepend" placeholder="请选择">-->
+<!--                        <el-option label="学号" value="1"></el-option>-->
+<!--                        <el-option label="姓名" value="2"></el-option>-->
+<!--                        <el-option label="用户电话" value="3"></el-option>-->
+<!--                    </el-select>-->
                     <el-button slot="append" icon="el-icon-search"></el-button>
                 </el-input>
             </div>
+            <div class="buttons">
+                <el-button @click="toggleSelection()" type="warning">取消选择</el-button>
+            </div>
+            <div class="buttons">
+                    <el-button slot="reference" @click="deleteSelected()" type="danger">批量删除</el-button>
+            </div>
+            <div class="buttons">
+                <el-button @click="dialogFormVisibleForAdd = true" type="primary">添加角色</el-button>
+            </div>
+
         </div>
         <el-divider></el-divider>
         <el-row :gutter="15">
@@ -30,36 +31,39 @@
                     <div slot="header" class="clearfix">
                         <span class="role-span">角色列表</span>
                     </div>
-                    <el-table :data="TableData" :stripe="true" :border="true" v-loading="listLoading"
-                              @selection-change="handleSelectionChange"
-                              :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
-<!--                    <el-table ref="multipleTable" highlight-current-row style="width: 100%;"-->
-<!--                              v-loading="listLoading" :data="TableData" @selection-change="handleSelectionChange">-->
+                    <el-table
+                        ref="multipleTable"
+                        highlight-current-row
+                        @current-change="getRoleMenu"
+                        style="width: 100%;"
+                        :data="TableData"
+                        @selection-change="handleSelectionChange"
+                    >
                         <el-table-column type="selection" width="55" />
-                        <el-table-column type="index"></el-table-column>
+                        <el-table-column prop="id" label="ID" />
                         <el-table-column prop="name" label="名称" />
-                        <el-table-column prop="level" label="角色级别" />
-                        <el-table-column :show-overflow-tooltip="true" width="135px" prop="create_time" label="创建日期" />
+                        <el-table-column prop="loginType" label="类型值" />
                         <el-table-column :show-overflow-tooltip="true" prop="remark" label="描述" />
-                        <el-table-column label="操作" width="200px"  fixed="right" align="center">
+                        <el-table-column label="操作" width="200px" align="center" fixed="right">
                             <template slot-scope="scope">
                                 <el-button
                                     size="mini"
-                                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                <el-popconfirm
-                                    title="确定删除这个条目吗？"
-                                >
+                                    class="op-button"
+                                    icon="el-icon-edit"
+                                    type="primary"
+                                    @click="handleEdit(scope.$index, scope.row)"></el-button>
                                     <el-button
-                                        slot="reference"
+                                        class="op-button"
                                         size="mini"
+                                        icon="el-icon-delete"
                                         type="danger"
-                                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                                </el-popconfirm>
+                                        @click="handleDelete(scope.$index, scope.row)"></el-button>
 
                             </template>
                         </el-table-column>
                     </el-table>
-                    <div class="page">
+                    <!--分页组件-->
+                    <div class="block">
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
@@ -70,7 +74,6 @@
                             :total="total">
                         </el-pagination>
                     </div>
-                    <!--分页组件-->
 <!--                    <div class="block">-->
 <!--                        <el-pagination-->
 <!--                            @size-change="handleSizeChange"-->
@@ -91,7 +94,6 @@
                             <span class="role-span">菜单分配</span>
                         </el-tooltip>
                         <el-button
-                            v-permission="['admin','roles:edit']"
                             :disabled="!showButton"
                             :loading="menuLoading"
                             icon="el-icon-check"
@@ -103,69 +105,84 @@
                     </div>
                     <el-tree
                         :data="menus"
+                        ref="menuTree"
                         show-checkbox
+                        check-strictly
+                        highlight-current
                         node-key="id"
                         :default-expanded-keys="[2, 3]"
-                        :default-checked-keys="[5]"
+                        :default-checked-keys="AssignedMenu"
                         :props="defaultProps">
                     </el-tree>
                 </el-card>
             </el-col>
         </el-row>
         <!-- 编辑角色-->
-        <el-dialog title="编辑角色" :visible.sync="dialogFormVisible" width="700px">
-            <el-form :model="editForm">
+        <el-dialog title="编辑角色" :visible.sync="dialogFormVisibleForEdit" width="700px">
+            <el-form :model="RoleForm" :rules="rules">
                 <el-form-item label="角色名称" :label-width="formLabelWidth">
-                    <el-input v-model="editForm.name" autocomplete="off"></el-input>
+                    <el-input v-model="RoleForm.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-row :gutter="24">
-                    <el-col :span="10">
-                        <el-form-item label="角色级别" prop="level" :label-width="formLabelWidth">
-                            <el-input-number v-model.number="editForm.level" :min="1" controls-position="right" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="10">
-                        <el-form-item label="数据范围" prop="dataScope" :label-width="formLabelWidth">
-                            <el-select v-model="editForm.dataScope" placeholder="请选择数据范围">
-                                <el-option
-                                    v-for="item in dateScopes"
-                                    :key="item"
-                                    :label="item"
-                                    :value="item"
-                                />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+                <el-form-item label="类型值" :label-width="formLabelWidth">
+                    <el-input v-model="RoleForm.loginType" autocomplete="off"></el-input>
+                </el-form-item>
                 <el-form-item label="角色描述" :label-width="formLabelWidth">
                     <el-input
                         type="textarea"
                         :rows="5"
                         placeholder="请输入内容"
-                        v-model="editForm.remark">
+                        v-model="RoleForm.remark">
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button @click="dialogFormVisibleForEdit = false">取 消</el-button>
+                <el-button type="primary" @click="editRole()">确 定</el-button>
             </div>
         </el-dialog>
+        <!--    添加角色-->
+        <el-dialog title="添加角色" :visible.sync="dialogFormVisibleForAdd" width="700px">
+            <el-form :model="RoleForm">
+                <el-form-item label="角色名称" :label-width="formLabelWidth">
+                    <el-input v-model="RoleForm.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="类型值" :label-width="formLabelWidth">
+                    <el-input v-model="RoleForm.loginType" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="角色描述" :label-width="formLabelWidth">
+                    <el-input
+                        type="textarea"
+                        :rows="5"
+                        placeholder="请输入内容"
+                        v-model="RoleForm.remark">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisibleForAdd = false">取 消</el-button>
+                <el-button type="primary" @click="addRole()">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
-// import {getRequest} from "@/utils/api";
-
-import {getParaListPage} from '../../api/api'
+import {
+    getUserListPage,
+    getAllMenus,
+    getRole,
+    requestMenu,
+    distributeMenu,
+    removeUser,
+    requestMenuByRoleId, requestEditRole, requestAddRole, requestRemoveRole
+} from '../../api/api'
 
 export default {
+    name: "RoleManage",
     data() {
         return {
-            // 获取用户列表的参数对象
             queryInfo: {
-                //查询类型
-                select: '',
                 // 查询参数
                 query: '',
                 // 当前的页码数
@@ -173,95 +190,153 @@ export default {
                 // 每页显示多少条数据
                 pagesize: 5
             },
-            listLoading: false,
+            total:'',
             multipleSelection: [],
-            // 总数
-            total: 0,
-            rules: {
-                name: [
-                    { required: true, message: '请输入名称', trigger: 'blur' }
-                ],
-                permission: [
-                    { required: true, message: '请输入权限', trigger: 'blur' }
-                ]
-            },
+            AssignedMenu: [],
+            currentRoleId: 0,
+            dialogFormVisibleForEdit: false,
+            dialogFormVisibleForAdd: false,
+            query: '',
+            select: '',
+
             formLabelWidth: '120px',
-            dialogFormVisible: false,
             dateScopes: [
                 '全部',
                 '本级',
                 '自定义'
             ],
-            editForm: {
+            RoleForm: {
+                id: 1,
                 name: '',
-                dataScope: '',
-                level: '',
-                remark: ''
+                remark: '-',
+                loginType:''
+            },
+            rules: {
+                name: [
+                    { required: true, message: '请输入名称', trigger: 'blur' }
+                ]
             },
             TableData: [],
-            menus: [
-                {
-                    id: 1,
-                    label: '教师管理'
-                },
-                {
-                    id: 2,
-                    label: '学生管理'
-                },
-                {
-                    id: 3,
-                    label: '课程管理'
-                },
-                {
-                    id: 4,
-                    label: '用户管理',
-                },
-                {
-                    id: 5,
-                    label: '角色管理',
-                },
-                {
-                    id: 6,
-                    label: '数据字典管理',
-                },
-                {
-                    id: 7,
-                    label: '系统参数管理',
-                },
-                {
-                    id: 8,
-                    label: '测试页面',
-                },
-                {
-                    id: 9,
-                    label: '相关页面',
-                    children: [
-                        {
-                            id: 1,
-                            label: '测试页面',
-                        }
-                    ]
-                }
-            ],
-            currentId: 0,
-            menuLoading: false,
-            showButton: false,
-            defaultProps: { children: 'children', label: 'label', isLeaf: 'leaf' },
+            menus: [],
+            currentId: 0, menuLoading: false, showButton: true,
+            defaultProps: { children: 'children', label: 'title', isLeaf: 'leaf' },
             menuIds: [], depts: [], deptDatas: [], // 多选时使用
         }
     },
-    created () {
-        this.getUserList()
-    },
     methods: {
-        async getUserList () {
-            this.listLoading = true
-            getParaListPage(this.queryInfo).then((res) => {
-                console.log(res)
-                this.total = res.data.total
-                this.TableData = res.data.users
-                this.listLoading = false
+        getAllRole: function () {
+            this.TableData= [{name:'sdsd'}]
+            getRole(this.queryInfo).then((res) => {
+                if(res.code===200) {
+                    this.total = res.data.total
+                    // this.TableData= res.data.users
+
+                }else {
+                    this.$message.error(res.msg)
+                }
             })
+        },
+        getMenu: function () {
+            getAllMenus().then(res => {
+                this.menus = res.data.data
+            })
+        },
+        formatType: function (row, column) {
+            return row.loginType === 1 ? '教师' : row.loginType === 2 ? '学生' :row.loginType === 0 ? '管理员': '未知'
+        },
+        getRoleMenu(val) {
+            this.loading = true
+            this.AssignedMenu = []
+            this.currentRoleId = val.id
+            var param ={id:val.id}
+            requestMenuByRoleId(param).then(res => {
+                let menus = res.data
+                for (let i = 0;i < menus.length;i++) {
+                    this.AssignedMenu.push(menus[i].id)
+                    for(let j = 0;j < menus[i].subs.length;j++){
+                        this.AssignedMenu.push(menus[i].subs[j].id)
+                    }
+                }
+                this.$refs.menuTree.setCheckedKeys([])
+                this.$refs.menuTree.setCheckedKeys(this.AssignedMenu)
+                this.loading = false
+            })
+        },
+        saveMenu() {
+            let selectedMenu = this.$refs.menuTree.getHalfCheckedKeys().concat(this.$refs.menuTree.getCheckedKeys())
+            console.log('当前菜单',selectedMenu)
+            console.log('当前角色',this.currentRoleId)
+            const param = { menuId:selectedMenu,id:this.currentRoleId}
+            // 提交菜单分配
+            distributeMenu(param).then((res) => {
+                if(res.code===200) {
+                    this.$message.success(res.msg)
+                }else {
+                    this.$message.error(res.msg)
+                }
+            })
+        },
+
+
+
+
+        // 显示编辑
+        handleEdit: function (index, row) {
+            this.dialogFormVisibleForEdit = true
+            this.RoleForm = Object.assign({}, row)
+        },
+        addRole() {
+            const param = this.RoleForm
+            requestAddRole(param).then((res) => {
+                if(res.code===200) {
+                    this.$message.success(res.msg)
+                    this.getAllRole()
+                }else {
+                    this.$message.error(res.msg)
+                }
+            })
+        },
+        editRole() {
+            const param = this.RoleForm
+            requestEditRole(param).then((res) => {
+                if(res.code===200) {
+                    this.$message.success(res.msg)
+                    this.getAllRole()
+                }else {
+                    this.$message.error(res.msg)
+                }
+            })
+        },
+        toggleSelection(rows) {
+            if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+        },
+        // handleEdit: function (index, row){
+        //     this.dialogFormVisible = true
+        //     this.RoleForm.name = row.name
+        // },
+        handleDelete: function (index, row){
+            this.$confirm('确认删除该记录吗?', '提示', {
+                type: 'warning'
+            }).then(() => {
+                let para = {id: row.id}
+                requestRemoveRole(para).then((res) => {
+                    if(res.code===200) {
+                        this.$message.success(res.msg)
+                        this.getAllRole()
+                    }
+                })
+            }).catch(() => {
+
+            })
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
         },
         // 监听 pageSize 改变的事件
         handleSizeChange (newSize) {
@@ -269,7 +344,7 @@ export default {
             //  将监听接受到的每页显示多少条的数据 newSzie 赋值给 pagesize
             this.queryInfo.pagesize = newSize
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getAllRole()
         },
         // 监听 页码值  改变的事件
         handleCurrentChange (newPage) {
@@ -277,24 +352,14 @@ export default {
             //  将监听接受到的页码值的数据 newPage 赋值给 pagenum
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getAllRole()
         },
-
-        deleteSelected() {
-        },
-        addItem () {
-        },
-        menuChange() {},
-        saveMenu() {},
-        getMenuDatas: function () {},
-        handleEdit: function (index, row){
-            this.dialogFormVisible = true
-            this.editForm = Object.assign({}, row)
-        },
-        handleDelete: function (){},
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-        }
+    },
+    mounted() {
+    },
+    created() {
+        this.getAllRole()
+        this.getMenu()
     }
 }
 </script>
@@ -317,5 +382,8 @@ export default {
     margin-top: 30px;
     margin-right: 30px;
     margin-bottom: 30px;
+}
+.op-button {
+    margin-left: 5px;
 }
 </style>

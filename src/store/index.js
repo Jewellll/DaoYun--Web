@@ -11,6 +11,7 @@ export default new Vuex.Store({
          dicCode:'',
          addDicCode:'',
          isCollapse: true,
+        menus:''
 
     },
     // 更改vuex的store中状态的唯一方法 - 同步操作
@@ -28,6 +29,9 @@ export default new Vuex.Store({
         },
         addDiction(state,data){
             state.addDicCode = data
+        },
+        setMenus(state,data){
+            state.menus = data
         },
         setCollapse(state,data){
             state.isCollapse=data

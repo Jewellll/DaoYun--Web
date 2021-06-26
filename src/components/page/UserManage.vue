@@ -271,14 +271,18 @@ export default {
             return row.sex == 1 ? '男' : row.sex == 2 ? '女' : '未知'
         },
         formatType: function (row, column) {
-            return row.loginType === 1 ? '教师' : row.loginType === 2 ? '管理员' : '未知'
+            return row.loginType === 1 ? '教师' : row.loginType === 2 ? '学生' :row.loginType === 0 ? '管理员': '未知'
         },
         async getUserList () {
             this.listLoading=true
             getUserListPage(this.queryInfo).then((res) => {
-                this.total = res.data.total
-                this.userList = res.data.users
-                this.listLoading=false
+                if(res.code===200) {
+                    this.total = res.data.total
+                    this.userList = res.data.users
+                    this.listLoading = false
+                }else {
+                    this.$message.error(res.msg)
+                }
             })
         },
         // 监听 pageSize 改变的事件

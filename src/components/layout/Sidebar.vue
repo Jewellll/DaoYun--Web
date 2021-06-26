@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import {requestMenu} from '../../api/api'
+
 export default {
     name: "Main",
     data() {
@@ -149,6 +151,21 @@ export default {
             this.toggle = !this.toggle;
             this.block = !this.block;
         },
+        getMenu() {
+            let _this = this
+            let id = JSON.parse(localStorage.getItem('user')).id
+            const param = {id:id}
+            requestMenu(param).then(res => {
+                console.log(res)
+                if (res.code === 200) {
+                    _this.items = res.data
+                    _this.$store.commit('setMenus', _this.items)
+                }
+            })
+        }
+    },
+    created() {
+        // this.getMenu()
     },
     computed: {
         onRoutes() {

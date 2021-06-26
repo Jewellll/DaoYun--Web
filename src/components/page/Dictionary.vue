@@ -136,7 +136,7 @@ export default {
                 this.listLoading = true
                 let para = {code: row.code}
                 removeDic(para).then((res) => {
-                    if(res.data.code==200) {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
@@ -163,7 +163,7 @@ export default {
                 this.listLoading = true
                 let para = {ids: ids}
                 batchRemoveDic(para).then((res) => {
-                    if(res.data.code==200) {
+                    if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({

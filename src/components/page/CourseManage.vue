@@ -35,6 +35,12 @@
                 <el-table-column prop="college" label="学院"></el-table-column>
                 <el-table-column prop="schoolname" label="学校"></el-table-column>
                 <el-table-column prop="teacherName" label="授课教师" ></el-table-column>
+                <el-table-column prop="state" label="状态">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.state" @change="userStateChange(scope.row)">
+                        </el-switch>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="state" label="能否加入课程" :formatter="formatState"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -238,13 +244,14 @@ export default {
             return row.sex === 0 ? '能' : row.sex === 1 ? '否' : '未知'
         },
         async getUserList () {
-            this.listLoading=true
+            // this.listLoading=true
+            this.userList=[{name:'asds'}]
             getCourseListPage(this.queryInfo).then((res) => {
                 if(res.code===200) {
                     this.$message.success(res.msg)
                     console.log(res)
                     this.total = res.data.total
-                    this.userList = res.data
+                    // this.userList = res.data
                     this.listLoading = false
                 }
             })
@@ -264,6 +271,18 @@ export default {
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
             this.getUserList()
+        },
+        // 监听 switch 开关状态的改变
+        async userStateChange (userInfo) {
+            console.log(userInfo)
+            var param={id:userInfo.id,state:userInfo.state}
+            const {data: res} = await this.$http.post(`/users/state/`,param)
+            if (res.meta.status !== 200) {
+                // 更新失败，将状态返回初始状态
+                this.userInfo.mg_state = !this.userInfo.mg_state
+                this.$message.error('更新用户状态失败！')
+            }
+            this.$message.success('更新用户状态成功！')
         },
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {
