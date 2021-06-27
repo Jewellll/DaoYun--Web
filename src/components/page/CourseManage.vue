@@ -14,7 +14,7 @@
             <div class="toolbar">
                 <el-row :gutter="20">
                     <el-col :span="4">
-                        <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getUserList()">
+                        <el-input placeholder="请输入课程号或课程名" v-model="queryInfo.query" clearable @clear="getUserList()">
                             <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
                         </el-input>
                     </el-col>
@@ -31,6 +31,7 @@
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column type="index"></el-table-column>
+                <el-table-column prop="code" label="课程号"></el-table-column>
                 <el-table-column prop="name" label="课程名"></el-table-column>
                 <el-table-column prop="college" label="学院"></el-table-column>
                 <el-table-column prop="schoolname" label="学校"></el-table-column>
@@ -41,7 +42,6 @@
                         </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column prop="state" label="能否加入课程" :formatter="formatState"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -93,15 +93,6 @@
                         <el-input v-model="addForm.teacherName"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="能否加入课程">
-                    <el-col :span="14">
-                        <el-radio-group v-model="addForm.state">
-                            <el-radio class="radio" label="0">能</el-radio>
-                            <el-radio class="radio" label="1">否</el-radio>
-                            <el-radio class="radio" label="2">未知</el-radio>
-                        </el-radio-group>
-                    </el-col>
-                </el-form-item>
             </el-form>
             <!-- 底部区域 -->
             <span slot="footer" class="dialog-footer">
@@ -112,7 +103,7 @@
 
         <!--编辑界面-->
         <el-dialog title="编辑"  width="40%" :visible.sync="editFormVisible" :close-on-click-modal="false">
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+            <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
                 <el-form-item label="课程名" prop="name">
                     <el-col :span="8">
                         <el-input v-model="editForm.name"></el-input>
@@ -133,15 +124,6 @@
                         <el-input v-model="editForm.teacherName"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="能否加入课程">
-                    <el-col :span="14">
-                        <el-radio-group v-model="editForm.state">
-                            <el-radio class="radio" label="0">能</el-radio>
-                            <el-radio class="radio" label="1">否</el-radio>
-                            <el-radio class="radio" label="2">未知</el-radio>
-                        </el-radio-group>
-                    </el-col>
-                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -160,6 +142,8 @@ import {
     getTeacherListPage, removeCourse,
     removeTeacher
 } from '../../api/api'
+import {changState} from '../../api/api'
+import {changeState} from '../../api/api'
 
 export default {
     data () {
@@ -245,13 +229,30 @@ export default {
         },
         async getUserList () {
             // this.listLoading=true
-            this.userList=[{name:'asds'}]
             getCourseListPage(this.queryInfo).then((res) => {
+                this.userList=[]
                 if(res.code===200) {
+
+                    for(var i =0;i<res.data.length;i++){
+                        var item={id:'',code:'',name:'',college:'',schoolname:'',teacherName:'',state:''}
+                        if(res.data[i].state===1){
+                            item.state=true
+
+                        }
+                        else {
+                            item.state=false
+                        }
+                        item.code=res.data[i].code
+                        item.name=res.data[i].name
+                        item.teacherName=res.data[i].teacherName
+                        item.schoolname=res.data[i].schoolname
+                        item.college=res.data[i].college
+                        item.id=res.data[i].id
+                        this.userList.push(item)
+                    }
                     this.$message.success(res.msg)
                     console.log(res)
-                    this.total = res.data.total
-                    // this.userList = res.data
+                    this.total = this.userList.length
                     this.listLoading = false
                 }
             })
@@ -275,14 +276,22 @@ export default {
         // 监听 switch 开关状态的改变
         async userStateChange (userInfo) {
             console.log(userInfo)
-            var param={id:userInfo.id,state:userInfo.state}
-            const {data: res} = await this.$http.post(`/users/state/`,param)
-            if (res.meta.status !== 200) {
-                // 更新失败，将状态返回初始状态
-                this.userInfo.mg_state = !this.userInfo.mg_state
-                this.$message.error('更新用户状态失败！')
+            var nstate
+            if(userInfo.state){
+                nstate=1
+            }else{
+                nstate=0
             }
-            this.$message.success('更新用户状态成功！')
+            var param={id:userInfo.id,state:nstate}
+            changeState(param).then((res) => {
+                if(res.code===200) {
+                    this.$message.success('更新用户状态成功！')
+                }else {
+                    // 更新失败，将状态返回初始状态
+                    userInfo.state = !userInfo.state
+                    this.$message.error('更新用户状态失败！')
+                }
+            })
         },
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {

@@ -77,7 +77,7 @@
             <el-form ref="addFormRef" :model="addForm" :rules="addFormRules" label-width="100px">
                 <el-form-item label="用户名" prop="username">
                     <el-col :span="8">
-                        <el-input v-model="addForm.name" ></el-input>
+                        <el-input v-model="addForm.username" ></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
@@ -276,9 +276,10 @@ export default {
         async getUserList () {
             this.listLoading=true
             getUserListPage(this.queryInfo).then((res) => {
+                console.log(res)
                 if(res.code===200) {
-                    this.total = res.data.total
-                    this.userList = res.data.users
+                    this.userList = res.data
+                    this.total = this.userList.length
                     this.listLoading = false
                 }else {
                     this.$message.error(res.msg)

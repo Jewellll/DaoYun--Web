@@ -64,6 +64,8 @@ export const removeCourse = params => { return http.post(`${base}/course/remove`
 
 export const batchRemoveCourse = params => { return http.post(`${base}/course/batchremove`, params ).then(res => res.data); };
 
+export const changeState = params => { return http.post(`${base}/course/state`, params ).then(res => res.data); };
+
 //字典管理
 
 export const getDictory = params => { return http.post(`${base}/dictionaries/dicName`,  params ).then(res => res.data); };
@@ -114,17 +116,17 @@ export const batchRemovePara = params => { return http.post(`${base}/systemManag
 //根据用户id找菜单
 export const requestMenu = params => { return axios.post(`${base}/user/getMenu`, params).then(res => res.data); };
 //根据角色id找菜单
-export const requestMenuByRoleId = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
+export const requestMenuByRoleId = params => { return axios.post(`${base}/role/getMenuByid`, params).then(res => res.data); };
 
 export const getRole = params => { return axios.post(`${base}/role/getRole`, params).then(res => res.data); };
 
 
 export const getAllMenus = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 //根据角色id和菜单id分配菜单
-export const distributeMenu = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
+export const distributeMenu = params => { return axios.post(`${base}/role/getMenuByRole`, params).then(res => res.data); };
 
-export const requestAddRole = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
+export const requestAddRole = params => { return axios.post(`${base}/role/add`, params).then(res => res.data); };
 
-export const requestEditRole = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
+export const requestEditRole = params => { return axios.post(`${base}/role/edit`, params).then(res => res.data); };
 
-export const requestRemoveRole = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
+export const requestRemoveRole = params => { return axios.post(`${base}/role/remove`, params).then(res => res.data); };

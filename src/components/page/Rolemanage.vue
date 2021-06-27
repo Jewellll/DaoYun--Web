@@ -24,7 +24,7 @@
                     <el-button slot="reference" @click="deleteSelected()" type="danger" :disabled="this.multipleSelection.length===0">批量删除</el-button>
             </div>
             <div class="buttons">
-                <el-button @click="dialogFormVisibleForAdd = true" type="primary">添加角色</el-button>
+                <el-button @click="addRole" type="primary">添加角色</el-button>
             </div>
 
         </div>
@@ -122,8 +122,8 @@
             </el-col>
         </el-row>
         <!-- 编辑角色-->
-        <el-dialog title="编辑角色" :visible.sync="dialogFormVisibleForEdit" width="700px">
-            <el-form :model="RoleForm" :rules="rules">
+        <el-dialog @close="addDialogClosed" title="编辑角色" :visible.sync="dialogFormVisibleForEdit" width="700px">
+            <el-form ref="RoleForm" :model="RoleForm" :rules="rules">
                 <el-form-item label="角色名称" :label-width="formLabelWidth">
                     <el-input v-model="RoleForm.name" autocomplete="off"></el-input>
                 </el-form-item>
@@ -145,8 +145,8 @@
             </div>
         </el-dialog>
         <!--    添加角色-->
-        <el-dialog title="添加角色" :visible.sync="dialogFormVisibleForAdd" width="700px">
-            <el-form :model="RoleForm">
+        <el-dialog @close="addDialogClosed" title="添加角色" :visible.sync="dialogFormVisibleForAdd" width="700px">
+            <el-form ref="RoleForm" :model="RoleForm">
                 <el-form-item label="角色名称" :label-width="formLabelWidth">
                     <el-input v-model="RoleForm.name" autocomplete="off"></el-input>
                 </el-form-item>
@@ -229,11 +229,11 @@ export default {
     },
     methods: {
         getAllRole: function () {
-            this.TableData= [{name:'sdsd'}]
             getRole(this.queryInfo).then((res) => {
                 if(res.code===200) {
-                    this.total = res.data.total
-                    // this.TableData= res.data.users
+
+                     this.TableData= res.data
+                    this.total = this.TableData.length
 
                 }else {
                     this.$message.error(res.msg)
@@ -241,8 +241,8 @@ export default {
             })
         },
         getMenu: function () {
-            getAllMenus().then(res => {
-                this.menus = res.data.data
+            getAllMenus(this.queryInfo).then(res => {
+                this.menus = res.data
             })
         },
         formatType: function (row, column) {
@@ -289,13 +289,18 @@ export default {
             this.RoleForm = Object.assign({}, row)
         },
         addRole() {
+            this.RoleForm={}
+            this.dialogFormVisibleForAdd = true
             const param = this.RoleForm
             requestAddRole(param).then((res) => {
                 if(res.code===200) {
                     this.$message.success(res.msg)
+                    this.loading=false
                     this.getAllRole()
+                    this.dialogFormVisibleForAdd=false
                 }else {
                     this.$message.error(res.msg)
+                    this.loading=false
                 }
             })
         },
@@ -304,9 +309,12 @@ export default {
             requestEditRole(param).then((res) => {
                 if(res.code===200) {
                     this.$message.success(res.msg)
+                    this.loading=false
                     this.getAllRole()
+                    this.dialogFormVisibleForEdit=false
                 }else {
                     this.$message.error(res.msg)
+                    this.loading=false
                 }
             })
         },
@@ -340,6 +348,9 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+        },
+        addDialogClosed () {
+            this.$refs.RoleForm.resetFields()
         },
         // 监听 pageSize 改变的事件
         handleSizeChange (newSize) {
