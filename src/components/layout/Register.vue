@@ -43,11 +43,10 @@
                 </el-col>
             </el-form-item>
             <el-form-item label="身份" prop="loginType">
-                <el-col :span="16">
+                <el-col :span="14">
                 <el-radio-group v-model="regForm.loginType">
                     <el-radio class="radio" label="1">教师</el-radio>
                     <el-radio class="radio" label="2">学生</el-radio>
-                    <el-radio class="radio" label="0">管理员</el-radio>
                 </el-radio-group>
                 </el-col>
             </el-form-item>

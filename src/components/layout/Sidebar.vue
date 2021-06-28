@@ -16,7 +16,7 @@
                         <i class="el-icon-s-unfold" v-show="toggle"></i>
                     </el-menu-item>
                     <template v-for="item in items">
-                        <template v-if="item.subs">
+                        <template v-if="item.subs.length!=0">
                             <el-submenu :index="item.index" :key="item.index">
                                 <template slot="title">
                                     <i :class="item.icon"></i>
@@ -24,11 +24,12 @@
                                 </template>
                                 <template v-for="subItem in item.subs">
                                     <el-submenu
-                                        v-if="subItem.subs"
+                                        v-if="subItem.subs.length!=0"
                                         :index="subItem.index"
                                         :key="subItem.index"
                                     >
                                         <template slot="title">{{ subItem.title }}</template>
+
                                         <el-menu-item
                                             v-for="(threeItem,i) in subItem.subs"
                                             :key="i"
@@ -163,14 +164,14 @@ export default {
             requestMenu(param).then(res => {
                 console.log(res)
                 if (res.code === 200) {
-                    _this.items = res.data
-                    _this.$store.commit('setMenus', _this.items)
+                    this.items = res.data
+                    this.$store.commit('setMenus', this.items)
                 }
             })
         }
     },
     created() {
-        // this.getMenu()
+        this.getMenu()
     },
     computed: {
         onRoutes() {

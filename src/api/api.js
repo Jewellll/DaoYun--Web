@@ -114,7 +114,7 @@ export const batchRemovePara = params => { return http.post(`${base}/systemManag
 
 // 角色管理
 //根据用户id找菜单
-export const requestMenu = params => { return axios.post(`${base}/user/getMenu`, params).then(res => res.data); };
+export const requestMenu = params => { return axios.post(`${base}/role/userMenu`, params).then(res => res.data); };
 //根据角色id找菜单
 export const requestMenuByRoleId = params => { return axios.post(`${base}/role/roleMenu`, params).then(res => res.data); };
 

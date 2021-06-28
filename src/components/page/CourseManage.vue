@@ -172,8 +172,7 @@ export default {
                 name: '',
                 college:'',
                 schoolname: '',
-                teacherName: '',
-                state:'2'
+                teacherName: ''
             },
             // 添加表单的验证规则对象
             addFormRules: {
@@ -199,8 +198,7 @@ export default {
                 name: '',
                 college:'',
                 schoolname: '',
-                teacherName: '',
-                state:'2'
+                teacherName: ''
             },
             editFormRules: {
                 name: [
@@ -294,17 +292,23 @@ export default {
         },
         // 监听添加用户对话框的关闭事件
         addDialogClosed () {
-            this.$refs.addFormRef.resetFields()
+            // this.$refs.addFormRef.resetFields()
             this.$refs.editForm.resetFields()
         },
         // 点击按钮，添加新用户
         addUser () {
+
             this.$refs.addFormRef.validate(async valid => {
                 if (valid) {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.addLoading = true
-                        let para = Object.assign({}, this.addForm)
-                        addCourse(para).then((res) => {
+                        let para = JSON.parse(localStorage.getItem("user")).id
+                        const param={id:para,name: this.addForm.name,
+                            college:this.addForm.college,
+                            schoolname:this.addForm.schoolname,
+                            teacherName: this.addForm.teacherName}
+                        console.log(param)
+                        addCourse(param).then((res) => {
                             if(res.code==200) {
                                 this.addLoading = false
                                 this.$message({
@@ -323,6 +327,7 @@ export default {
         handleEdit: function (index, row) {
             this.editFormVisible = true
             this.editForm = Object.assign({}, row)
+            console.log(this.editForm)
         },
         //编辑提交
         editSubmit: function () {
@@ -330,12 +335,17 @@ export default {
                 if (valid) {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.editLoading = true
-                        let para = Object.assign({}, this.editForm)
-                        editCourse(para).then((res) => {
+                        const param=this.editForm
+                            // {id:this.userList.id,name: this.editForm.name,
+                            // college:this.editForm.college,
+                            // schoolname:this.editForm.schoolname,
+                            // teacherName: this.editForm.teacherName}
+                            console.log(param)
+                        editCourse(param).then((res) => {
                             if(res.code==200) {
                                 this.editLoading = false
                                 this.$message({
-                                    message: res.data.msg,
+                                    message: res.msg,
                                     type: 'success'
                                 })
                                 this.editFormVisible = false
@@ -358,7 +368,7 @@ export default {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getCourseList()

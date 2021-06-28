@@ -2,7 +2,7 @@
 <div class="manage-container" >
     <div class="container">
         <div class="user" style="width: 100%;margin-bottom: 5px">
-            <div class="diy" style="display: inline-block;margin-right: 5px; height: 300px;width: 300px;cursor: pointer">
+            <div class="diy" style="display: inline-block;margin-right: 5px; height: 300px;width: 200px;cursor: pointer">
                 <el-card :body-style="{ padding: '0px' }">
                     <img :src=img class="image">
                     <div style="padding: 14px;">
@@ -14,29 +14,18 @@
                 </el-card>
             </div>
             <div style="display: inline-block;margin-right: 5px; width: 35%">
-                <el-carousel :interval="5000" arrow="always" class="car" style="height: 400px">
+                <el-carousel :interval="5000" arrow="always" class="car" style="height: 300px">
                     <el-carousel-item v-for="(img,index) in imgList" :key="index">
                         <img class="img" v-bind:src="img.url">
                     </el-carousel-item>
                 </el-carousel>
             </div>
-            <div ref="gaugeChart" style="width:400px;display: inline-block;box-sizing: border-box; height: 400px; background-color: #ffffff; padding: 20px; border-radius: 5px;"></div>
+            <div ref="gaugeChart" style="width:300px;display: inline-block;box-sizing: border-box; height: 300px; background-color: #ffffff; border-radius: 5px;"></div>
 
         </div>
     <div class="info" style="padding-left: -40px">
         <div ref="myChart" style="width: 32%;display: inline-block;box-sizing: border-box; margin-right: 5px; height: 500px; background-color: #ffffff; padding:80px 50px 20px 20px; border-radius: 5px;"></div>
         <div ref="lineChart" style="width: 64.1%;display: inline-block;box-sizing: border-box; height: 500px; background-color: #ffffff;padding: 20px 50px 20px 20px; border-radius: 5px;"></div>
-
-
-
-<!--            <el-table :data="tableData" :header-cell-style="{background:'#F5F6FA',color:'#666E92'}"-->
-<!--                      :row-style="{height:'25px'}" :cell-style="{padding:'1px'}"-->
-<!--                      highlight-current-row class="table" >-->
-<!--                <el-table-column prop="name" label="姓名" >-->
-<!--                </el-table-column>-->
-<!--                <el-table-column prop="card" label="学号">-->
-<!--                </el-table-column>-->
-<!--            </el-table>-->
 
     </div>
     </div>
@@ -53,7 +42,7 @@ export default {
         this.myChart.setOption({
             title: {
                 text: '32469',
-                subtext: '评价数',
+                subtext: '用户数',
                 left: 'center',
                 top: '43%',
                 subtextStyle: {
@@ -95,9 +84,9 @@ export default {
                         }
                     },
                     data: [
-                        { name: '好评', value: 1048 },
-                        { name: '一般', value: 735 },
-                        { name: '差评', value: 180 }
+                        { name: '学生', value: 1048 },
+                        { name: '教师', value: 735 },
+                        { name: '管理员', value: 180 }
                     ]
                 }
             ]
@@ -105,7 +94,7 @@ export default {
         this.lineChart = echarts.init(this.$refs.lineChart)
         this.lineChart.setOption({
             title: {
-                text: '评价数据分析'
+                text: '用户在线数'
             },
             // 提示框
             tooltip: {
@@ -116,7 +105,7 @@ export default {
                 icon: 'circle',
                 left: 'center',
                 top: 0,
-                data: ['好评', '一般', '差评']
+                data: ['教师', '学生', '管理员']
             },
             grid: {
                 left: '3%',
@@ -145,19 +134,19 @@ export default {
             },
             series: [
                 {
-                    name: '好评',
+                    name: '教师',
                     type: 'line',
                     // smooth: true, // 平滑曲线显示
                     data: [120, 132, 101, 134, 190, 230, 210, 201, 234, 290, 230, 210]
                 },
                 {
-                    name: '一般',
+                    name: '学生',
                     type: 'line',
                     // smooth: true,
                     data: [100, 82, 91, 54, 90, 76, 110, 81, 104, 90, 130, 110]
                 },
                 {
-                    name: '差评',
+                    name: '管理员',
                     type: 'line',
                     stack: '总量',
                     // smooth: true,
