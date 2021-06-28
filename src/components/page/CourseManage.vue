@@ -250,7 +250,6 @@ export default {
                         item.id=res.data[i].id
                         this.userList.push(item)
                     }
-                    this.$message.success(res.msg)
                     console.log(res)
                     this.total = this.userList.length
                     this.listLoading = false

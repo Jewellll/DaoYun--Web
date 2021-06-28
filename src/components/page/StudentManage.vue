@@ -287,7 +287,6 @@ export default {
             this.listLoading=true
             getStudentListPage(this.queryInfo).then((res) => {
                 console.log(res)
-                this.$message.success(res.msg)
                 this.userList = res.data
                 this.total = this.userList.length
                 this.listLoading=false

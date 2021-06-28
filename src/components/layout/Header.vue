@@ -145,7 +145,7 @@ export default {
                 telphone: '',
                 email: '',
                 create_time: '',
-                login_type: ''
+                logintype: -1
             },
             userForm: {
                 id:0,
@@ -155,7 +155,7 @@ export default {
                 sex: -1,
                 telphone: '',
                 email: '',
-                login_type: '',
+                loginType: -1,
                 newPassword:'',
                 checkPassword:''
             },
@@ -214,7 +214,7 @@ export default {
                             this.$message.error('修改失败')
                         } else {
                             this.$message.success('修改成功')
-                            // this.userInfo=this.userForm
+                            this.formatSex()
                             this.$store.commit('setUser', this.userForm);
                             this.edit=false
                         }
@@ -225,18 +225,19 @@ export default {
                 }
             })
         },
-        formatSex: function (user) {
+        formatSex: function () {
             console.log(this.userInfo.sex)
-            if (this.userInfo.sex === 1) {
+            if (this.userInfo.sex == 1) {
                 this.sex = '男'
-            } else if (this.userInfo.sex === 2) {
+            } else if (this.userInfo.sex == 2) {
+                console.log('22')
                 this.sex = '女'
-            }  else if(this.userInfo.sex===0){
+            }  else if(this.userInfo.sex==0){
                 this.sex = '未知'
             }
             console.log(this.sex)
         },
-        formatLoginType: function (user) {
+        formatLoginType: function () {
             if (this.userInfo.loginType == 1) {
                 this.loginType = '教师'
             } else if (this.userInfo.loginType == 2) {
@@ -275,9 +276,8 @@ export default {
         if (user) {
             user = JSON.parse(user)
             this.userInfo = user
-            this.formatSex(user)
-            this.formatLoginType(user)
-
+            this.formatSex()
+            this.formatLoginType()
             this.userForm = this.userInfo
             this.userForm.newPassword = this.userInfo.password
             this.userForm.checkPassword=this.userInfo.password

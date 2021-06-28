@@ -123,7 +123,7 @@ export const getRole = params => { return axios.post(`${base}/role/getRole`, par
 
 export const getAllMenus = params => { return axios.post(`${base}/role/getMenu`, params).then(res => res.data); };
 //根据角色id和菜单id分配菜单
-export const distributeMenu = params => { return axios.post(`${base}/role/getMenuByRole`, params).then(res => res.data); };
+export const distributeMenu = params => { return axios.post(`${base}/role/setMenu`, params).then(res => res.data); };
 
 export const requestAddRole = params => { return axios.post(`${base}/role/add`, params).then(res => res.data); };
 

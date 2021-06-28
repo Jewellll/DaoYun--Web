@@ -1,30 +1,31 @@
 <template>
 <div class="manage-container" >
     <div class="container">
-        <div class="user" style="width: 100%">
-            <div ref="gaugeChart" style="width: 400px;display: inline-block; height: 400px; background-color: #ffffff; padding: 20px; border-radius: 5px;"></div>
-            <div style="display: inline-block; height: 300px;width: 200px">
-                    <el-card :body-style="{ padding: '0px' }">
-                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-                        <div style="padding: 14px;">
-                            <span>朱文龙</span>
-                            <div class="bottom clearfix">
-                                <p>200327128</p>
-                            </div>
+        <div class="user" style="width: 100%;margin-bottom: 5px">
+            <div class="diy" style="display: inline-block;margin-right: 5px; height: 300px;width: 300px;cursor: pointer">
+                <el-card :body-style="{ padding: '0px' }">
+                    <img :src=img class="image">
+                    <div style="padding: 14px;">
+                        <span>朱文龙</span>
+                        <div class="bottom clearfix">
+                            <p>200327128</p>
                         </div>
-                    </el-card>
+                    </div>
+                </el-card>
             </div>
-            <div style="display: inline-block; width: 30%">
-            <el-carousel :interval="5000" arrow="always" class="car" style="height: 400px">
-                <el-carousel-item v-for="(img,index) in imgList" :key="index">
-                    <img class="img" v-bind:src="img.url">
-                </el-carousel-item>
-            </el-carousel>
+            <div style="display: inline-block;margin-right: 5px; width: 35%">
+                <el-carousel :interval="5000" arrow="always" class="car" style="height: 400px">
+                    <el-carousel-item v-for="(img,index) in imgList" :key="index">
+                        <img class="img" v-bind:src="img.url">
+                    </el-carousel-item>
+                </el-carousel>
             </div>
+            <div ref="gaugeChart" style="width:400px;display: inline-block;box-sizing: border-box; height: 400px; background-color: #ffffff; padding: 20px; border-radius: 5px;"></div>
+
         </div>
-    <div class="info">
-        <div ref="myChart" style="width: 35%;display: inline-block;box-sizing: border-box; margin-right: 10px; height: 500px; background-color: #ffffff; padding:80px 50px 20px 70px; border-radius: 5px;"></div>
-        <div ref="lineChart" style="width: 64.1%;display: inline-block;box-sizing: border-box; height: 500px; background-color: #ffffff;padding: 20px 50px 20px 70px; border-radius: 5px;"></div>
+    <div class="info" style="padding-left: -40px">
+        <div ref="myChart" style="width: 32%;display: inline-block;box-sizing: border-box; margin-right: 5px; height: 500px; background-color: #ffffff; padding:80px 50px 20px 20px; border-radius: 5px;"></div>
+        <div ref="lineChart" style="width: 64.1%;display: inline-block;box-sizing: border-box; height: 500px; background-color: #ffffff;padding: 20px 50px 20px 20px; border-radius: 5px;"></div>
 
 
 
@@ -229,6 +230,7 @@ export default {
     },
     data() {
         return {
+            img:require('../../assets/img/user.jpeg'),
             currentDate: new Date(),
             imgList:[
                 {url:require('../../assets/img/img1.jpg')},
