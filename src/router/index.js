@@ -29,7 +29,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'Login',
+            name: '默认',
             redirect: '/login'
         },
         {
@@ -186,8 +186,8 @@ export default new Router({
             ]
         },
         {
-            path: '/login',
-            name: 'Login',
+            path: '/loginHome',
+            name: 'LoginHome',
             component: LoginHome,
             children: [
                 {
@@ -219,7 +219,7 @@ export default new Router({
         },
         {
             path: '*',
-            name: '404',
+            name: '404页面',
             component: error,
             meta:{
                 title:'页面走丢了'

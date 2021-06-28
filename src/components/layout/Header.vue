@@ -37,35 +37,14 @@
                         <img :src="this.userInfo.avatar"/>
                     </el-avatar>
                     <span class="sender">姓名： {{ userInfo.name }}</span>
-                    <span class="sender">身份：  {{ userInfo.login_type }}</span>
-                    <span class="sender">注册时间： {{ userInfo.create_time }}</span>
+                    <span class="sender">身份：  {{ this.loginType }}</span>
                 </div>
                 <el-divider></el-divider>
                 <div class="Info">
                     <span class="sender">用户名： {{ userInfo.username }}</span>
-                    <span class="sender">性别：  {{ sex }}</span>
+                    <span class="sender">性别：  {{ this.sex }}</span>
                     <span class="sender">手机号： {{ userInfo.telphone }}</span>
                     <span class="sender">邮箱： {{ userInfo.email }}</span>
-<!--                <div class="personal-relation">-->
-<!--                    <div class="relation-item">用户名:-->
-<!--                        <div style="float: right; padding-right:70px;">{{ userInfo.username }}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="personal-relation">-->
-<!--                    <div class="relation-item">性别:-->
-<!--                        <div style="float: right; padding-right:70px;">{{ sex }}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="personal-relation">-->
-<!--                    <div class="relation-item">手机号:-->
-<!--                        <div style="float: right; padding-right:70px;">{{ userInfo.telphone }}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="personal-relation">-->
-<!--                    <div class="relation-item">邮箱:-->
-<!--                        <div style="float: right; padding-right:70px;">{{ userInfo.email }}</div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 </div>
             </div>
             <el-button style="width: 50%;margin-top: 100px" @click.native="edit = true" type="primary">修改信息</el-button>
@@ -99,8 +78,8 @@
                 <el-form-item label="性别" prop="sex">
                     <el-col :span="14">
                     <el-radio-group v-model="userForm.sex">
-                        <el-radio class="radio" label="1">男</el-radio>
-                        <el-radio class="radio" label="0">女</el-radio>
+                        <el-radio class="radio" label=1>男</el-radio>
+                        <el-radio class="radio" label=2>女</el-radio>
                     </el-radio-group>
                     </el-col>
                 </el-form-item>
@@ -114,6 +93,16 @@
                     <el-input v-model="userForm.email" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
+                <el-form-item label="密码" prop="newPassword">
+                    <el-col :span="14">
+                        <el-input v-model="userForm.newPassword" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPassword">
+                    <el-col :span="14">
+                        <el-input v-model="userForm.checkPassword" auto-complete="off"></el-input>
+                    </el-col>
+                </el-form-item>
                 <el-form-item>
                     <el-button @click.native="edit = false">返回</el-button>
                     <el-button type="primary" @click.native="editSubmit">提交</el-button>
@@ -124,11 +113,29 @@
 </template>
 
 <script>
-import {editUserInfo, requestLogin} from '../../api/api'
+import {editUserInfo} from '../../api/api'
 
 export default {
     name: 'Header',
     data () {
+        var validatePass = (rule, value, callback) => {
+            if (!value) {
+                callback(new Error("请输入新密码"));
+            } else if (value.toString().length < 6 || value.toString().length > 18) {
+                callback(new Error("密码长度为6-18位"));
+            } else {
+                callback();
+            }
+        };
+        var validatePass2 = (rule, value, callback) => {
+            if (value === "") {
+                callback(new Error("请再次输入密码"));
+            } else if (value !== this.userForm.newPassword) {
+                callback(new Error("两次输入密码不一致!"));
+            } else {
+                callback();
+            }
+        };
         return {
             userInfo: {
                 name: '',
@@ -141,13 +148,16 @@ export default {
                 login_type: ''
             },
             userForm: {
+                id:0,
                 name: '',
                 username:'',
                 avatar: '',
-                sex: '',
+                sex: -1,
                 telphone: '',
                 email: '',
-                login_type: ''
+                login_type: '',
+                newPassword:'',
+                checkPassword:''
             },
             rules: {
                 name: [
@@ -162,6 +172,8 @@ export default {
                 sex: [
                     {required: true, message: '请选择性别', trigger: 'blur'}
                 ],
+                newPassword: [{ validator: validatePass, trigger: "blur" }],
+                checkPassword: [{ validator: validatePass2, trigger: "blur" }],
                 telphone: [
                     {required: true, message: '请输入手机号', trigger: 'blur'}
                 ],
@@ -169,6 +181,7 @@ export default {
                     {required: true, message: '请输入邮箱', trigger: 'blur'}
                 ]
             },
+            loginType:'',
             sex: '',
             edit: false,    //修改个人信息
             view: false,     //展示个人信息
@@ -192,16 +205,17 @@ export default {
             this.$refs.userForm.validate((valid) => {
                 if (valid) {
                     this.logining = true
-                    const editParams = {username: this.userForm.username, name:this.userForm.name,sex:this.userForm.sex,telphone:this.userForm.telphone,
-                    email:this.userForm.email}
+                    const editParams = {id:this.userInfo.id,avatar:'this.userForm.avatar',username: this.userForm.username, name:this.userForm.name,sex:this.userForm.sex,telphone:this.userForm.telphone,
+                    email:this.userForm.email,newPassword:this.userForm.newPassword}
                     editUserInfo(editParams).then(data => {
                         this.logining = false
                         let {msg, code, user, token} = data
                         if (code !== 200) {
                             this.$message.error('修改失败')
                         } else {
-                            this.$message('修改成功')
-                            this.userInfo=this.userForm
+                            this.$message.success('修改成功')
+                            // this.userInfo=this.userForm
+                            this.$store.commit('setUser', this.userForm);
                             this.edit=false
                         }
                     })
@@ -212,12 +226,23 @@ export default {
             })
         },
         formatSex: function (user) {
-            if (this.userInfo.sex == 1) {
+            console.log(this.userInfo.sex)
+            if (this.userInfo.sex === 1) {
                 this.sex = '男'
-            } else if (this.userInfo.sex == 0) {
+            } else if (this.userInfo.sex === 2) {
                 this.sex = '女'
-            } else {
+            }  else if(this.userInfo.sex===0){
                 this.sex = '未知'
+            }
+            console.log(this.sex)
+        },
+        formatLoginType: function (user) {
+            if (this.userInfo.loginType == 1) {
+                this.loginType = '教师'
+            } else if (this.userInfo.loginType == 2) {
+                this.loginType = '学生'
+            } else {
+                this.loginType = '管理员'
             }
         },
         handleClose (done) {
@@ -238,9 +263,9 @@ export default {
             reader.onload = (data) => {
                 let res = data.target
                 this.userForm.avatar = res.result
-                console.log(this.userForm.avatar)
-                this.userInfo.avatar=this.userForm.avatar
-                console.log(this.userInfo.avatar)
+                // console.log(this.userForm.avatar)
+                // this.userInfo.avatar=this.userForm.avatar
+                // console.log(this.userInfo.avatar)
             }
             reader.readAsDataURL(file)
         }
@@ -251,7 +276,11 @@ export default {
             user = JSON.parse(user)
             this.userInfo = user
             this.formatSex(user)
+            this.formatLoginType(user)
+
             this.userForm = this.userInfo
+            this.userForm.newPassword = this.userInfo.password
+            this.userForm.checkPassword=this.userInfo.password
         }
 
     }

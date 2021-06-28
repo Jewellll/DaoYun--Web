@@ -14,12 +14,12 @@
             <div class="toolbar">
             <el-row :gutter="20">
                 <el-col :span="4">
-                    <el-input placeholder="请输入工号或姓名" v-model="queryInfo.query" clearable @clear="getUserList()">
-                        <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
+                    <el-input placeholder="请输入工号或姓名" v-model="queryInfo.query" clearable @clear="getTeacherList()">
+                        <el-button slot="append" icon="el-icon-search" @click="getTeacherList()"></el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="2">
-                    <el-button type="primary" @click="addFormVisible=true">添加教师</el-button>
+                    <el-button type="primary" @click="add">添加教师</el-button>
                 </el-col>
                 <el-col :span="2">
                 <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
@@ -73,7 +73,7 @@
                     <el-input v-model="addForm.name" ></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="工号" prop="card">
+                <el-form-item label="工号" prop="sno">
                     <el-col :span="8">
                     <el-input v-model="addForm.sno"></el-input>
                     </el-col>
@@ -124,26 +124,26 @@
                     </el-col>
                 </el-form-item>
                 <el-form-item label="性别">
-                    <el-col :span="14">
+                    <el-col :span="10">
                     <el-radio-group v-model="editForm.sex">
-                        <el-radio class="radio" label="1">男</el-radio>
-                        <el-radio class="radio" label="2">女</el-radio>
-                        <el-radio class="radio" label="0">未知</el-radio>
+                        <el-radio class="radio" :label="1">男</el-radio>
+                        <el-radio class="radio" :label="2">女</el-radio>
+                        <el-radio class="radio" :label="0">未知</el-radio>
                     </el-radio-group>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
-                    <el-col :span="14">
+                    <el-col :span="10">
                     <el-input v-model="editForm.email"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="手机号" prop="telphone">
-                    <el-col :span="14">
+                    <el-col :span="10">
                     <el-input v-model="editForm.telphone"></el-input>
                     </el-col>
                 </el-form-item>
                 <el-form-item label="学校" prop="schoolname">
-                    <el-col :span="14">
+                    <el-col :span="10">
                     <el-input v-model="editForm.schoolname"></el-input>
                     </el-col>
                 </el-form-item>
@@ -226,7 +226,7 @@ export default {
                 ],
                 sno: [
                     {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
+                    {min: 8, max: 8, message: '长度为8个字符', trigger: 'blur'}
                 ],
                 email: [
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
@@ -258,7 +258,7 @@ export default {
                 ],
                 sno: [
                     {required: true, message: '请输入密码', trigger: 'blur'},
-                    {min: 9, max: 9, message: '长度为8个字符', trigger: 'blur'}
+                    {min: 8, max: 8, message: '长度为8个字符', trigger: 'blur'}
                 ],
                 email: [
                     {required: true, message: '请输入邮箱', trigger: 'blur'},
@@ -275,21 +275,21 @@ export default {
         }
     },
     created () {
-        this.getUserList()
+        this.getTeacherList()
     },
     methods: {
         //性别显示转换
         formatSex: function (row, column) {
             return row.sex == 1 ? '男' : row.sex == 2 ? '女' : '未知'
         },
-        async getUserList () {
+        async getTeacherList () {
             this.listLoading=true
             getTeacherListPage(this.queryInfo).then((res) => {
                 if(res.code===200) {
                     console.log(res)
-                    this.$message.success(res.msg)
-                    this.total = res.data.total
+
                     this.userList = res.data
+                    this.total = this.userList.length
                     this.listLoading = false
                 }
             })
@@ -300,7 +300,7 @@ export default {
             //  将监听接受到的每页显示多少条的数据 newSzie 赋值给 pagesize
             this.queryInfo.pagesize = newSize
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getTeacherList()
         },
         // 监听 页码值  改变的事件
         handleCurrentChange (newPage) {
@@ -308,14 +308,17 @@ export default {
             //  将监听接受到的页码值的数据 newPage 赋值给 pagenum
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getTeacherList()
         },
-        // 监听添加用户对话框的关闭事件
+        //监听添加用户对话框的关闭事件
         addDialogClosed () {
             this.$refs.addFormRef.resetFields()
             this.$refs.editForm.resetFields()
         },
-        // 点击按钮，添加新用户
+        add(){
+            this.addFormVisible=true
+            this.addForm={}
+        },
         addUser () {
             this.$refs.addFormRef.validate(async valid => {
                 if (valid) {
@@ -330,7 +333,7 @@ export default {
                                     type: 'success'
                                 })
                                 this.addFormVisible = false
-                                this.getUserList()
+                                this.getTeacherList()
                             }
                         })
                     })
@@ -357,7 +360,7 @@ export default {
                                     type: 'success'
                                 })
                                 this.editFormVisible = false
-                                this.getUserList()
+                                this.getTeacherList()
                             }
                         })
                     })
@@ -379,7 +382,7 @@ export default {
                             message: res.msg,
                             type: 'success'
                         })
-                        this.getUserList()
+                        this.getTeacherList()
                     }
                 })
             }).catch(() => {
@@ -406,7 +409,7 @@ export default {
                             message: '删除成功',
                             type: 'success'
                         })
-                        this.getUserList()
+                        this.getTeacherList()
                     }
                 })
             }).catch(() => {

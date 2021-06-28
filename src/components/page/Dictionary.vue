@@ -61,8 +61,8 @@
 
 <script>
 import {
-batchRemoveDic,
-getDicListPage
+    batchRemoveDic,
+    getDicListPage, removeDic
 } from '../../api/api'
 
 export default {

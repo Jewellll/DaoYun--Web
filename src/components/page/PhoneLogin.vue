@@ -12,7 +12,7 @@
                     <el-input type="text" v-model="phoneForm.verifyNum" style=""
                               auto-complete="off" @keyup.enter.native="verificationCode"
                               placeholder="请输入验证码"></el-input>
-                    <el-button :style="{border: none,background:btnColor?'#2E9AFE':'#617079',color:'#FFF',width:'50%'}"
+                    <el-button :style="{background:btnColor?'#2E9AFE':'#617079',color:'#FFF',width:'50%'}"
                                v-on:click="sendSmsCode"
                                class="verify-btn" v-model="btnContent"
                                v-bind="{'disabled':disabled}">
@@ -78,7 +78,7 @@ export default {
             requestMss(phoneParams).then(res => {
                 let {msg, code} =res;
                 if (code === 200) {
-                    this.$message(msg)
+                    this.$message.success(msg)
                 } else if (code === 400) {
                     this.$message.error(msg);
                 }
@@ -108,7 +108,7 @@ export default {
                 if (code == 300) {
                     this.$message.error(msg)
                 } else if(code ==200){
-                    _this.$store.commit('setUser', user);
+                    _this.$store.commit('setUser',res.data[0]);
                     _this.$store.commit('setToken', token);
                     _this.$router.push( '/home')
                     this.$message.success(msg)

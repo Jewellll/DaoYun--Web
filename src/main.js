@@ -9,6 +9,9 @@ import store from './store/index'
 import http from './store/http';  //此处问http文件的路径
 import Mock from './mock'
 
+import iconPicker from 'vue-fontawesome-elementui-icon-picker';
+
+Vue.use(iconPicker);
 Vue.config.productionTip = false
 
 Vue.prototype.$http = http;

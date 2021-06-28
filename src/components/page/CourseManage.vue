@@ -14,8 +14,8 @@
             <div class="toolbar">
                 <el-row :gutter="20">
                     <el-col :span="4">
-                        <el-input placeholder="请输入课程号或课程名" v-model="queryInfo.query" clearable @clear="getUserList()">
-                            <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
+                        <el-input placeholder="请输入课程号或课程名" v-model="queryInfo.query" clearable @clear="getCourseList()">
+                            <el-button slot="append" icon="el-icon-search" @click="getCourseList()"></el-button>
                         </el-input>
                     </el-col>
                     <el-col :span="2">
@@ -220,14 +220,14 @@ export default {
         }
     },
     created () {
-        this.getUserList()
+        this.getCourseList()
     },
     methods: {
         //性别显示转换
         formatState: function (row, column) {
             return row.sex === 0 ? '能' : row.sex === 1 ? '否' : '未知'
         },
-        async getUserList () {
+        async getCourseList () {
             // this.listLoading=true
             getCourseListPage(this.queryInfo).then((res) => {
                 this.userList=[]
@@ -263,7 +263,7 @@ export default {
             //  将监听接受到的每页显示多少条的数据 newSzie 赋值给 pagesize
             this.queryInfo.pagesize = newSize
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getCourseList()
         },
         // 监听 页码值  改变的事件
         handleCurrentChange (newPage) {
@@ -271,7 +271,7 @@ export default {
             //  将监听接受到的页码值的数据 newPage 赋值给 pagenum
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
-            this.getUserList()
+            this.getCourseList()
         },
         // 监听 switch 开关状态的改变
         async userStateChange (userInfo) {
@@ -313,7 +313,7 @@ export default {
                                     type: 'success'
                                 })
                                 this.addFormVisible = false
-                                this.getUserList()
+                                this.getCourseList()
                             }
                         })
                     })
@@ -340,7 +340,7 @@ export default {
                                     type: 'success'
                                 })
                                 this.editFormVisible = false
-                                this.getUserList()
+                                this.getCourseList()
                             }
                         })
                     })
@@ -362,7 +362,7 @@ export default {
                             message: res.data.msg,
                             type: 'success'
                         })
-                        this.getUserList()
+                        this.getCourseList()
                     }
                 })
             }).catch(() => {
@@ -389,7 +389,7 @@ export default {
                             message: '删除成功',
                             type: 'success'
                         })
-                        this.getUserList()
+                        this.getCourseList()
                     }
                 })
             }).catch(() => {

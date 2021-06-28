@@ -75,7 +75,7 @@ export default {
             requestMss(phoneParams).then(res => {
                 let {msg, code} = res;
                 if (code === 200) {
-                    this.$message(msg)
+                    this.$message.success(msg)
                 } else if (code === 400) {
                     this.$message.error(msg);
                 }

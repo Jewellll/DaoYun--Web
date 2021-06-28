@@ -1,44 +1,70 @@
 <template>
     <div>
-        <el-form :model="regForm" :rules="rules" ref="regForm" class="reg-container" label-position="left"
+        <el-form :model="regForm" :rules="rules" ref="regForm" class="reg-container" label-position="left" size="small"
                  label-width="0x">
             <h3 class="check_title">注册</h3>
-            <el-form-item prop="phoneNum">
+            <el-form-item label="手机号" prop="phoneNum">
+                <el-col :span="14">
                 <el-input type="text" v-model="regForm.phoneNum"
                           auto-complete="off" placeholder="请输入手机号码"></el-input>
+                </el-col>
             </el-form-item>
-            <el-form-item prop="verifyNum">
+            <el-form-item label="验证码" prop="verifyNum">
                 <div class="iden">
-                    <el-input type="text" v-model="regForm.verifyNum" auto-complete="off"
-                              placeholder="请输入验证码"></el-input>
-                    <el-button :style="{border: none,background:btnColor?'#2E9AFE':'#617079',color:'#FFF',width:'50%'}"
+                    <el-col :span="10">
+                    <el-input type="text" v-model="regForm.verifyNum" auto-complete="off"  placeholder="请输入"></el-input>
+                    </el-col>
+                    <el-col :span="24">
+                    <el-button :style="{border: 'none',background:btnColor?'#2E9AFE':'#617079',color:'#FFF',width:'50%'}"
                                v-on:click="sendSmsCode" class="verify-btn" v-model="btnContent"
                                v-bind="{'disabled':disabled}">
                         {{ btnContent }}
                     </el-button>
+                    </el-col>
                 </div>
             </el-form-item>
-            <el-form-item prop="username">
-                <el-input type="text" v-model="regForm.username" placeholder="用户名"></el-input>
+            <el-form-item label="用户名" prop="username">
+                <el-col :span="10">
+                <el-input type="text" v-model="regForm.username" placeholder="请输入用户名"></el-input>
+                </el-col>
             </el-form-item>
-            <el-form-item prop="name">
-                <el-input type="text" v-model="regForm.name" placeholder="姓名"></el-input>
+            <el-form-item label="姓名" prop="name">
+                <el-col :span="10">
+                <el-input type="text" v-model="regForm.name" placeholder="请输入姓名"></el-input>
+                </el-col>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item label="性别" prop="name">
+                <el-col :span="14">
                 <el-radio-group v-model="regForm.sex">
                     <el-radio class="radio" label="1">男</el-radio>
                     <el-radio class="radio" label="2">女</el-radio>
                     <el-radio class="radio" label="0">未知</el-radio>
                 </el-radio-group>
+                </el-col>
             </el-form-item>
-            <el-form-item prop="email">
-                <el-input type="text" v-model="regForm.email" placeholder="邮箱"></el-input>
+            <el-form-item label="身份" prop="loginType">
+                <el-col :span="16">
+                <el-radio-group v-model="regForm.loginType">
+                    <el-radio class="radio" label="1">教师</el-radio>
+                    <el-radio class="radio" label="2">学生</el-radio>
+                    <el-radio class="radio" label="0">管理员</el-radio>
+                </el-radio-group>
+                </el-col>
             </el-form-item>
-            <el-form-item  prop="newPassword">
-                <el-input type="password" v-model="regForm.newPassword" placeholder="密码"></el-input>
+            <el-form-item label="邮箱" prop="email">
+                <el-col :span="14">
+                <el-input type="text" v-model="regForm.email" placeholder="请输入邮箱"></el-input>
+                </el-col>
             </el-form-item>
-            <el-form-item prop="checkPassword">
+            <el-form-item label="密码"  prop="newPassword">
+                <el-col :span="14">
+                <el-input type="password" v-model="regForm.newPassword" placeholder="请输入密码"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPassword">
+                <el-col :span="14">
                 <el-input type="password" v-model="regForm.checkPassword" placeholder="再次输入密码"></el-input>
+                </el-col>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" style="width: 100%;border: none"
@@ -105,14 +131,16 @@ export default {
                 sex:'0',
                 email:"",
                 newPassword:"",
-                checkPassword:""
+                checkPassword:"",
+                loginType:''
             },
             rules: {
                 username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+                loginType: [{ required: true, message: "请选择身份", trigger: "blur" }],
                 name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
                 verifyNum: [{ required: true, message: "请输入验证码", trigger: "blur" }],
-                newPassword: [{ validator: validatePass, trigger: "blur" }],
-                checkPassword: [{ validator: validatePass2, trigger: "blur" }],
+                newPassword: [{ required: true, message: "请输入密码", trigger: "blur" },{ validator: validatePass, trigger: "blur" }],
+                checkPassword: [{ required: true, message: "请再次输入密码", trigger: "blur" },{ validator: validatePass2, trigger: "blur" }],
                 phoneNum:[{ required: true, message: "请输入手机号", trigger: "blur" },
                     { validator: checkMobile, trigger: "blur" }],
                 email: [{ required: true, message: "请输入邮箱", trigger: "blur" },
@@ -138,7 +166,7 @@ export default {
             registerMss(phoneParams).then(res => {
                 let {msg, code} = res;
                 if (code === 200) {
-                    this.$message(msg)
+                    this.$message.success(msg)
                 } else if (code === 400) {
                     this.$message.error(msg);
                 }
@@ -162,6 +190,7 @@ export default {
             this.$refs.regForm.validate((valid) => {
                 if (valid) {
                     const regParams = this.regForm
+                    console.log(regParams)
                      requireRegister(regParams).then(res => {
                         let {msg, code} = res
                         if (code !== 200) {

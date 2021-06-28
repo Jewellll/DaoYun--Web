@@ -9,12 +9,7 @@
         <div style="margin-top: 20px;display: flex;margin-bottom: 20px">
             <div style="margin-left: 20px">
                 <el-input placeholder="请输入内容" v-model="query" class="input-with-select">
-<!--                    <el-select v-model="select" slot="prepend" placeholder="请选择">-->
-<!--                        <el-option label="学号" value="1"></el-option>-->
-<!--                        <el-option label="姓名" value="2"></el-option>-->
-<!--                        <el-option label="用户电话" value="3"></el-option>-->
-<!--                    </el-select>-->
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                    <el-button slot="append" @click="" icon="el-icon-search"></el-button>
                 </el-input>
             </div>
             <div class="buttons">
@@ -24,7 +19,7 @@
                     <el-button slot="reference" @click="deleteSelected()" type="danger" :disabled="this.multipleSelection.length===0">批量删除</el-button>
             </div>
             <div class="buttons">
-                <el-button @click="addRole" type="primary">添加角色</el-button>
+                <el-button @click="dialogFormVisibleForAdd = true" type="primary">添加角色</el-button>
             </div>
 
         </div>
@@ -78,16 +73,6 @@
                             :total="total">
                         </el-pagination>
                     </div>
-<!--                    <div class="block">-->
-<!--                        <el-pagination-->
-<!--                            @size-change="handleSizeChange"-->
-<!--                            @current-change="handleCurrentChange"-->
-<!--                            :current-page.sync="currentPage"-->
-<!--                            :page-size="pageSize"-->
-<!--                            layout="prev, pager, next, jumper"-->
-<!--                            :total="TableData.length">-->
-<!--                        </el-pagination>-->
-<!--                    </div>-->
                 </el-card>
             </el-col>
             <!-- 菜单授权 -->
@@ -114,7 +99,8 @@
                         check-strictly
                         highlight-current
                         node-key="id"
-                        :default-expanded-keys="[2, 3]"
+
+                        :default-expand-all="true"
                         :default-checked-keys="AssignedMenu"
                         :props="defaultProps">
                     </el-tree>
@@ -194,7 +180,7 @@ export default {
                 // 每页显示多少条数据
                 pagesize: 5
             },
-            total:'',
+            total:0,
             multipleSelection: [],
             AssignedMenu: [],
             currentRoleId: 0,
@@ -223,7 +209,7 @@ export default {
             TableData: [],
             menus: [],
             currentId: 0, menuLoading: false, showButton: true,
-            defaultProps: { children: 'children', label: 'title', isLeaf: 'leaf' },
+            defaultProps: { children: 'sub', label: 'title', isLeaf: 'leaf' },
             menuIds: [], depts: [], deptDatas: [], // 多选时使用
         }
     },
@@ -242,7 +228,55 @@ export default {
         },
         getMenu: function () {
             getAllMenus(this.queryInfo).then(res => {
+                console.log(res)
                 this.menus = res.data
+                // this.menus=[{
+                //     icon: 'el-icon-paperclip',
+                //         index: '3',
+                //     title: '相关页面',
+                //     subs: [
+                //     {
+                //         index: 'test',
+                //         title: '测试页面'
+                //     },{
+                //         index: '3-2',
+                //         title: '异常管理',
+                //         subs: [
+                //             {
+                //                 index: '500',
+                //                 title: '500异常页面'
+                //             },
+                //             {
+                //                 index: '404',
+                //                 title: '404异常页面'
+                //             },
+                //             {
+                //                 index: '403',
+                //                 title: '403异常页面'
+                //             },
+                //             {
+                //                 index: 'diyError',
+                //                 title: '自定义异常页面'
+                //             }
+                //         ]
+                //     }
+                //
+                // ]
+                // }]
+                // this.menus=[{
+                //     label: '一级 3',
+                //     children: [{
+                //         label: '二级 3-1',
+                //         children: [{
+                //             label: '三级 3-1-1'
+                //         }]
+                //     }, {
+                //         label: '二级 3-2',
+                //         children: [{
+                //             label: '三级 3-2-1'
+                //         }]
+                //     }]
+                // }]
             })
         },
         formatType: function (row, column) {
@@ -253,14 +287,17 @@ export default {
             this.AssignedMenu = []
             this.currentRoleId = val.id
             var param ={id:val.id}
+            console.log(param)
             requestMenuByRoleId(param).then(res => {
+                console.log(res)
                 let menus = res.data
                 for (let i = 0;i < menus.length;i++) {
                     this.AssignedMenu.push(menus[i].id)
-                    for(let j = 0;j < menus[i].subs.length;j++){
-                        this.AssignedMenu.push(menus[i].subs[j].id)
-                    }
+                    // for(let j = 0;j < menus[i].sub.length;j++){
+                    //     this.AssignedMenu.push(menus[i].sub[j].id)
+                    // }
                 }
+                console.log(this.AssignedMenu)
                 this.$refs.menuTree.setCheckedKeys([])
                 this.$refs.menuTree.setCheckedKeys(this.AssignedMenu)
                 this.loading = false
@@ -272,6 +309,7 @@ export default {
             console.log('当前角色',this.currentRoleId)
             const param = { menuId:selectedMenu,id:this.currentRoleId}
             // 提交菜单分配
+            console.log(param)
             distributeMenu(param).then((res) => {
                 if(res.code===200) {
                     this.$message.success(res.msg)
@@ -289,8 +327,6 @@ export default {
             this.RoleForm = Object.assign({}, row)
         },
         addRole() {
-            this.RoleForm={}
-            this.dialogFormVisibleForAdd = true
             const param = this.RoleForm
             requestAddRole(param).then((res) => {
                 if(res.code===200) {
@@ -312,6 +348,7 @@ export default {
                     this.loading=false
                     this.getAllRole()
                     this.dialogFormVisibleForEdit=false
+                    this.RoleForm={}
                 }else {
                     this.$message.error(res.msg)
                     this.loading=false

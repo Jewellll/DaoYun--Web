@@ -17,7 +17,7 @@ export const requireForget = params => { return axios.post(`${base}/forget`, par
 // 修改个人信息
 export const editUserInfo = params => { return axios.post(`${base}/editUser`, params).then(res => res.data); };
 // 注册
-export const requireRegister = params => { return axios.post(`${base}/register/one`, params).then(res => res.data); };
+export const requireRegister = params => { return axios.post(`${base}/register`, params).then(res => res.data); };
 
 //用户管理
 
@@ -116,7 +116,7 @@ export const batchRemovePara = params => { return http.post(`${base}/systemManag
 //根据用户id找菜单
 export const requestMenu = params => { return axios.post(`${base}/user/getMenu`, params).then(res => res.data); };
 //根据角色id找菜单
-export const requestMenuByRoleId = params => { return axios.post(`${base}/role/getMenuByid`, params).then(res => res.data); };
+export const requestMenuByRoleId = params => { return axios.post(`${base}/role/roleMenu`, params).then(res => res.data); };
 
 export const getRole = params => { return axios.post(`${base}/role/getRole`, params).then(res => res.data); };
 

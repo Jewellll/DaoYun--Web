@@ -5,7 +5,7 @@
         <h3 class="login_title">登录</h3>
         <el-form-item prop="username">
             <el-input type="text" v-model="loginForm.username"
-                      auto-complete="off" placeholder="账号"></el-input>
+                      auto-complete="off" placeholder="用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password">
             <el-input type="password" v-model="loginForm.password"
@@ -110,6 +110,7 @@ export default {
                         if (code == 300) {
                             this.$message.error(msg);
                         } else if(code==200){
+                            console.log(res)
                             _this.$store.commit('setUser', res.data[0]);
                             _this.$store.commit('setToken', token);
                             this.$message.success(msg)

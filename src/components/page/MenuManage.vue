@@ -26,7 +26,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-table :data="userList" :stripe="true" :border="true" v-loading="listLoading" @selection-change="selsChange"
+            <el-table :data="menuList" :stripe="true" :border="true" v-loading="listLoading" @selection-change="selsChange"
                       :header-cell-style="{background:'#F5F6FA',color:'#666E92'}">
                 <el-table-column type="selection" ></el-table-column>
                 <el-table-column type="index" ></el-table-column>
@@ -128,11 +128,10 @@
 <script>
 import {
     addMenu,
-    addUser, batchRemoveMenu,
-    batchRemoveUser, editMenu,
-    editUser, getMenuListPage,
-    getUserListPage, removeMenu,
-    removeUser
+   batchRemoveMenu,
+ editMenu,
+ getMenuListPage,
+ removeMenu
 } from '../../api/api'
 
 export default {
@@ -147,8 +146,7 @@ export default {
                 // 每页显示多少条数据
                 pagesize: 5
             },
-            // 获取的用户列表
-            userList: [],
+            menuList: [],
             sels: [],//列表选中列
             // 总数
             total: 0,
@@ -203,11 +201,12 @@ export default {
     },
     methods: {
         async getMenuList () {
-            this.listLoading=true
+            // this.listLoading=true
+            this.menuList = [{title:'sads'}]
             getMenuListPage(this.queryInfo).then((res) => {
                 if(res.code===200) {
                     this.total = res.data.total
-                    this.userList = res.data.users
+                    this.menuList = res.data.users
                     this.listLoading = false
                 }else {
                     this.$message.error(res.msg)
