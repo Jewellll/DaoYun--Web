@@ -80,13 +80,15 @@ export const editDic = params => { return http.post(`${base}/dictionaries/code`,
 
 export const addDic = params => { return http.post(`${base}/dictionaries/id`,  params ).then(res => res.data); };
 
-export const removeDic = params => { return http.post(`${base}/dictionaries/remove`,  params).then(res => res.data); };
+export const removeDic = params => { return http.post(`${base}/dictionaries/removeone`,  params).then(res => res.data); };
 
-export const removeDicDetail = params => { return http.post(`${base}/dictionaries/removeDic`,  params).then(res => res.data); };
+export const removeDicDetail = params => { return http.post(`${base}/dictionaries/remove`,  params).then(res => res.data); };
 
 export const batchRemoveDic = params => { return http.post(`${base}/dictionary/batchremove`,  params ).then(res => res.data); };
 
 export const editDictionary = params => { return http.post(`${base}/dictionary/edit`, params ).then(res => res.data); };
+
+export const saveDic = params => { return http.post(`${base}/dictionaries/editDicDetail`, params ).then(res => res.data); };
 
 //用户管理
 

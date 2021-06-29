@@ -13,7 +13,7 @@
             <!-- 搜索与添加区域 -->
             <div class="toolbar">
                 <el-row :gutter="20">
-                    <el-col :span="4">
+                    <el-col :span="6">
                         <el-input placeholder="请输入英文标识或者中文标识" v-model="queryInfo.query" clearable @clear="getUserList()">
                             <el-button slot="append" icon="el-icon-search" @click="getUserList()"></el-button>
                         </el-input>
@@ -33,7 +33,6 @@
                 <el-table-column type="index"></el-table-column>
                 <el-table-column prop="typename" label="中文标识"></el-table-column>
                 <el-table-column prop="code" label="英文标识"></el-table-column>
-                <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -62,13 +61,12 @@
 <script>
 import {
     batchRemoveDic,
-    getDicListPage, removeDic
+    getDicListPage, removeDic, saveEdit
 } from '../../api/api'
 
 export default {
     data () {
         return {
-            // 获取用户列表的参数对象
             queryInfo: {
                 // 查询参数
                 query: '',
@@ -91,13 +89,13 @@ export default {
     },
     methods: {
         toAdd(){
-            this.$router.push({ path: "/editDictionary", query: {} });
+            this.$router.push({ path: "/addDictionary", query: {} });
         },
         async getUserList () {
             this.listLoading=true
             getDicListPage(this.queryInfo).then((res) => {
-                this.total = res.total
                 this.userList = res.data
+                this.total = this.userList.length
                 this.listLoading=false
             })
         },
@@ -119,14 +117,9 @@ export default {
         },
         //显示编辑
         handleEdit: function (index, row) {
-            // this.editFormVisible = true
             let para = Object.assign({}, row)
-            // editDictionary(para).then((res) => {
-            //     if(res.data.code==200) {
             this.$store.commit('setDiction',para.code);
-            this.$router.push({ path: "/addDictionary", query: {} });
-            //     }
-            // })
+            this.$router.push({ path: "/editDictionary", query: {} });
         },
         //删除
         handleDel: function (index, row) {
@@ -134,13 +127,14 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.listLoading = true
-                let para = {code: row.code}
+                let para = {id:row.id}
+                console.log(row)
                 removeDic(para).then((res) => {
                     if(res.code==200) {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getUserList()
