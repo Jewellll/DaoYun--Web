@@ -2,7 +2,7 @@
 <div class="manage-container" >
     <div class="container">
         <div class="user" style="width: 100%;margin-bottom: 5px">
-            <div class="diy" style="display: inline-block;margin-right: 5px; height: 300px;width: 200px;cursor: pointer">
+            <div @click="skip('https://github.com/Jewellll')" class="diy" style="display: inline-block;margin-right: 5px; height: 300px;width: 200px;cursor: pointer">
                 <el-card :body-style="{ padding: '0px' }">
                     <img :src=img class="image">
                     <div style="padding: 14px;">
@@ -239,6 +239,11 @@ export default {
                 name: '魏凌',
                 card: '200327176'
             }]
+        }
+    },
+    methods:{
+        skip (url) {
+            window.open(url,"_blank")
         }
     }
 }

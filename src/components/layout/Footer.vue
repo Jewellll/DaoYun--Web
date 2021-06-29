@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-     @版权
+     @版权 工程实训二班第四组
     </div>
 
 </template>

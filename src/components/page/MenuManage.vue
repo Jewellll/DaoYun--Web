@@ -33,7 +33,6 @@
                 <el-table-column prop="title" label="菜单名"></el-table-column>
                 <el-table-column prop="icon" label="图标"></el-table-column>
                 <el-table-column prop="index" label="路径"></el-table-column>
-                <el-table-column prop="component" label="组件"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->
@@ -70,6 +69,11 @@
                         <el-input v-model="addForm.title" ></el-input>
                     </el-col>
                 </el-form-item>
+                <el-form-item label="父级菜单id" prop="title">
+                    <el-col :span="8">
+                        <el-input v-model="addForm.parentId" ></el-input>
+                    </el-col>
+                </el-form-item>
                 <el-form-item label="图标" prop="icon">
                     <el-col :span="14">
                         <icon-picker v-model="addForm.icon"></icon-picker>
@@ -78,11 +82,6 @@
                 <el-form-item label="路径" prop="index">
                     <el-col :span="14">
                         <el-input v-model="addForm.index"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="组件" prop="component">
-                    <el-col :span="14">
-                        <el-input v-model="addForm.component"></el-input>
                     </el-col>
                 </el-form-item>
             </el-form>
@@ -111,11 +110,6 @@
                         <el-input v-model="editForm.index" auto-complete="off"></el-input>
                     </el-col>
                 </el-form-item>
-                <el-form-item label="组件" prop="component">
-                    <el-col :span="14">
-                        <el-input v-model="editForm.component"></el-input>
-                    </el-col>
-                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click.native="editFormVisible = false">取消</el-button>
@@ -128,10 +122,10 @@
 <script>
 import {
     addMenu,
-   batchRemoveMenu,
- editMenu,
- getMenuListPage,
- removeMenu
+    batchRemoveMenu,
+    editMenu, getAllMenus,
+    getMenuListPage,
+    removeMenu
 } from '../../api/api'
 
 export default {
@@ -160,7 +154,7 @@ export default {
                 title: '',
                 icon:'',
                 index:'',
-                component: ''
+                parentId:0
             },
             // 添加表单的验证规则对象
             addFormRules: {
@@ -181,7 +175,6 @@ export default {
                 title: '',
                 icon:'',
                 index:'',
-                component: ''
             },
             editFormRules: {
                 title: [
@@ -201,16 +194,28 @@ export default {
     },
     methods: {
         async getMenuList () {
-            // this.listLoading=true
-            this.menuList = [{title:'sads'}]
-            getMenuListPage(this.queryInfo).then((res) => {
-                if(res.code===200) {
-                    this.total = res.data.total
-                    this.menuList = res.data.users
-                    this.listLoading = false
-                }else {
-                    this.$message.error(res.msg)
+            getAllMenus(this.queryInfo).then(res => {
+                this.menuList=[]
+                console.log(res)
+                let num=0
+                // this.menuList = res.data
+                let menus = res.data
+                for (let i = 0;i < menus.length;i++) {
+                    this.menuList.push(menus[i])
+                    num=num+1
+                    for(let j = 0;j < menus[i].subs.length;j++){
+                        this.menuList.push(menus[i].subs[j])
+                        num=num+1
+                        for (let k = 0;k < menus[i].subs[j].subs.length;k++){
+                            this.menuList.push(menus[i].subs[j].subs[k])
+                            num=num+1
+                        }
+                    }
                 }
+                this.total=num
+                console.log(this.menuList)
+                console.log(this.queryInfo.pagenum)
+                this.menuList=this.menuList.slice((this.queryInfo.pagenum-1)*this.queryInfo.pagesize,this.queryInfo.pagenum*this.queryInfo.pagesize)
             })
         },
         // 监听 pageSize 改变的事件
@@ -228,6 +233,7 @@ export default {
             this.queryInfo.pagenum = newPage
             //  修改完以后，重新发起请求获取一次数据
             this.getMenuList()
+
         },
         // 监听 switch 开关状态的改变
         async userStateChange (userInfo) {
@@ -252,6 +258,7 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.addLoading = true
                         let para = Object.assign({}, this.addForm)
+                        console.log(para)
                         addMenu(para).then((res) => {
                             if(res.code==200) {
                                 this.addLoading = false
@@ -279,11 +286,12 @@ export default {
                     this.$confirm('确认提交吗？', '提示', {}).then(() => {
                         this.editLoading = true
                         let para = Object.assign({}, this.editForm)
+                        console.log(para)
                         editMenu(para).then((res) => {
                             if(res.code==200) {
                                 this.editLoading = false
                                 this.$message({
-                                    message: res.data.msg,
+                                    message: res.msg,
                                     type: 'success'
                                 })
                                 this.editFormVisible = false
@@ -306,7 +314,7 @@ export default {
                         this.listLoading = false
                         //NProgress.done();
                         this.$message({
-                            message: res.data.msg,
+                            message: res.msg,
                             type: 'success'
                         })
                         this.getMenuList()
@@ -355,7 +363,7 @@ export default {
     margin-right: 10px;
     padding: 10px 10px;
     background-color: #FFFFFF;
-    height: 100vh;
+    height: 100%;
     border-radius: 5px;
 }
 .crumb{

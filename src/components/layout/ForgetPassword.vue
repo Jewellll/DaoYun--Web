@@ -2,9 +2,6 @@
         <div class="forget">
             <div class="title">修改密码</div>
             <el-form :model="forgetForm" :rules="rules" ref="forgetForm" class="forget-container">
-<!--                <el-form-item label="旧密码" prop="password">-->
-<!--                    <el-input type="password" v-model="forgetForm.password" placeholder="请输入旧密码"></el-input>-->
-<!--                </el-form-item>-->
                 <el-form-item label="新密码" prop="newPassword">
                     <el-input type="password" v-model="forgetForm.newPassword" placeholder="请输入新密码"></el-input>
                 </el-form-item>

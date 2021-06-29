@@ -13,9 +13,6 @@
                 </el-input>
             </div>
             <div class="buttons">
-                <el-button @click="toggleSelection()" type="warning">取消选择</el-button>
-            </div>
-            <div class="buttons">
                     <el-button slot="reference" @click="deleteSelected()" type="danger" :disabled="this.multipleSelection.length===0">批量删除</el-button>
             </div>
             <div class="buttons">
@@ -230,60 +227,12 @@ export default {
             getAllMenus(this.queryInfo).then(res => {
                 console.log(res)
                 this.menus = res.data
-                // this.menus=[{
-                //     icon: 'el-icon-paperclip',
-                //         index: '3',
-                //     title: '相关页面',
-                //     subs: [
-                //     {
-                //         index: 'test',
-                //         title: '测试页面'
-                //     },{
-                //         index: '3-2',
-                //         title: '异常管理',
-                //         subs: [
-                //             {
-                //                 index: '500',
-                //                 title: '500异常页面'
-                //             },
-                //             {
-                //                 index: '404',
-                //                 title: '404异常页面'
-                //             },
-                //             {
-                //                 index: '403',
-                //                 title: '403异常页面'
-                //             },
-                //             {
-                //                 index: 'diyError',
-                //                 title: '自定义异常页面'
-                //             }
-                //         ]
-                //     }
-                //
-                // ]
-                // }]
-                // this.menus=[{
-                //     label: '一级 3',
-                //     children: [{
-                //         label: '二级 3-1',
-                //         children: [{
-                //             label: '三级 3-1-1'
-                //         }]
-                //     }, {
-                //         label: '二级 3-2',
-                //         children: [{
-                //             label: '三级 3-2-1'
-                //         }]
-                //     }]
-                // }]
             })
         },
         formatType: function (row, column) {
             return row.loginType === 1 ? '教师' : row.loginType === 2 ? '学生' :row.loginType === 0 ? '管理员': '未知'
         },
         getRoleMenu(val) {
-            this.loading = true
             this.AssignedMenu = []
             this.currentRoleId = val.id
             var param ={id:val.id}
@@ -293,14 +242,10 @@ export default {
                 let menus = res.data
                 for (let i = 0;i < menus.length;i++) {
                     this.AssignedMenu.push(menus[i].id)
-                    // for(let j = 0;j < menus[i].sub.length;j++){
-                    //     this.AssignedMenu.push(menus[i].sub[j].id)
-                    // }
                 }
                 console.log(this.AssignedMenu)
                 this.$refs.menuTree.setCheckedKeys([])
                 this.$refs.menuTree.setCheckedKeys(this.AssignedMenu)
-                this.loading = false
             })
         },
         saveMenu() {
@@ -355,19 +300,6 @@ export default {
                 }
             })
         },
-        toggleSelection(rows) {
-            if (rows) {
-                rows.forEach(row => {
-                    this.$refs.multipleTable.toggleRowSelection(row);
-                });
-            } else {
-                this.$refs.multipleTable.clearSelection();
-            }
-        },
-        // handleEdit: function (index, row){
-        //     this.dialogFormVisible = true
-        //     this.RoleForm.name = row.name
-        // },
         handleDelete: function (index, row){
             this.$confirm('确认删除该记录吗?', '提示', {
                 type: 'warning'

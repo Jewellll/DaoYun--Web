@@ -398,10 +398,6 @@ export default {
     width: 100%
 }
 
-/*relation-item {*/
-/*    padding: 12px;*/
-
-/*}*/
 .Info{
     font-size: 16px;
     margin-top: 20px;

@@ -16,7 +16,7 @@
                         <i class="el-icon-s-unfold" v-show="toggle"></i>
                     </el-menu-item>
                     <template v-for="item in items">
-                        <template v-if="item.subs.length!=0">
+                        <template v-if="item.subs!=''">
                             <el-submenu :index="item.index" :key="item.index">
                                 <template slot="title">
                                     <i :class="item.icon"></i>
@@ -24,7 +24,7 @@
                                 </template>
                                 <template v-for="subItem in item.subs">
                                     <el-submenu
-                                        v-if="subItem.subs.length!=0"
+                                        v-if="subItem.subs!=''"
                                         :index="subItem.index"
                                         :key="subItem.index"
                                     >
