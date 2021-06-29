@@ -19,7 +19,7 @@
                         </el-input>
                     </el-col>
                     <el-col :span="2">
-                        <el-button type="primary" @click="addFormVisible=true">添加教师</el-button>
+                        <el-button type="primary" @click="addFormVisible=true">添加</el-button>
                     </el-col>
                     <el-col :span="2">
                         <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
@@ -31,12 +31,9 @@
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column prop="card" label="工号"></el-table-column>
-                <el-table-column prop="name" label="姓名"></el-table-column>
-                <el-table-column prop="sex" label="性别" width="100" :formatter="formatSex"></el-table-column>
-                <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column prop="mobile" label="电话"></el-table-column>
-                <el-table-column prop="course" label="课程名"></el-table-column>
+                <el-table-column prop="card" label="测试编号"></el-table-column>
+                <el-table-column prop="name" label="测试名"></el-table-column>
+                <el-table-column prop="email" label="测试结果"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!-- 修改按钮 -->

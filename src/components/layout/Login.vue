@@ -159,20 +159,20 @@ export default {
 
 .forget-link {
     position: relative;
-    right: 120px;
+    right: 110px;
     color: #505458;
-    font-size: 12px;
+    font-size: 4px;
 }
 .phone-link {
     position: center;
     color: #505458;
-    font-size: 12px;
+    font-size: 4px;
 }
 .signup-link{
     position: relative;
-    left: 120px;
+    left: 110px;
     color: #505458;
-    font-size: 12px;
+    font-size: 4px;
 }
 .identifyBox{
     display: flex;
